@@ -63,7 +63,7 @@ CREATE TABLE `categories` (
   `id` int NOT NULL AUTO_INCREMENT,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,6 +72,7 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+INSERT INTO `categories` VALUES ('Hành động','Phim có nhiều cảnh rượt đuổi, đánh đấm, kịch tính cao.',1,'2026-05-01 13:09:54'),('Kinh dị','Phim gây sợ hãi, hồi hộp với các yếu tố tâm linh hoặc giật gân.',2,'2026-05-01 13:09:54'),('Hoạt hình','Phim dành cho mọi lứa tuổi, sử dụng kỹ thuật đồ họa 2D/3D.',3,'2026-05-01 13:09:54'),('Tình cảm','Tập trung vào các mối quan hệ yêu đương và cảm xúc nhân vật.',4,'2026-05-01 13:09:54'),('Khoa học viễn tưởng','Phám phá các chủ đề về tương lai, vũ trụ và công nghệ cao.',5,'2026-05-01 13:09:54');
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -118,10 +119,13 @@ CREATE TABLE `movies` (
   `id_category` int NOT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
   `created_at` datetime DEFAULT NULL,
+  `status_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_category` (`id_category`),
+  KEY `fk_status_movie` (`status_id`),
+  CONSTRAINT `fk_status_movie` FOREIGN KEY (`status_id`) REFERENCES `status_movie` (`id`),
   CONSTRAINT `movies_ibfk_1` FOREIGN KEY (`id_category`) REFERENCES `categories` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -130,6 +134,7 @@ CREATE TABLE `movies` (
 
 LOCK TABLES `movies` WRITE;
 /*!40000 ALTER TABLE `movies` DISABLE KEYS */;
+INSERT INTO `movies` VALUES ('Inception','Một kẻ trộm có khả năng xâm nhập vào giấc mơ của người khác.','2010-07-16','Khoa học viễn tưởng','Christopher Nolan','Leonardo DiCaprio, Joseph Gordon-Levitt','https://example.com/inception.jpg',1,1,'2026-05-01 13:11:11',NULL),('The Dark Knight','Batman đối đầu với Joker trong cuộc chiến giành lại hòa bình cho Gotham.','2008-07-18','Hành động','Christopher Nolan','Christian Bale, Heath Ledger','https://example.com/darkknight.jpg',1,2,'2026-05-01 13:11:11',NULL),('Parasite','Câu chuyện về sự phân hóa giàu nghèo đầy kịch tính của một gia đình Hàn Quốc.','2019-05-30','Tâm lý','Bong Joon-ho','Song Kang-ho, Lee Sun-kyun','https://example.com/parasite.jpg',2,3,'2026-05-01 13:11:11',NULL),('Your Name','Hai người lạ mặt bỗng dưng bị hoán đổi thân xác cho nhau qua những giấc mơ.','2016-08-26','Hoạt hình','Makoto Shinkai','Ryunosuke Kamiki, Mone Kamishiraishi','https://example.com/yourname.jpg',3,4,'2026-05-01 13:11:11',NULL);
 /*!40000 ALTER TABLE `movies` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -249,6 +254,30 @@ LOCK TABLES `status` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `status_movie`
+--
+
+DROP TABLE IF EXISTS `status_movie`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `status_movie` (
+  `id` int NOT NULL,
+  ` name_status` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `status_movie`
+--
+
+LOCK TABLES `status_movie` WRITE;
+/*!40000 ALTER TABLE `status_movie` DISABLE KEYS */;
+INSERT INTO `status_movie` VALUES (1,'Đang chiếu'),(2,'Sắp chiếu'),(3,'Ngừng chiếu');
+/*!40000 ALTER TABLE `status_movie` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tickets`
 --
 
@@ -318,4 +347,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-26 14:33:13
+-- Dump completed on 2026-05-01 23:29:47
