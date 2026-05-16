@@ -2,9 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.dht.configs;
+package com.tth.configs;
 
-import com.tth.configs.HibernateConfigs;
 import jakarta.servlet.MultipartConfigElement;
 import jakarta.servlet.ServletRegistration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -20,7 +19,7 @@ public class DispatcherServletInit extends AbstractAnnotationConfigDispatcherSer
         return new Class[] {
             ThymeleafConfigs.class,
             HibernateConfigs.class,
-            SpringSecurityConfigs.class ,
+//            SpringSecurityConfigs.class,
         };
     }
 

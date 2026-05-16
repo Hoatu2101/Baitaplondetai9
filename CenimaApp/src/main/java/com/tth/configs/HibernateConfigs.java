@@ -27,11 +27,10 @@ public class HibernateConfigs {
 
     @Autowired
     private Environment env;
-
     @Bean
     public LocalSessionFactoryBean getSessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setPackagesToScan(new String[]{"com.dht.pojo"});
+        sessionFactory.setPackagesToScan(new String[]{"com.tth.pojo"});
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
