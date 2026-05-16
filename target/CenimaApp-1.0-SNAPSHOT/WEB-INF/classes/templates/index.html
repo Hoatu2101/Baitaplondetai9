@@ -1,0 +1,141 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Trang chủ</title>
+    <th:block th:replace="base :: css"></th:block>
+</head>
+<body>
+    <div th:replace="base :: header"></div>
+    <section class="container mt-3">
+
+    <!-- SEARCH CARD -->
+    <div class="card shadow-sm mb-3">
+        <div class="card-body">
+
+            <form class="row g-2 align-items-center" method="get" th:action="@{/}">
+
+                <div class="col-md-5">
+                    <input type="text"
+                           name="kw"
+                           class="form-control"
+                           placeholder="🔍 Tìm phim..."
+                           th:value="${param.kw}">
+                </div>
+
+                <div class="col-md-3">
+                    <select name="cateId" class="form-select">
+                        <option value="">-- Tất cả thể loại --</option>
+                        <option th:each="c : ${categories}"
+                                th:value="${c.id}"
+                                th:text="${c.name}"
+                                th:selected="${param.cateId == c.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100">
+                        Tìm
+                    </button>
+                </div>
+
+                <div class="col-md-2">
+                    <a th:href="@{/}" class="btn btn-outline-secondary w-100">
+                        Reset
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <!-- ADD BUTTON -->
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="m-0">🎬 Danh sách phim</h5>
+
+        <a th:href="@{/admin/movies}" class="btn btn-success">
+            + Thêm phim
+        </a>
+    </div>
+
+    <!-- TABLE -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+
+            <table class="table table-hover table-striped align-middle text-center m-0">
+
+                <thead class="table-dark">
+                <tr>
+                    <th>Poster</th>
+                    <th>Tên phim</th>
+                    <th>Mô tả</th>
+                    <th width="120">Thao tác</th>
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <tr th:each="m : ${movies}">
+
+                    <!-- poster -->
+                    <td style="width:120px">
+                        <img th:src="${m.posterUrl} ?: 'https://via.placeholder.com/120'"
+                             class="img-fluid rounded shadow-sm"/>
+                    </td>
+
+                    <!-- title -->
+                    <td class="fw-bold" th:text="${m.title}"></td>
+
+                    <!-- description -->
+                    <td style="text-align:left; max-width:400px"
+                        th:text="${m.description}">
+                    </td>
+
+                    <!-- actions -->
+                    <td>
+
+                        <a th:href="@{'/admin/movies/' + ${m.id}}"
+                           class="btn btn-sm btn-primary me-1"
+                           title="Cập nhật">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+
+                        <button class="btn btn-sm btn-danger"
+                                title="Xóa"
+                                th:onclick="'deleteMovie(\'' + @{/api/movies/} + ${m.id} + '\')'">
+                            <i class="bi bi-trash"></i>
+                        </button>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+</section>
+
+    <div th:replace="base :: footer"></div>
+    <script>
+        function deleteProduct(url) {
+            if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
+                fetch(url, {method: 'DELETE'})
+                        .then(res => {
+                            if (res.ok) {
+                                alert("Xóa thành công!");
+                                location.reload(); // reload page hoặc xóa row nếu muốn
+                            } else {
+                                alert("Xóa thất bại!");
+                            }
+                        })
+                        .catch(err => console.error(err));
+            }
+        }
+    </script>
+</body>
+</html>

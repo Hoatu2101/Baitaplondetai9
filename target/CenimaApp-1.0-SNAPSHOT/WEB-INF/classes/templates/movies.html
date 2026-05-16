@@ -1,0 +1,154 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Cập nhật phim - ADMIN</title>
+    <th:block th:replace="base :: css"></th:block>
+</head>
+
+<body>
+
+<div th:replace="base :: header"></div>
+
+<section class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-warning text-dark fw-bold">
+            ✏️ Cập nhật phim
+        </div>
+
+        <div class="card-body">
+
+            <form th:action="@{'/admin/movies/update/' + ${movie.id}}"
+                  method="post">
+
+                <!-- TITLE -->
+                <div class="mb-3">
+                    <label class="form-label">Tên phim</label>
+                    <input type="text"
+                           class="form-control"
+                           name="title"
+                           th:value="${movie.title}">
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="mb-3">
+                    <label class="form-label">Mô tả</label>
+                    <textarea class="form-control"
+                              name="description"
+                              rows="3"
+                              th:text="${movie.description}">
+                    </textarea>
+                </div>
+
+                <div class="row">
+
+                    <!-- RELEASE DATE -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Ngày phát hành</label>
+                        <input type="date"
+                               class="form-control"
+                               name="release_date"
+                               th:value="${movie.releaseDate}">
+                    </div>
+
+                    <!-- GENRE -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Thể loại</label>
+                        <input type="text"
+                               class="form-control"
+                               name="genre"
+                               th:value="${movie.genre}">
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <!-- DIRECTOR -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Đạo diễn</label>
+                        <input type="text"
+                               class="form-control"
+                               name="director"
+                               th:value="${movie.director}">
+                    </div>
+
+                    <!-- CAST -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Diễn viên</label>
+                        <input type="text"
+                               class="form-control"
+                               name="cast"
+                               th:value="${movie.cast}">
+                    </div>
+
+                </div>
+
+                <!-- POSTER -->
+                <div class="mb-3">
+                    <label class="form-label">Poster URL</label>
+                    <input type="text"
+                           class="form-control"
+                           name="poster_url"
+                           th:value="${movie.posterUrl}">
+                </div>
+
+                <div class="row">
+
+                    <!-- CATEGORY -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Thể loại phim</label>
+                        <select class="form-select" name="id_category">
+
+                            <option th:each="c : ${categories}"
+                                    th:value="${c.id}"
+                                    th:text="${c.name}"
+                                    th:selected="${c.id == movie.idCategory}">
+                            </option>
+
+                        </select>
+                    </div>
+
+                    <!-- STATUS -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Trạng thái</label>
+                        <select class="form-select" name="status_id">
+
+                            <option th:each="s : ${statuses}"
+                                    th:value="${s.id}"
+                                    th:text="${s.nameStatus}"
+                                    th:selected="${s.id == movie.statusId}">
+                            </option>
+
+                        </select>
+                    </div>
+
+                </div>
+
+                <!-- BUTTONS -->
+                <div class="d-flex justify-content-between">
+
+                    <a th:href="@{/}" class="btn btn-secondary">
+                        ← Quay lại
+                    </a>
+
+                    <button type="submit" class="btn btn-success">
+                        💾 Lưu thay đổi
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</section>
+
+<div th:replace="base :: footer"></div>
+
+</body>
+</html>
+
