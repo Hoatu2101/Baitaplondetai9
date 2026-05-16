@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.dht.configs;
+package com.tth.configs;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.dht.formatters.CategoryFormatter;
+//import com.tth.formatters.CategoryFormatter;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,9 +26,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @ComponentScan(
         basePackages = {
-            "com.dht.controllers",
-            "com.dht.repository",
-            "com.dht.service"
+            "com.tth.controller",
+            "com.tth.repository",
+            "com.tth.service"
         }
 )
 @EnableWebMvc
@@ -40,10 +40,10 @@ public class WebAppContextConfigs implements WebMvcConfigurer {
         configurer.enable();
     }
 
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addFormatter(new CategoryFormatter());
-    }
+//    @Override
+//    public void addFormatters(FormatterRegistry registry) {
+//        registry.addFormatter(new CategoryFormatter());
+//    }
 
     @Bean
     public Cloudinary cloudinary() {
