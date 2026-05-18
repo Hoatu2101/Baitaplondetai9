@@ -1,0 +1,67 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Duyệt nhân viên</title>
+
+    <th:block th:replace="base :: css"></th:block>
+</head>
+
+<body>
+
+<div th:replace="base :: header"></div>
+
+<section class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-warning">
+            Danh sách nhân viên chờ duyệt
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-bordered">
+
+                <tr>
+                    <th>Avatar</th>
+                    <th>Họ tên</th>
+                    <th>Tài khoản</th>
+                    <th>SĐT</th>
+                    <th></th>
+                </tr>
+
+                <tr th:each="u : ${users}">
+
+                    <td width="100">
+                        <img th:src="${u.avatar}"
+                             class="img-fluid rounded"/>
+                    </td>
+
+                    <td th:text="${u.name}"></td>
+
+                    <td th:text="${u.username}"></td>
+
+                    <td th:text="${u.numberPhone}"></td>
+
+                    <td>
+
+                        <a class="btn btn-success"
+                           th:href="@{'/admin/approve/' + ${u.id}}">
+                            Duyệt
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+</body>
+</html>

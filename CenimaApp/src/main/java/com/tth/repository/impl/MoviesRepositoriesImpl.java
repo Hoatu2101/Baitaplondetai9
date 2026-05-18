@@ -51,7 +51,7 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
 
             String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {
-                predicates.add(b.like(root.get("name"), String.format("%%%s%%", kw)));
+                predicates.add(b.like(root.get("title"), String.format("%%%s%%", kw)));
 
             }
             String cateId = params.get("cateId");
@@ -65,7 +65,7 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
 
         Query query = session.createQuery(m);
         if (params != null) {
-            int pageSize = this.env.getProperty("products.page_size", Integer.class,8);
+            int pageSize = this.env.getProperty("movies.page_size", Integer.class,8);
             int page = Integer.parseInt(params.getOrDefault("page", "1"));
             int start = (page - 1) * pageSize;
 
