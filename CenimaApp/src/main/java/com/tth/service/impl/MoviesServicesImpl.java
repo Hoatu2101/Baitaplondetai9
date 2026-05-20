@@ -47,7 +47,7 @@ public class MoviesServicesImpl implements MoviesService{
 
     @Override
     public void addOrUpdateMovies(Movies m) {
-         if (!m.getFile().isEmpty()) {
+         if (m.getFile() != null && !m.getFile().isEmpty()) {
             try {
                 Map res = this.cloudinary.uploader().upload(m.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
                 m.setPosterUrl(res.get("secure_url").toString());

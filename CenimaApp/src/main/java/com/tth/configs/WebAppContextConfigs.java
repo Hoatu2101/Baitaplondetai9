@@ -26,9 +26,10 @@ import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 @EnableWebMvc
 @EnableTransactionManagement
 @ComponentScan(basePackages = {
-    "com.tth.controller",
-    "com.tth.repository",
-    "com.tth.service"
+//    "com.tth.controller",
+//    "com.tth.repository",
+//    "com.tth.service"
+    "com.tth"
 })
 public class WebAppContextConfigs implements WebMvcConfigurer {
 
@@ -38,65 +39,10 @@ public class WebAppContextConfigs implements WebMvcConfigurer {
         configurer.enable();
     }
 
-//    @Bean
-//    public SpringResourceTemplateResolver templateResolver(
-//            ApplicationContext applicationContext) {
-//
-//        SpringResourceTemplateResolver resolver
-//                = new SpringResourceTemplateResolver();
-//
-//        resolver.setApplicationContext(applicationContext);
-//        resolver.setPrefix("templates/");
-//        resolver.setSuffix(".html");
-//        resolver.setCharacterEncoding("UTF-8");
-//        resolver.setTemplateMode("HTML");
-//
-//        return resolver;
-//    }
-
-//    @Bean
-//    public SpringTemplateEngine templateEngine(
-//            ApplicationContext applicationContext) {
-//
-//        SpringTemplateEngine engine = new SpringTemplateEngine();
-//
-//        engine.setTemplateResolver(
-//                templateResolver(applicationContext));
-//
-//        engine.setEnableSpringELCompiler(true);
-//
-//        return engine;
-//    }
-
-//    @Bean
-//    public ViewResolver viewResolver(
-//            ApplicationContext applicationContext) {
-//
-//        ThymeleafViewResolver resolver
-//                = new ThymeleafViewResolver();
-//
-//        resolver.setTemplateEngine(
-//                templateEngine(applicationContext));
-//
-//        resolver.setCharacterEncoding("UTF-8");
-//
-//        return resolver;
-//    }
-
     @Bean
     public StandardServletMultipartResolver multipartResolver() {
         return new StandardServletMultipartResolver();
     }
-
-//    @Bean
-//    public Cloudinary cloudinary() {
-//        return new Cloudinary(ObjectUtils.asMap(
-//                "cloud_name", "dxxwcby8l",
-//                "api_key", "792844686918347",
-//                "api_secret", "T8ys_Z9zaKSqmKWa4K1RY6DXUJg",
-//                "secure", true
-//        ));
-//    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

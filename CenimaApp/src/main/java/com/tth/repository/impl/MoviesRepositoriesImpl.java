@@ -56,7 +56,10 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
             }
             String cateId = params.get("cateId");
             if (cateId != null && !cateId.isEmpty()) {
-                predicates.add(b.equal(root.get("idCategory").as(Integer.class), cateId));
+                predicates.add(
+                        b.equal(root.get("idCategory").get("id"),
+                                Integer.parseInt(cateId))
+                );
 
             }
             m.where(predicates.toArray(Predicate[]::new));
@@ -65,7 +68,7 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
 
         Query query = session.createQuery(m);
         if (params != null) {
-            int pageSize = this.env.getProperty("movies.page_size", Integer.class,8);
+            int pageSize = this.env.getProperty("movies.page_size", Integer.class, 8);
             int page = Integer.parseInt(params.getOrDefault("page", "1"));
             int start = (page - 1) * pageSize;
 
@@ -80,25 +83,25 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
     @Override
     public void addOrUpdateMovies(Movies p) {
         // validate cơ bản
-    if (p == null) {
-        throw new IllegalArgumentException("Phim  không được null");
-    }
+        if (p == null) {
+            throw new IllegalArgumentException("Phim  không được null");
+        }
 
-    if (p.getTitle()== null || p.getTitle().trim().isEmpty()) {
-        throw new IllegalArgumentException("Tên phim không được rỗng");
-    }
-    Session s = this.factory.getObject().getCurrentSession();
+        if (p.getTitle() == null || p.getTitle().trim().isEmpty()) {
+            throw new IllegalArgumentException("Tên phim không được rỗng");
+        }
+        Session s = this.factory.getObject().getCurrentSession();
 
-    if (p.getId() == null) {
-        s.persist(p);
-    } else {
-        s.merge(p);
-    }
+        if (p.getId() == null) {
+            s.persist(p);
+        } else {
+            s.merge(p);
+        }
     }
 
     @Override
     public Movies getMovieById(int id) {
-          Session s = this.factory.getObject().getCurrentSession();
+        Session s = this.factory.getObject().getCurrentSession();
         return s.get(Movies.class, id);
     }
 

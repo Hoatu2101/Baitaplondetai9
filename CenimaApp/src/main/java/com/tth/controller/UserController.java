@@ -31,9 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(
-            @ModelAttribute(value = "user") Users user
-    ) {
+    public String register(@ModelAttribute(value = "user") Users user) {
 
         this.userService.addUser(user);
 

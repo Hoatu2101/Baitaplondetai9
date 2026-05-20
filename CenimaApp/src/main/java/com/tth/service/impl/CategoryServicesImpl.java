@@ -17,7 +17,6 @@ import com.tth.repository.CategoryRepositories;
  * @author Administrator
  */
 @Service
-
 public class CategoryServicesImpl implements CategoryServices {
 @Autowired
 private CategoryRepositories cateRepo;

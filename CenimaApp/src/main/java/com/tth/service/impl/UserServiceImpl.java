@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package com.tth.service.impl;
 
 import com.cloudinary.Cloudinary;
@@ -17,14 +16,16 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 /**
  *
  * @author Admin
  */
-
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -49,10 +50,11 @@ public class UserServiceImpl implements UserService {
 
         user.setActive(true);
 
-        if (user.getRole().equals("ROLE_CUSTOMER"))
+        if (user.getRole().equals("ROLE_CUSTOMER")) {
             user.setApproved(true);
-        else
+        } else {
             user.setApproved(false);
+        }
 
         if (user.getFile() != null && !user.getFile().isEmpty()) {
 
@@ -90,4 +92,31 @@ public class UserServiceImpl implements UserService {
     public void approveStaff(int id) {
         this.userRepo.approveStaff(id);
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        Users u = this.userRepo.getUserByUsername(username);
+
+        if (u == null) {
+            throw new UsernameNotFoundException("Invalid user");
+        }
+
+        if (!u.getApproved()) {
+            throw new UsernameNotFoundException(
+                    "Tài khoản chưa được duyệt");
+        }
+
+        if (!u.getActive()) {
+            throw new UsernameNotFoundException(
+                    "Tài khoản đã bị khóa");
+        }
+
+        return org.springframework.security.core.userdetails.User
+                .withUsername(u.getUsername())
+                .password(u.getPassword())
+                .roles(u.getRole().replace("ROLE_", ""))
+                .build();
+    }
+
 }
