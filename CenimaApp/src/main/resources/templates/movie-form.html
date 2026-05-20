@@ -1,0 +1,63 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Create Movie</title>
+    <th:block th:replace="base :: css"></th:block>
+</head>
+
+<body>
+
+    <div th:replace="base :: header"></div>
+
+    <section class="container mt-4">
+
+        <form method="post"
+              enctype="multipart/form-data"
+              th:object="${movie}">
+
+            <div class="mb-3">
+                <label>Tên phim</label>
+                <input type="text"
+                       th:field="*{name}"
+                       class="form-control"/>
+            </div>
+
+            <div class="mb-3">
+                <label>Mô tả</label>
+                <textarea th:field="*{description}"
+                          class="form-control"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label>Poster</label>
+                <input type="file"
+                       th:field="*{file}"
+                       class="form-control"/>
+            </div>
+
+            <div class="mb-3">
+                <label>Trailer</label>
+                <input type="text"
+                       th:field="*{trailer}"
+                       class="form-control"/>
+            </div>
+            <div class="mb-3">
+                <label>Giá vé</label>
+                <input type="number"
+                       th:field="*{price}"
+                       class="form-control"/>
+            </div>
+
+            <div class="mb-3">
+                <button class="btn btn-success">
+                    Lưu phim
+                </button>
+            </div>
+
+        </form>
+
+    </section>
+
+</body>
+</html>

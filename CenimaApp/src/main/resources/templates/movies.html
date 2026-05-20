@@ -1,4 +1,4 @@
-<!doctype html>
+<!--<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 
     <head>
@@ -25,70 +25,70 @@
                       enctype="multipart/form-data"
                       th:object="${movie}">
 
-                    <!-- TITLE -->
+                     TITLE 
                     <div class="mb-3">
                         <label class="form-label">Tên phim</label>
                         <input type="text"
                                class="form-control"
                                th:field="*{title}"
-                               <!--th:value="${movie.title}">-->
+                               th:value="${movie.title}">
                     </div>
 
-                    <!-- DESCRIPTION -->
+                     DESCRIPTION 
                     <div class="mb-3">
                         <label class="form-label">Mô tả</label>
                         <textarea class="form-control"
                                   th:field="*{description}"
                                   rows="3"
-                                  <!--th:text="${movie.description}">-->
+                                  th:text="${movie.description}">
                         </textarea>
                     </div>
 
                     <div class="row">
 
-                        <!-- RELEASE DATE -->
+                         RELEASE DATE 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Ngày phát hành</label>
                             <input type="date"
                                    class="form-control"
                                    th:field="*{releaseDate}"
-                                   <!--th:value="${movie.releaseDate}">-->
+                                   th:value="${movie.releaseDate}">
                         </div>
 
-                        <!-- GENRE -->
+                         GENRE 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Thể loại</label>
                             <input type="text"
                                    class="form-control"
                                    th:field="*{genre}"
-                                   <!--th:value="${movie.genre}">-->
+                                   th:value="${movie.genre}">
                         </div>
 
                     </div>
 
                     <div class="row">
 
-                        <!-- DIRECTOR -->
+                         DIRECTOR 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Đạo diễn</label>
                             <input type="text"
                                    class="form-control"
                                    th:field="*{director}"
-                                   <!--th:value="${movie.director}">-->
+                                   th:value="${movie.director}">
                         </div>
 
-                        <!-- CAST -->
+                         CAST 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Diễn viên</label>
                             <input type="text"
                                    class="form-control"
                                    th:field="*{cast}"
-                                   <!--th:value="${movie.cast}">-->
+                                   th:value="${movie.cast}">
                         </div>
 
                     </div>
 
-                    <!-- POSTER -->
+                     POSTER 
                     <div class="mb-3">
                         <label class="form-label">Poster</label>
 
@@ -99,7 +99,7 @@
 
                     <div class="row">
 
-                        <!-- CATEGORY -->
+                         CATEGORY 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Thể loại phim</label>
                             <select class="form-select" th:field="*{idCategory}">
@@ -113,7 +113,7 @@
                             </select>
                         </div>
 
-                        <!-- STATUS -->
+                         STATUS 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Trạng thái</label>
                             <select class="form-select" th:field="*{statusId}">
@@ -129,7 +129,7 @@
 
                     </div>
 
-                    <!-- BUTTONS -->
+                     BUTTONS 
                     <div class="d-flex justify-content-between">
 
                         <a th:href="@{/}" class="btn btn-secondary">
@@ -153,4 +153,56 @@
 
 </body>
 </html>
+-->
 
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Movies</title>
+    <th:block th:replace="base :: css"></th:block>
+</head>
+
+<body>
+
+    <div th:replace="base :: header"></div>
+
+    <section class="container mt-4">
+
+        <div class="row">
+
+            <div class="col-md-3 mb-4"
+                 th:each="m : ${movies}">
+
+                <div class="card shadow h-100">
+
+                    <img th:src="${m.posterUrl}"
+                         class="card-img-top"
+                         style="height: 350px; object-fit: cover"/>
+
+                    <div class="card-body">
+
+                        <h5 th:text="${m.name}"></h5>
+
+                        <p>
+                            Giá vé:
+                            <span th:text="${m.price}"></span>
+                        </p>
+
+                        <a class="btn btn-primary"
+                           th:href="@{'/movies/' + ${m.id}}">
+                            Chi tiết
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</body>
+</html>

@@ -10,12 +10,11 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import java.awt.event.AWTEventListener;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -36,12 +35,14 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
     @Autowired
     private Environment env;
 
+//    @Autowired
+//    private LocalSessionFactoryBean factory;
     @Autowired
-    private LocalSessionFactoryBean factory;
+    private SessionFactory factory;
 
     @Override
     public List<Movies> getMovies(Map<String, String> params) {
-        Session session = this.factory.getObject().getCurrentSession();
+        Session session = this.factory.getCurrentSession();
         CriteriaBuilder b = session.getCriteriaBuilder();
         CriteriaQuery<Movies> m = b.createQuery(Movies.class);
         Root root = m.from(Movies.class);
@@ -90,7 +91,7 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
         if (p.getTitle() == null || p.getTitle().trim().isEmpty()) {
             throw new IllegalArgumentException("Tên phim không được rỗng");
         }
-        Session s = this.factory.getObject().getCurrentSession();
+        Session s = this.factory.getCurrentSession();
 
         if (p.getId() == null) {
             s.persist(p);
@@ -101,13 +102,17 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
 
     @Override
     public Movies getMovieById(int id) {
-        Session s = this.factory.getObject().getCurrentSession();
+        Session s = this.factory.getCurrentSession();
         return s.get(Movies.class, id);
     }
 
     @Override
     public void deleteMovie(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+        Session s = this.factory.getCurrentSession();
 
+        Movies m = s.get(Movies.class, id);
+
+        s.remove(m);
+    }
 }
+

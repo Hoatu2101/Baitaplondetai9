@@ -122,9 +122,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @ComponentScan(
         basePackages = {
-//            "com.tth.controller",
-//            "com.tth.repository",
-//            "com.tth.service"
+            //            "com.tth.controller",
+            //            "com.tth.repository",
+            //            "com.tth.service"
             "com.tth"
         }
 )
@@ -138,7 +138,6 @@ public class SpringSecurityConfigs {
 
     @Autowired
     private UserService userService;
-
 
     @Bean
     public AuthenticationManager authenticationManager(
@@ -158,32 +157,35 @@ public class SpringSecurityConfigs {
 
         return authProvider;
     }
-    
-@Bean
-public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-    http
-        .csrf(csrf -> csrf.disable())
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        .authorizeHttpRequests(auth -> auth
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                         "/",
                         "/login",
                         "/register",
+                        "movies",
                         "/css/**",
                         "/js/**",
                         "/images/**",
                         "/api/**"
                 ).permitAll()
-
                 .requestMatchers("/admin/**")
                 .hasRole("ADMIN")
-
+                .requestMatchers("/staff/**")
+                .hasAnyRole("STAFF", "ADMIN")
+                .requestMatchers("/movies/create")
+                .hasAnyRole("ADMIN", "STAFF")
+                .requestMatchers("/movies/delete/**")
+                .hasAnyRole("ADMIN", "STAFF")
                 .anyRequest()
                 .authenticated()
-        )
-
-        .formLogin(form -> form
+                )
+                .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .usernameParameter("username")
@@ -191,21 +193,19 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 .defaultSuccessUrl("/", true)
                 .failureUrl("/login?error=true")
                 .permitAll()
-        )
-
-        .logout(logout -> logout
+                )
+                .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout=true")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .permitAll()
-        );
+                );
 
-    http.authenticationProvider(authenticationProvider());
+        http.authenticationProvider(authenticationProvider());
 
-    return http.build();
-}
-
+        return http.build();
+    }
 
     @Bean
     public Cloudinary cloudinary() {

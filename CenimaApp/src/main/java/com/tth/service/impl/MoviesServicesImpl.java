@@ -25,10 +25,12 @@ import java.util.logging.Logger;
 public class MoviesServicesImpl implements MoviesService{
 
     
-     @Autowired
-     private MoviesRepositories moRepo;
-     @Autowired
-     private Cloudinary cloudinary;
+    @Autowired
+    private MoviesRepositories moRepo;
+    
+    @Autowired
+    private Cloudinary cloudinary;
+     
     @Override
     public List<Movies> getMovies(Map<String, String> params) {
             return this.moRepo.getMovies(params);
@@ -41,13 +43,13 @@ public class MoviesServicesImpl implements MoviesService{
     }
 
     @Override
-    public void deleteProduct(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void deleteMovies(int id) {
+        this.moRepo.deleteMovie(id);
     }
 
     @Override
     public void addOrUpdateMovies(Movies m) {
-         if (m.getFile() != null && !m.getFile().isEmpty()) {
+         if (!m.getFile().isEmpty()) {
             try {
                 Map res = this.cloudinary.uploader().upload(m.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
                 m.setPosterUrl(res.get("secure_url").toString());
@@ -59,7 +61,7 @@ public class MoviesServicesImpl implements MoviesService{
         
         this.moRepo.addOrUpdateMovies(m);
     }
-    }
+}
 
  
     
