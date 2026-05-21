@@ -12,8 +12,14 @@ import java.util.Map;
  * @author Administrator
  */
 public interface MoviesRepositories {
-    List<Movies> getMovies(Map<String, String> params);
-    void addOrUpdateMovies(Movies p);
+
+    List<Movies> getMovies(String kw, int page);
+    
+    List<Movies> getMovies(String kw, Integer cateId, int page);
+
     Movies getMovieById(int id);
+
+    void addOrUpdate(Movies movie);
+
     void deleteMovie(int id);
 }

@@ -1,63 +1,140 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-    <head>
-        <title>Create Movie</title>
+<head>
+    <title>Quản lý phim</title>
     <th:block th:replace="base :: css"></th:block>
 </head>
 
 <body>
 
-    <div th:replace="base :: header"></div>
+<div th:replace="base :: header"></div>
 
-    <section class="container mt-4">
+<section class="container mt-4">
+
+    <div class="card shadow p-4">
+
+        <h2 class="mb-4">Quản lý phim</h2>
 
         <form method="post"
               enctype="multipart/form-data"
+              th:action="@{/admin/movies}"
               th:object="${movie}">
 
+            <input type="hidden" th:field="*{id}"/>
+
+            <!-- TÊN -->
             <div class="mb-3">
                 <label>Tên phim</label>
+
                 <input type="text"
-                       th:field="*{name}"
-                       class="form-control"/>
+                       class="form-control"
+                       th:field="*{movieName}"
+                       required/>
             </div>
 
+            <!-- MÔ TẢ -->
             <div class="mb-3">
                 <label>Mô tả</label>
-                <textarea th:field="*{description}"
-                          class="form-control"></textarea>
+
+                <textarea class="form-control"
+                          rows="5"
+                          th:field="*{description}">
+                </textarea>
             </div>
 
+            <!-- THỂ LOẠI -->
             <div class="mb-3">
-                <label>Poster</label>
-                <input type="file"
-                       th:field="*{file}"
-                       class="form-control"/>
+
+                <label>Thể loại</label>
+
+                <select class="form-select"
+                        th:field="*{category}"
+                        required>
+
+                    <option value="">-- Chọn thể loại --</option>
+
+                    <option th:each="c : ${categories}"
+                            th:value="${c.id}"
+                            th:text="${c.name}">
+                    </option>
+
+                </select>
             </div>
 
+            <!-- TRAILER -->
             <div class="mb-3">
+
                 <label>Trailer</label>
+
                 <input type="text"
-                       th:field="*{trailer}"
-                       class="form-control"/>
-            </div>
-            <div class="mb-3">
-                <label>Giá vé</label>
-                <input type="number"
-                       th:field="*{price}"
-                       class="form-control"/>
+                       class="form-control"
+                       th:field="*{trailer}"/>
             </div>
 
+            <!-- GIÁ -->
             <div class="mb-3">
-                <button class="btn btn-success">
-                    Lưu phim
-                </button>
+
+                <label>Giá vé</label>
+
+                <input type="number"
+                       class="form-control"
+                       th:field="*{price}"/>
             </div>
+
+            <!-- ĐỊNH DẠNG -->
+            <div class="mb-3">
+
+                <label>Định dạng</label>
+
+                <select class="form-select"
+                        th:field="*{movieFormat}">
+
+                    <option value="2D">2D</option>
+                    <option value="3D">3D</option>
+                    <option value="IMAX">IMAX</option>
+
+                </select>
+            </div>
+
+            <!-- THỜI LƯỢNG -->
+            <div class="mb-3">
+
+                <label>Thời lượng</label>
+
+                <input type="number"
+                       class="form-control"
+                       th:field="*{duration}"/>
+            </div>
+
+            <!-- POSTER -->
+            <div class="mb-3">
+
+                <label>Poster</label>
+
+                <input type="file"
+                       name="file"
+                       class="form-control"/>
+
+                <div class="mt-2"
+                     th:if="${movie.poster != null}">
+
+                    <img th:src="${movie.poster}"
+                         width="200"
+                         class="rounded shadow"/>
+                </div>
+
+            </div>
+
+            <button class="btn btn-success">
+                Lưu phim
+            </button>
 
         </form>
 
-    </section>
+    </div>
+
+</section>
 
 </body>
 </html>

@@ -38,7 +38,7 @@ public class AuthController {
         return "register";
     }
 
-    @PostMapping("/api/register")
+    @PostMapping("/register")
     public String register(
             @ModelAttribute("user") Users user) {
 

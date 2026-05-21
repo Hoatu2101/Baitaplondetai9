@@ -17,52 +17,83 @@ import com.tth.service.MoviesService;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  *
  * @author Administrator
  */
+//@Service
+//public class MoviesServicesImpl implements MoviesService{
+//
+//    
+//    @Autowired
+//    private MoviesRepositories moRepo;
+//    
+//    @Autowired
+//    private Cloudinary cloudinary;
+//     
+//    @Override
+//    public List<Movies> getMovies(Map<String, String> params) {
+//            return this.moRepo.getMovies(params);
+//    }
+//
+//
+//    @Override
+//    public Movies getMoviestById(int id) {
+//       return this.moRepo.getMovieById(id);
+//    }
+//
+//    @Override
+//    public void deleteMovies(int id) {
+//        this.moRepo.deleteMovie(id);
+//    }
+//
+//    @Override
+//    public void addOrUpdateMovies(Movies m) {
+//         if (!m.getFile().isEmpty()) {
+//            try {
+//                Map res = this.cloudinary.uploader().upload(m.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+//                m.setPosterUrl(res.get("secure_url").toString());
+//           } catch (IOException ex) {
+//                Logger.getLogger(MoviesServicesImpl.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            
+//        }
+//        
+//        this.moRepo.addOrUpdateMovies(m);
+//    }
+//}
+
 @Service
-public class MoviesServicesImpl implements MoviesService{
+@Transactional
+public class MoviesServicesImpl implements MoviesService {
 
-    
     @Autowired
-    private MoviesRepositories moRepo;
-    
-    @Autowired
-    private Cloudinary cloudinary;
-     
-    @Override
-    public List<Movies> getMovies(Map<String, String> params) {
-            return this.moRepo.getMovies(params);
-    }
-
+    private MoviesRepositories movieRepo;
 
     @Override
-    public Movies getMoviestById(int id) {
-       return this.moRepo.getMovieById(id);
+    public List<Movies> getMovies(String kw, int page) {
+        return this.movieRepo.getMovies(kw, page);
     }
 
     @Override
-    public void deleteMovies(int id) {
-        this.moRepo.deleteMovie(id);
+    public List<Movies> getMovies(String kw, Integer cateId, int page) {
+        return this.movieRepo.getMovies(kw, cateId, page);
     }
 
     @Override
-    public void addOrUpdateMovies(Movies m) {
-         if (!m.getFile().isEmpty()) {
-            try {
-                Map res = this.cloudinary.uploader().upload(m.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-                m.setPosterUrl(res.get("secure_url").toString());
-           } catch (IOException ex) {
-                Logger.getLogger(MoviesServicesImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-        }
-        
-        this.moRepo.addOrUpdateMovies(m);
+    public Movies getMovieById(int id) {
+        return this.movieRepo.getMovieById(id);
+    }
+
+    @Override
+    public void addOrUpdate(Movies movie) {
+        this.movieRepo.addOrUpdate(movie);
+    }
+
+    @Override
+    public void deleteMovie(int id) {
+        this.movieRepo.deleteMovie(id);
     }
 }
-
- 
-    
-

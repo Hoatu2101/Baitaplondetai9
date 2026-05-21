@@ -175,7 +175,7 @@ public class SpringSecurityConfigs {
                         "/api/**"
                 ).permitAll()
                 .requestMatchers("/admin/**")
-                .hasRole("ADMIN")
+                .hasAnyRole("ADMIN", "STAFF")
                 .requestMatchers("/staff/**")
                 .hasAnyRole("STAFF", "ADMIN")
                 .requestMatchers("/movies/create")

@@ -7,6 +7,8 @@ package com.tth.pojo;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -31,8 +33,9 @@ public class StatusMovie implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @NotNull
+//    @Basic(optional = false)
+//    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
@@ -40,7 +43,7 @@ public class StatusMovie implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "name_status")
     private String nameStatus;
-    @OneToMany(mappedBy = "statusId")
+    @OneToMany(mappedBy = "statusMovie")
     private List<Movies> moviesList;
 
     public StatusMovie() {

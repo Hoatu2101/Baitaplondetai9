@@ -55,7 +55,7 @@ public class Categories implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCategory")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private List<Movies> moviesList;
 
     public Categories() {
