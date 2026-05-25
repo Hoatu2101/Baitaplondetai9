@@ -6,6 +6,7 @@ package com.tth.controller;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.tth.pojo.Categories;
 import com.tth.pojo.Movies;
 import com.tth.service.CategoryServices;
 import com.tth.service.MoviesService;
@@ -38,9 +39,6 @@ public class MovieController {
     @Autowired
     private Cloudinary cloudinary;
 
-    // ==========================
-    // DANH SÁCH PHIM
-    // ==========================
     @GetMapping("/movies")
     public String movies(Model model,
             @RequestParam(value = "kw", required = false) String kw,
@@ -51,31 +49,26 @@ public class MovieController {
                 this.movieService.getMovies(kw, cateId, page));
 
         model.addAttribute("categories",
-                this.cateService.getCates());
+                cateService.getCates());
 
         return "movies";
     }
 
-    // ==========================
-    // CHI TIẾT
-    // ==========================
     @GetMapping("/movies/{id}")
     public String details(Model model,
             @PathVariable(value = "id") int id) {
 
         Movies movie = this.movieService.getMovieById(id);
 
-        if (movie == null)
+        if (movie == null) {
             return "redirect:/movies";
+        }
 
         model.addAttribute("movie", movie);
 
         return "movie-details";
     }
 
-    // ==========================
-    // FORM THÊM
-    // ==========================
     @GetMapping("/admin/movies")
     public String createView(Model model) {
 
@@ -87,15 +80,12 @@ public class MovieController {
         return "movie-form";
     }
 
-    // ==========================
-    // FORM UPDATE
-    // ==========================
     @GetMapping("/admin/movies/{id}")
     public String updateView(Model model,
             @PathVariable(value = "id") int id) {
 
         model.addAttribute("movie",
-                this.movieService.getMovieById(id));
+                movieService.getMovieById(id));
 
         model.addAttribute("categories",
                 cateService.getCates());
@@ -103,42 +93,42 @@ public class MovieController {
         return "movie-form";
     }
 
-    // ==========================
-    // SAVE
-    // ==========================
     @PostMapping("/admin/movies")
     public String addMovie(
-            @ModelAttribute(value = "movie") Movies movie,
-            @RequestParam("file") MultipartFile file)
+            @ModelAttribute("movie") Movies movie,
+            @RequestParam("categoryId") int categoryId,
+            @RequestParam(value = "file", required = false) MultipartFile file)
             throws IOException {
 
-        if (!file.isEmpty()) {
+        Categories c = new Categories();
+        c.setId(categoryId);
 
-            String url = (String) cloudinary.uploader().upload(
+        movie.setCategory(c);
+
+        if (file != null && !file.isEmpty()) {
+
+            Map res = cloudinary.uploader().upload(
                     file.getBytes(),
-                    ObjectUtils.emptyMap()).get("secure_url");
+                    ObjectUtils.emptyMap());
 
-            movie.setPoster(url);
+            movie.setPoster(
+                    res.get("secure_url").toString());
         }
 
-        this.movieService.addOrUpdate(movie);
+        movieService.addOrUpdate(movie);
 
         return "redirect:/movies";
     }
 
-    // ==========================
-    // DELETE
-    // ==========================
     @GetMapping("/admin/deleteMovie/{id}")
     public String deleteMovie(
             @PathVariable(value = "id") int id) {
 
-        this.movieService.deleteMovie(id);
+        movieService.deleteMovie(id);
 
         return "redirect:/movies";
     }
 }
-
 
 //@Controller
 //public class MovieController {

@@ -118,44 +118,19 @@ import org.springframework.transaction.annotation.Transactional;
 //
         
 @Repository
-@PropertySource("classpath:configs.properties")
 @Transactional
-public class MoviesRepositoriesImpl implements MoviesRepositories {
+public class MoviesRepositoriesImpl
+        implements MoviesRepositories {
 
     @Autowired
     private LocalSessionFactoryBean factory;
 
     @Override
-    public List<Movies> getMovies(String kw, int page) {
-
-        Session s = this.factory.getObject().getCurrentSession();
-
-        String hql = "FROM Movies m WHERE m.active = true";
-
-        if (kw != null && !kw.isEmpty()) {
-            hql += " AND m.movieName LIKE :kw";
-        }
-
-        Query q = s.createQuery(hql, Movies.class);
-
-        if (kw != null && !kw.isEmpty()) {
-            q.setParameter("kw", "%" + kw + "%");
-        }
-
-        int pageSize = 20;
-
-        q.setFirstResult((page - 1) * pageSize);
-        q.setMaxResults(pageSize);
-
-        return q.getResultList();
-    }
-
-    @Override
     public List<Movies> getMovies(String kw,
-            Integer cateId,
-            int page) {
+                                  Integer cateId,
+                                  int page) {
 
-        Session s = this.factory.getObject().getCurrentSession();
+        Session s = factory.getObject().getCurrentSession();
 
         String hql = "FROM Movies m WHERE m.active = true";
 
@@ -167,7 +142,9 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
             hql += " AND m.category.id = :cateId";
         }
 
-        Query q = s.createQuery(hql, Movies.class);
+        hql += " ORDER BY m.id DESC";
+
+        Query<Movies> q = s.createQuery(hql, Movies.class);
 
         if (kw != null && !kw.isEmpty()) {
             q.setParameter("kw", "%" + kw + "%");
@@ -180,7 +157,6 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
         int pageSize = 20;
 
         q.setFirstResult((page - 1) * pageSize);
-
         q.setMaxResults(pageSize);
 
         return q.getResultList();
@@ -188,29 +164,31 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
 
     @Override
     public Movies getMovieById(int id) {
-        Session s = this.factory.getObject().getCurrentSession();
+
+        Session s = factory.getObject().getCurrentSession();
+
         return s.get(Movies.class, id);
     }
 
     @Override
     public void addOrUpdate(Movies movie) {
 
-        Session s = this.factory.getObject().getCurrentSession();
+        Session s = factory.getObject().getCurrentSession();
 
-        if (movie.getId() == null) {
+        if (movie.getId() == null)
             s.persist(movie);
-        } else {
+        else
             s.merge(movie);
-        }
     }
 
     @Override
     public void deleteMovie(int id) {
 
-        Session s = this.factory.getObject().getCurrentSession();
+        Session s = factory.getObject().getCurrentSession();
 
-        Movies m = this.getMovieById(id);
+        Movies movie = this.getMovieById(id);
 
-        s.remove(m);
+        if (movie != null)
+            s.remove(movie);
     }
 }

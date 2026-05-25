@@ -67,33 +67,32 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class MoviesServicesImpl implements MoviesService {
+public class MoviesServicesImpl
+        implements MoviesService {
 
     @Autowired
     private MoviesRepositories movieRepo;
 
     @Override
-    public List<Movies> getMovies(String kw, int page) {
-        return this.movieRepo.getMovies(kw, page);
-    }
+    public List<Movies> getMovies(String kw,
+                                  Integer cateId,
+                                  int page) {
 
-    @Override
-    public List<Movies> getMovies(String kw, Integer cateId, int page) {
-        return this.movieRepo.getMovies(kw, cateId, page);
+        return movieRepo.getMovies(kw, cateId, page);
     }
 
     @Override
     public Movies getMovieById(int id) {
-        return this.movieRepo.getMovieById(id);
+        return movieRepo.getMovieById(id);
     }
 
     @Override
     public void addOrUpdate(Movies movie) {
-        this.movieRepo.addOrUpdate(movie);
+        movieRepo.addOrUpdate(movie);
     }
 
     @Override
     public void deleteMovie(int id) {
-        this.movieRepo.deleteMovie(id);
+        movieRepo.deleteMovie(id);
     }
 }

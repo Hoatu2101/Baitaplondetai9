@@ -233,6 +233,9 @@ import org.springframework.web.multipart.MultipartFile;
 //    }
 //    
 //}
+
+
+
 @Entity
 @Table(name = "movies")
 public class Movies implements Serializable {

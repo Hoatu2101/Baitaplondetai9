@@ -28,36 +28,6 @@ import org.springframework.web.bind.annotation.PathVariable;
  *
  * @author admin
  */
-//@Controller
-//@ControllerAdvice
-//public class HomeController {
-//
-//    @Autowired
-//    private CategoryServices cateService;
-//
-//    @Autowired
-//    private MoviesService movieService;
-//
-//    @GetMapping("/")
-//    public String index(Model model,
-//            @RequestParam Map<String, String> params) {
-//
-//        model.addAttribute(
-//                "movies",
-//                this.movieService.getMovies(params)
-//        );
-//
-//        model.addAttribute(
-//                "categories",
-//                this.cateService.getCates()
-//        );
-//
-//        return "index";
-//    }
-//
-//}
-
-
 @Controller
 @ControllerAdvice
 public class HomeController {
@@ -72,9 +42,7 @@ public class HomeController {
     private UserService userService;
 
     /*
-        =========================
-        LOAD GLOBAL DATA
-        =========================
+        GLOBAL DATA
      */
     @ModelAttribute
     public void commonAttr(Model model,
@@ -82,34 +50,29 @@ public class HomeController {
 
         model.addAttribute(
                 "categories",
-                this.cateService.getCates()
-        );
+                cateService.getCates());
 
         if (principal != null) {
 
-            Users user = this.userService
+            Users user = userService
                     .getUserByUsername(principal.getName());
 
-            model.addAttribute(
-                    "currentUser",
-                    user
-            );
+            model.addAttribute("currentUser", user);
         }
     }
 
     /*
-        =========================
-        HOME PAGE
-        =========================
+        HOME
      */
     @GetMapping("/")
     public String index(
             Model model,
-            @RequestParam(value="kw",required = false) String kw,
-            @RequestParam(value="page",defaultValue = "1") int page) {
+            @RequestParam(value = "kw", required = false) String kw,
+            @RequestParam(value = "cateId", required = false) Integer cateId,
+            @RequestParam(value = "page", defaultValue = "1") int page) {
 
         List<Movies> movies =
-                this.movieService.getMovies(kw, page);
+                movieService.getMovies(kw, cateId, page);
 
         model.addAttribute("movies", movies);
 
@@ -118,93 +81,14 @@ public class HomeController {
         return "index";
     }
 
-//    /*
-//        =========================
-//        MOVIES PAGE
-//        =========================
-//     */
-//    @GetMapping("/movies")
-//    public String movies(
-//            Model model,
-//            @RequestParam(required = false) String kw,
-//            @RequestParam(defaultValue = "1") int page) {
-//
-//        List<Movies> movies =
-//                this.movieService.getMovies(kw, page);
-//
-//        model.addAttribute("movies", movies);
-//
-//        model.addAttribute("currentPage", page);
-//
-//        model.addAttribute("kw", kw);
-//
-//        return "movies";
-//    }
-
     /*
-        =========================
-        LOGIN PAGE
-        =========================
-     */
-//    @GetMapping("/login")
-//    public String login() {
-//        return "login";
-//    }
-
-    /*
-        =========================
-        REGISTER PAGE
-        =========================
-     */
-//    @GetMapping("/register")
-//    public String register(Model model) {
-//
-//        model.addAttribute(
-//                "user",
-//                new Users()
-//        );
-//
-//        return "register";
-//    }
-
-    /*
-        =========================
-        ADMIN DASHBOARD
-        =========================
-     */
-    @GetMapping("/admin")
-    public String admin(Model model) {
-
-        model.addAttribute(
-                "movies",
-                this.movieService.getMovies(null, 1)
-        );
-
-        return "admin-dashboard";
-    }
-
-    /*
-        =========================
-        ACCESS DENIED
-        =========================
-     */
-    @GetMapping("/403")
-    public String accessDenied() {
-        return "403";
-    }
-
-    /*
-        =========================
         ROLE CHECK
-        =========================
      */
     @ModelAttribute("isAdmin")
     public boolean isAdmin() {
 
         Authentication auth =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication();
+                SecurityContextHolder.getContext().getAuthentication();
 
         return auth != null
                 && auth.getAuthorities()
@@ -218,9 +102,7 @@ public class HomeController {
     public boolean isStaff() {
 
         Authentication auth =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication();
+                SecurityContextHolder.getContext().getAuthentication();
 
         return auth != null
                 && auth.getAuthorities()
@@ -229,20 +111,194 @@ public class HomeController {
                                 a.getAuthority()
                                         .equals("ROLE_STAFF"));
     }
-
-    @ModelAttribute("isCustomer")
-    public boolean isCustomer() {
-
-        Authentication auth =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication();
-
-        return auth != null
-                && auth.getAuthorities()
-                        .stream()
-                        .anyMatch(a ->
-                                a.getAuthority()
-                                        .equals("ROLE_CUSTOMER"));
-    }
 }
+
+
+//@Controller
+//@ControllerAdvice
+//public class HomeController {
+//
+//    @Autowired
+//    private CategoryServices cateService;
+//
+//    @Autowired
+//    private MoviesService movieService;
+//
+//    @Autowired
+//    private UserService userService;
+//
+//    /*
+//        =========================
+//        LOAD GLOBAL DATA
+//        =========================
+//     */
+//    @ModelAttribute
+//    public void commonAttr(Model model,
+//            Principal principal) {
+//
+//        model.addAttribute(
+//                "categories",
+//                this.cateService.getCates()
+//        );
+//
+//        if (principal != null) {
+//
+//            Users user = this.userService
+//                    .getUserByUsername(principal.getName());
+//
+//            model.addAttribute(
+//                    "currentUser",
+//                    user
+//            );
+//        }
+//    }
+//
+//    /*
+//        =========================
+//        HOME PAGE
+//        =========================
+//     */
+//    @GetMapping("/")
+//    public String index(
+//            Model model,
+//            @RequestParam(value="kw",required = false) String kw,
+//            @RequestParam(value="page",defaultValue = "1") int page) {
+//
+//        List<Movies> movies =
+//                this.movieService.getMovies(kw, page,1);
+//
+//        model.addAttribute("movies", movies);
+//
+//        model.addAttribute("currentPage", page);
+//
+//        return "index";
+//    }
+//
+////    /*
+////        =========================
+////        MOVIES PAGE
+////        =========================
+////     */
+////    @GetMapping("/movies")
+////    public String movies(
+////            Model model,
+////            @RequestParam(required = false) String kw,
+////            @RequestParam(defaultValue = "1") int page) {
+////
+////        List<Movies> movies =
+////                this.movieService.getMovies(kw, page);
+////
+////        model.addAttribute("movies", movies);
+////
+////        model.addAttribute("currentPage", page);
+////
+////        model.addAttribute("kw", kw);
+////
+////        return "movies";
+////    }
+//
+//    /*
+//        =========================
+//        LOGIN PAGE
+//        =========================
+//     */
+////    @GetMapping("/login")
+////    public String login() {
+////        return "login";
+////    }
+//
+//    /*
+//        =========================
+//        REGISTER PAGE
+//        =========================
+//     */
+////    @GetMapping("/register")
+////    public String register(Model model) {
+////
+////        model.addAttribute(
+////                "user",
+////                new Users()
+////        );
+////
+////        return "register";
+////    }
+//
+//    /*
+//        =========================
+//        ADMIN DASHBOARD
+//        =========================
+//     */
+//    @GetMapping("/admin")
+//    public String admin(Model model) {
+//
+//        model.addAttribute(
+//                "movies",
+//                this.movieService.getMovieById(1)
+//        );
+//
+//        return "admin-dashboard";
+//    }
+//
+//    /*
+//        =========================
+//        ACCESS DENIED
+//        =========================
+//     */
+//    @GetMapping("/403")
+//    public String accessDenied() {
+//        return "403";
+//    }
+//
+//    /*
+//        =========================
+//        ROLE CHECK
+//        =========================
+//     */
+//    @ModelAttribute("isAdmin")
+//    public boolean isAdmin() {
+//
+//        Authentication auth =
+//                SecurityContextHolder
+//                        .getContext()
+//                        .getAuthentication();
+//
+//        return auth != null
+//                && auth.getAuthorities()
+//                        .stream()
+//                        .anyMatch(a ->
+//                                a.getAuthority()
+//                                        .equals("ROLE_ADMIN"));
+//    }
+//
+//    @ModelAttribute("isStaff")
+//    public boolean isStaff() {
+//
+//        Authentication auth =
+//                SecurityContextHolder
+//                        .getContext()
+//                        .getAuthentication();
+//
+//        return auth != null
+//                && auth.getAuthorities()
+//                        .stream()
+//                        .anyMatch(a ->
+//                                a.getAuthority()
+//                                        .equals("ROLE_STAFF"));
+//    }
+//
+//    @ModelAttribute("isCustomer")
+//    public boolean isCustomer() {
+//
+//        Authentication auth =
+//                SecurityContextHolder
+//                        .getContext()
+//                        .getAuthentication();
+//
+//        return auth != null
+//                && auth.getAuthorities()
+//                        .stream()
+//                        .anyMatch(a ->
+//                                a.getAuthority()
+//                                        .equals("ROLE_CUSTOMER"));
+//    }
+//}

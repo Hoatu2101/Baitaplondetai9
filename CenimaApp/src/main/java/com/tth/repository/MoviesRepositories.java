@@ -13,8 +13,6 @@ import java.util.Map;
  */
 public interface MoviesRepositories {
 
-    List<Movies> getMovies(String kw, int page);
-    
     List<Movies> getMovies(String kw, Integer cateId, int page);
 
     Movies getMovieById(int id);
