@@ -11,20 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.tth.repository.CategoryRepositories;
 
-
 /**
  *
  * @author Administrator
  */
 @Service
 public class CategoryServicesImpl implements CategoryServices {
-@Autowired
-private CategoryRepositories cateRepo;
-@Override
-public List<Categories> getCates() {
-    return this.cateRepo.getCates();
-}
 
+    @Autowired
+    private CategoryRepositories cateRepo;
 
+    @Override
+    public List<Categories> getCates() {
+        return this.cateRepo.getCates();
+    }
 
 }
