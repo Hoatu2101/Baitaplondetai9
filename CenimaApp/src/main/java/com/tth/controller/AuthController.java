@@ -40,10 +40,22 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(
-            @ModelAttribute("user") Users user) {
+            @ModelAttribute(value = "user") Users user,
+            Model model) {
 
-        this.userService.addUser(user);
+        try {
 
-        return "redirect:/login";
+            this.userService.addUser(user);
+
+            return "redirect:/login";
+
+        } catch (Exception ex) {
+
+            model.addAttribute(
+                    "errMsg",
+                    ex.getMessage());
+
+            return "register";
+        }
     }
 }

@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -42,8 +40,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addUser(Users user) {
 
+        Users u = this.userRepo
+                .getUserByUsername(user.getUsername());
+
+        if (u != null) {
+            throw new RuntimeException(
+                    "Tên tài khoản đã tồn tại!");
+        }
+
         user.setPassword(
-                this.passwordEncoder.encode(user.getPassword())
+                this.passwordEncoder.encode(
+                        user.getPassword())
         );
 
         user.setCreatedAt(new Date());
@@ -56,22 +63,25 @@ public class UserServiceImpl implements UserService {
             user.setApproved(false);
         }
 
-        if (user.getFile() != null && !user.getFile().isEmpty()) {
+        if (user.getFile() != null
+                && !user.getFile().isEmpty()) {
 
             try {
 
-                Map res = this.cloudinary.uploader().upload(
-                        user.getFile().getBytes(),
-                        ObjectUtils.asMap(
-                                "resource_type", "auto"
-                        )
-                );
+                Map res
+                        = this.cloudinary.uploader().upload(
+                                user.getFile().getBytes(),
+                                ObjectUtils.asMap(
+                                        "resource_type",
+                                        "auto"
+                                )
+                        );
 
-                user.setAvatar(res.get("secure_url").toString());
+                user.setAvatar(
+                        res.get("secure_url").toString());
 
             } catch (IOException ex) {
-                Logger.getLogger(UserServiceImpl.class.getName())
-                        .log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
         }
 

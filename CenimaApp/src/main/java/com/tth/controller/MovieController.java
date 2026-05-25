@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -129,92 +128,3 @@ public class MovieController {
         return "redirect:/movies";
     }
 }
-
-//@Controller
-//public class MovieController {
-//
-//    @Autowired
-//    private MoviesService movieService;
-//
-//    @Autowired
-//    private CategoryServices cateService;
-//
-//    @Autowired
-//    private Cloudinary cloudinary;
-//
-//    @GetMapping("/movies")
-//    public String movies(Model model,
-//            @RequestParam(value="kw",required = false) String kw,
-//            @RequestParam(value="page",defaultValue = "1") int page) {
-//
-//        model.addAttribute("movies",
-//                this.movieService.getMovies(kw, page));
-//
-//        return "movies";
-//    }
-//
-//    @GetMapping("/movies/{id}")
-//    public String details(Model model,
-//            @PathVariable(value = "id") int id) {
-//
-//        Movies movie = this.movieService.getMovieById(id);
-//
-//        if (movie == null) {
-//            return "redirect:/movies";
-//        }
-//
-//        model.addAttribute("movie", movie);
-//
-//        return "movie-details";
-//    }
-//
-//    @GetMapping("/admin/movies")
-//    public String createView(Model model) {
-//
-//        model.addAttribute("movie", new Movies());
-//        model.addAttribute("categories", cateService.getCates());
-//
-//        return "movie-form";
-//    }
-//
-//    @GetMapping("/admin/movies/{id}")
-//    public String updateView(Model model,
-//            @PathVariable(value = "id") int id) {
-//
-//        model.addAttribute("movie",
-//                this.movieService.getMovieById(id));
-//
-//        model.addAttribute("categories", cateService.getCates());
-//
-//        return "movie-form";
-//    }
-//
-//    @PostMapping("/admin/movies")
-//    public String addMovie(
-//            @ModelAttribute(value = "movie") Movies movie,
-//            @RequestParam("file") MultipartFile file)
-//            throws IOException {
-//
-//        if (!file.isEmpty()) {
-//
-//            String url = (String) cloudinary.uploader().upload(
-//                    file.getBytes(),
-//                    ObjectUtils.emptyMap()).get("secure_url");
-//
-//            movie.setPoster(url);
-//        }
-//
-//        this.movieService.addOrUpdate(movie);
-//
-//        return "redirect:/movies";
-//    }
-//
-//    @GetMapping("/admin/deleteMovie/{id}")
-//    public String deleteMovie(
-//            @PathVariable(value = "id") int id) {
-//
-//        this.movieService.deleteMovie(id);
-//
-//        return "redirect:/movies";
-//    }
-//}

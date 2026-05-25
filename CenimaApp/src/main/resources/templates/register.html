@@ -1,99 +1,105 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <title>Đăng ký</title>
+    <head>
+        <title>Đăng ký</title>
 
     <th:block th:replace="base :: css"></th:block>
 </head>
 
 <body>
 
-<div th:replace="base :: header"></div>
+    <div th:replace="base :: header"></div>
 
-<section class="container mt-4">
+    <section class="container mt-4">
 
-    <div class="row justify-content-center">
+        <div class="row justify-content-center">
 
-        <div class="col-md-6">
+            <div class="col-md-6">
 
-            <div class="card shadow">
+                <div class="card shadow">
 
-                <div class="card-header bg-success text-white">
-                    Đăng ký tài khoản
-                </div>
+                    <div class="card-header bg-success text-white">
+                        Đăng ký tài khoản
+                    </div>
 
-                <div class="card-body">
+                    <div class="card-body">
 
-                    <form method="post"
-                          enctype="multipart/form-data"
-                          th:action="@{/register}"
-                          th:object="${user}">
-
-                        <div class="mb-3">
-                            <label>Họ tên</label>
-
-                            <input type="text"
-                                   th:field="*{name}"
-                                   class="form-control"/>
+                        <div th:if="${errMsg}"
+                             class="alert alert-danger"
+                             th:text="${errMsg}">
                         </div>
+                        <form method="post"
+                              enctype="multipart/form-data"
+                              th:action="@{/register}"
+                              th:object="${user}">
 
-                        <div class="mb-3">
-                            <label>Tài khoản</label>
+                            <div class="mb-3">
+                                <label>Họ tên</label>
 
-                            <input type="text"
-                                   th:field="*{username}"
-                                   class="form-control"/>
-                        </div>
+                                <input type="text"
+                                       th:field="*{name}"
+                                       class="form-control"/>
+                            </div>
 
-                        <div class="mb-3">
-                            <label>Mật khẩu</label>
+                            <div class="mb-3">
+                                <label>Tài khoản</label>
 
-                            <input type="password"
-                                   th:field="*{password}"
-                                   class="form-control"/>
-                        </div>
+                                <input type="text"
+                                       th:field="*{username}"
+                                       class="form-control"/>
+                            </div>
 
-                        <div class="mb-3">
-                            <label>Số điện thoại</label>
+                            <div class="mb-3">
+                                <label>Mật khẩu</label>
 
-                            <input type="text"
-                                   th:field="*{numberPhone}"
-                                   class="form-control"/>
-                        </div>
+                                <input type="password"
+                                       th:field="*{password}"
+                                       class="form-control"/>
+                            </div>
 
-                        <div class="mb-3">
+                            <div class="mb-3">
+                                <label>Số điện thoại</label>
 
-                            <label>Vai trò</label>
+                                <input type="text"
+                                       th:field="*{numberPhone}"
+                                       class="form-control"/>
+                            </div>
 
-                            <select th:field="*{role}"
-                                    class="form-select">
+                            <div class="mb-3">
 
-                                <option value="ROLE_CUSTOMER">
-                                    Khách hàng
-                                </option>
+                                <label>Vai trò</label>
 
-                                <option value="ROLE_STAFF">
-                                    Nhân viên rạp
-                                </option>
+                                <select th:field="*{role}"
+                                        class="form-select">
 
-                            </select>
-                        </div>
+                                    <option value="ROLE_CUSTOMER">
+                                        Khách hàng
+                                    </option>
 
-                        <div class="mb-3">
+                                    <option value="ROLE_STAFF">
+                                        Nhân viên rạp
+                                    </option>
 
-                            <label>Avatar</label>
+                                </select>
+                            </div>
 
-                            <input type="file"
-                                   th:field="*{file}"
-                                   class="form-control"/>
-                        </div>
+                            <div class="mb-3">
 
-                        <button class="btn btn-success w-100">
-                            Đăng ký
-                        </button>
+                                <label>Avatar</label>
 
-                    </form>
+                                <input type="file"
+                                       th:field="*{file}"
+                                       class="form-control"/>
+                            </div>
+
+                            <button class="btn btn-success w-100">
+                                Đăng ký
+                            </button>
+
+                        </form>
+
+                    </div>
 
                 </div>
 
@@ -101,9 +107,7 @@
 
         </div>
 
-    </div>
-
-</section>
+    </section>
 
 </body>
 </html>
