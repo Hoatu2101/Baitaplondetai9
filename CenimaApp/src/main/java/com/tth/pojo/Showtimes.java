@@ -16,6 +16,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -28,136 +29,287 @@ import java.util.List;
  *
  * @author Administrator
  */
+//@Entity
+//@Table(name = "showtimes")
+//@NamedQueries({
+//    @NamedQuery(name = "Showtimes.findAll", query = "SELECT s FROM Showtimes s"),
+//    @NamedQuery(name = "Showtimes.findByStartTime", query = "SELECT s FROM Showtimes s WHERE s.startTime = :startTime"),
+//    @NamedQuery(name = "Showtimes.findByEndTime", query = "SELECT s FROM Showtimes s WHERE s.endTime = :endTime"),
+//    @NamedQuery(name = "Showtimes.findById", query = "SELECT s FROM Showtimes s WHERE s.id = :id"),
+//    @NamedQuery(name = "Showtimes.findByCreatedAt", query = "SELECT s FROM Showtimes s WHERE s.createdAt = :createdAt")})
+//public class Showtimes implements Serializable {
+//
+//    private static final long serialVersionUID = 1L;
+//    @Basic(optional = false)
+//    @NotNull
+//    @Column(name = "start_time")
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private Date startTime;
+//    @Basic(optional = false)
+//    @NotNull
+//    @Column(name = "end_time")
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private Date endTime;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Basic(optional = false)
+//    @Column(name = "id")
+//    private Integer id;
+//    @Column(name = "created_at")
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private Date createdAt;
+//    @JoinColumn(name = "movie_id", referencedColumnName = "id")
+//    @ManyToOne(optional = false)
+//    private Movies movieId;
+//    @JoinColumn(name = "room_id", referencedColumnName = "id")
+//    @ManyToOne(optional = false)
+//    private Rooms roomId;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "showtimeId")
+//    private List<Bookings> bookingsList;
+//
+//    public Showtimes() {
+//    }
+//
+//    public Showtimes(Integer id) {
+//        this.id = id;
+//    }
+//
+//    public Showtimes(Integer id, Date startTime, Date endTime) {
+//        this.id = id;
+//        this.startTime = startTime;
+//        this.endTime = endTime;
+//    }
+//
+//    public Date getStartTime() {
+//        return startTime;
+//    }
+//
+//    public void setStartTime(Date startTime) {
+//        this.startTime = startTime;
+//    }
+//
+//    public Date getEndTime() {
+//        return endTime;
+//    }
+//
+//    public void setEndTime(Date endTime) {
+//        this.endTime = endTime;
+//    }
+//
+//    public Integer getId() {
+//        return id;
+//    }
+//
+//    public void setId(Integer id) {
+//        this.id = id;
+//    }
+//
+//    public Date getCreatedAt() {
+//        return createdAt;
+//    }
+//
+//    public void setCreatedAt(Date createdAt) {
+//        this.createdAt = createdAt;
+//    }
+//
+//    public Movies getMovieId() {
+//        return movieId;
+//    }
+//
+//    public void setMovieId(Movies movieId) {
+//        this.movieId = movieId;
+//    }
+//
+//    public Rooms getRoomId() {
+//        return roomId;
+//    }
+//
+//    public void setRoomId(Rooms roomId) {
+//        this.roomId = roomId;
+//    }
+//
+//    public List<Bookings> getBookingsList() {
+//        return bookingsList;
+//    }
+//
+//    public void setBookingsList(List<Bookings> bookingsList) {
+//        this.bookingsList = bookingsList;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        int hash = 0;
+//        hash += (id != null ? id.hashCode() : 0);
+//        return hash;
+//    }
+//
+//    @Override
+//    public boolean equals(Object object) {
+//        // TODO: Warning - this method won't work in the case the id fields are not set
+//        if (!(object instanceof Showtimes)) {
+//            return false;
+//        }
+//        Showtimes other = (Showtimes) object;
+//        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "com.tth.pojo.Showtimes[ id=" + id + " ]";
+//    }
+//    
+//}
+
+
 @Entity
 @Table(name = "showtimes")
-@NamedQueries({
-    @NamedQuery(name = "Showtimes.findAll", query = "SELECT s FROM Showtimes s"),
-    @NamedQuery(name = "Showtimes.findByStartTime", query = "SELECT s FROM Showtimes s WHERE s.startTime = :startTime"),
-    @NamedQuery(name = "Showtimes.findByEndTime", query = "SELECT s FROM Showtimes s WHERE s.endTime = :endTime"),
-    @NamedQuery(name = "Showtimes.findById", query = "SELECT s FROM Showtimes s WHERE s.id = :id"),
-    @NamedQuery(name = "Showtimes.findByCreatedAt", query = "SELECT s FROM Showtimes s WHERE s.createdAt = :createdAt")})
 public class Showtimes implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "start_time")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date startTime;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "end_time")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date endTime;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
     private Integer id;
-    @Column(name = "created_at")
+
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "start_time", nullable = false)
+    private Date startTime;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "end_time", nullable = false)
+    private Date endTime;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at")
     private Date createdAt;
-    @JoinColumn(name = "movie_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+
+    @ManyToOne
+    @JoinColumn(name = "movie_id", nullable = false)
     private Movies movieId;
-    @JoinColumn(name = "room_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+
+    @ManyToOne
+    @JoinColumn(name = "room_id", nullable = false)
     private Rooms roomId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "showtimeId")
+
+    @OneToMany(mappedBy = "showtimeId")
     private List<Bookings> bookingsList;
+
+    @PrePersist
+    public void prePersist() {
+        setCreatedAt(new Date());
+    }
 
     public Showtimes() {
     }
 
-    public Showtimes(Integer id) {
-        this.id = id;
-    }
-
-    public Showtimes(Integer id, Date startTime, Date endTime) {
+    public Showtimes(Integer id, Date startTime, Date endTime, Date createdAt, Movies movieId, Rooms roomId, List<Bookings> bookingsList) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.createdAt = createdAt;
+        this.movieId = movieId;
+        this.roomId = roomId;
+        this.bookingsList = bookingsList;
     }
 
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
+    /**
+     * @return the id
+     */
     public Integer getId() {
         return id;
     }
 
+    /**
+     * @param id the id to set
+     */
     public void setId(Integer id) {
         this.id = id;
     }
 
+    /**
+     * @return the startTime
+     */
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    /**
+     * @param startTime the startTime to set
+     */
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    /**
+     * @return the endTime
+     */
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    /**
+     * @param endTime the endTime to set
+     */
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    /**
+     * @return the createdAt
+     */
     public Date getCreatedAt() {
         return createdAt;
     }
 
+    /**
+     * @param createdAt the createdAt to set
+     */
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
+    /**
+     * @return the movieId
+     */
     public Movies getMovieId() {
         return movieId;
     }
 
+    /**
+     * @param movieId the movieId to set
+     */
     public void setMovieId(Movies movieId) {
         this.movieId = movieId;
     }
 
+    /**
+     * @return the roomId
+     */
     public Rooms getRoomId() {
         return roomId;
     }
 
+    /**
+     * @param roomId the roomId to set
+     */
     public void setRoomId(Rooms roomId) {
         this.roomId = roomId;
     }
 
+    /**
+     * @return the bookingsList
+     */
     public List<Bookings> getBookingsList() {
         return bookingsList;
     }
 
+    /**
+     * @param bookingsList the bookingsList to set
+     */
     public void setBookingsList(List<Bookings> bookingsList) {
         this.bookingsList = bookingsList;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Showtimes)) {
-            return false;
-        }
-        Showtimes other = (Showtimes) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.tth.pojo.Showtimes[ id=" + id + " ]";
-    }
     
 }

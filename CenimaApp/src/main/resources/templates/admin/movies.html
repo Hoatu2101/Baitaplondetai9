@@ -1,0 +1,130 @@
+<!--<div class="row">
+
+    <div class="col-md-3 mb-4"
+         th:each="m : ${movies}">
+
+        <div class="card shadow h-100">
+
+            <img th:src="${m.poster}"
+                 class="card-img-top"
+                 style="height: 350px; object-fit: cover"/>
+
+            <div class="card-body">
+
+                <h5 th:text="${m.movieName}"></h5>
+
+                <p>
+                    Giá:
+                    <span th:text="${m.price}"></span>
+                </p>
+
+                <p>
+                    Thời lượng:
+                    <span th:text="${m.duration}"></span>
+                    phút
+                </p>
+
+                <p>
+                    Định dạng:
+                    <span th:text="${m.movieFormat}"></span>
+                </p>
+
+                <a class="btn btn-primary"
+                   th:href="@{'/movies/' + ${m.id}}">
+                    Chi tiết
+                </a>
+
+                <div sec:authorize="hasAnyRole('ADMIN','STAFF')">
+
+                    <a class="btn btn-warning mt-2"
+                       th:href="@{'/admin/movies/' + ${m.id}}">
+                        Cập nhật
+                    </a>
+
+                    <a class="btn btn-danger mt-2"
+                       th:href="@{'/admin/deleteMovie/' + ${m.id}}">
+                        Xóa
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>-->
+
+
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Danh sách phim</title>
+
+    <th:block th:replace="base :: css"></th:block>
+</head>
+
+<body>
+
+<div th:replace="base :: header"></div>
+
+<section class="container mt-4">
+
+    <div class="d-flex justify-content-between mb-3">
+
+        <h2>Danh sách phim</h2>
+
+        <a th:href="@{/admin/movies}"
+           class="btn btn-success">
+
+            Thêm phim
+        </a>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-3 mb-4"
+             th:each="m : ${movies}">
+
+            <div class="card shadow h-100">
+
+                <img th:src="${m.poster}"
+                     class="card-img-top"
+                     style="height:350px; object-fit:cover;"/>
+
+                <div class="card-body">
+
+                    <h5 th:text="${m.movieName}"></h5>
+
+                    <p>
+                        Giá:
+                        <span th:text="${m.price}"></span>
+                    </p>
+
+                    <a class="btn btn-primary btn-sm"
+                       th:href="@{'/movies/' + ${m.id}}">
+                        Chi tiết
+                    </a>
+
+                    <a class="btn btn-warning btn-sm"
+                       th:href="@{'/admin/movies/' + ${m.id}}">
+                        Sửa
+                    </a>
+
+                    <a class="btn btn-danger btn-sm"
+                       th:href="@{'/admin/movies/delete/' + ${m.id}}">
+                        Xóa
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</body>
+</html>
