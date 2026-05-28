@@ -1,0 +1,113 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Đăng ký</title>
+
+    <th:block th:replace="base :: css"></th:block>
+</head>
+
+<body>
+
+    <div th:replace="base :: header"></div>
+
+    <section class="container mt-4">
+
+        <div class="row justify-content-center">
+
+            <div class="col-md-6">
+
+                <div class="card shadow">
+
+                    <div class="card-header bg-success text-white">
+                        Đăng ký tài khoản
+                    </div>
+
+                    <div class="card-body">
+
+                        <div th:if="${errMsg}"
+                             class="alert alert-danger"
+                             th:text="${errMsg}">
+                        </div>
+                        <form method="post"
+                              enctype="multipart/form-data"
+                              th:action="@{/register}"
+                              th:object="${user}">
+
+                            <div class="mb-3">
+                                <label>Họ tên</label>
+
+                                <input type="text"
+                                       th:field="*{name}"
+                                       class="form-control"/>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Tài khoản</label>
+
+                                <input type="text"
+                                       th:field="*{username}"
+                                       class="form-control"/>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Mật khẩu</label>
+
+                                <input type="password"
+                                       th:field="*{password}"
+                                       class="form-control"/>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Số điện thoại</label>
+
+                                <input type="text"
+                                       th:field="*{numberPhone}"
+                                       class="form-control"/>
+                            </div>
+
+                            <div class="mb-3">
+
+                                <label>Vai trò</label>
+
+                                <select th:field="*{role}"
+                                        class="form-select">
+
+                                    <option value="ROLE_CUSTOMER">
+                                        Khách hàng
+                                    </option>
+
+                                    <option value="ROLE_STAFF">
+                                        Nhân viên rạp
+                                    </option>
+
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+
+                                <label>Avatar</label>
+
+                                <input type="file"
+                                       th:field="*{file}"
+                                       class="form-control"/>
+                            </div>
+
+                            <button class="btn btn-success w-100">
+                                Đăng ký
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</body>
+</html>
