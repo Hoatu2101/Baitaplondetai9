@@ -31,11 +31,22 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute(value = "user") Users user) {
+    public String register(
+            @ModelAttribute(value = "user") Users user,
+            Model model) {
 
-        this.userService.addUser(user);
+        try {
 
-        return "redirect:/login";
+            this.userService.addUser(user);
+
+            return "redirect:/login";
+
+        } catch (RuntimeException ex) {
+
+            model.addAttribute("errMsg", ex.getMessage());
+
+            return "register";
+        }
     }
 
     @GetMapping("/login")
@@ -55,7 +66,8 @@ public class UserController {
     }
 
     @GetMapping("/admin/approve/{id}")
-    public String approve(@PathVariable(value = "id") int id) {
+    public String approve(
+            @PathVariable(value = "id") int id) {
 
         this.userService.approveStaff(id);
 

@@ -6,7 +6,6 @@ package com.tth.controller;
 
 
 import com.tth.pojo.Rooms;
-import com.tth.service.CinemaService;
 import com.tth.service.RoomService;
 import com.tth.service.StatusService;
 import java.util.Map;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import com.tth.service.CinemaService;
 
 @Controller
 @RequestMapping("/admin/rooms")
@@ -29,9 +29,8 @@ public class RoomController {
     private StatusService statusService;
 
     @GetMapping
-    public String rooms(
-            Model model,
-            @RequestParam Map<String, String> params) {
+    public String rooms(Model model,
+                        @RequestParam Map<String, String> params) {
 
         model.addAttribute(
                 "rooms",
@@ -69,9 +68,8 @@ public class RoomController {
     }
 
     @GetMapping("/{id}")
-    public String updateView(
-            Model model,
-            @PathVariable(value = "id") int id) {
+    public String updateView(Model model,
+                             @PathVariable(value = "id") int id) {
 
         model.addAttribute(
                 "room",

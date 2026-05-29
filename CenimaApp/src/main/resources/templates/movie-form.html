@@ -1,0 +1,148 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Quản lý phim</title>
+
+    <th:block th:replace="base :: css"></th:block>
+</head>
+
+<body>
+
+    <div th:replace="base :: header"></div>
+
+    <section class="container mt-4">
+
+        <div class="card shadow p-4">
+
+            <h2 class="mb-4">Quản lý phim</h2>
+
+            <form method="post"
+                  enctype="multipart/form-data"
+                  th:action="@{/admin/movies}"
+                  th:object="${movie}">
+
+                <input type="hidden"
+                       th:field="*{id}" />
+
+                <!-- TÊN -->
+                <div class="mb-3">
+                    <label>Tên phim</label>
+
+                    <input type="text"
+                           class="form-control"
+                           th:field="*{movieName}"
+                           required />
+                </div>
+
+                <!-- MÔ TẢ -->
+                <div class="mb-3">
+
+                    <label>Mô tả</label>
+
+                    <textarea class="form-control"
+                              th:field="*{description}">
+                    </textarea>
+
+                </div>
+
+                <!-- TRAILER -->
+                <div class="mb-3">
+
+                    <label>Trailer</label>
+
+                    <input type="text"
+                           class="form-control"
+                           th:field="*{trailer}" />
+
+                </div>
+
+                <!-- GIÁ -->
+                <div class="mb-3">
+
+                    <label>Giá vé</label>
+
+                    <input type="number"
+                           class="form-control"
+                           th:field="*{price}" />
+
+                </div>
+
+                <!-- FORMAT -->
+                <div class="mb-3">
+
+                    <label>Định dạng</label>
+
+                    <select class="form-select"
+                            th:field="*{movieFormat}">
+
+                        <option value="2D">2D</option>
+                        <option value="3D">3D</option>
+                        <option value="IMAX">IMAX</option>
+
+                    </select>
+
+                </div>
+
+                <!-- DURATION -->
+                <div class="mb-3">
+
+                    <label>Thời lượng</label>
+
+                    <input type="number"
+                           class="form-control"
+                           th:field="*{duration}" />
+
+                </div>
+
+                <!-- CATEGORY -->
+                <div class="mb-3">
+
+                    <label>Thể loại</label>
+
+                    <select class="form-select"
+                            th:field="*{category.id}">
+
+                        <option value="">
+                            -- Chọn thể loại --
+                        </option>
+
+                        <option th:each="c : ${categories}"
+                                th:value="${c.id}"
+                                th:text="${c.name}"
+                                th:selected="${movie.category != null && movie.category.id == c.id}">
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- POSTER -->
+                <div class="mb-3">
+
+                    <label>Poster</label>
+
+                    <input type="file"
+                           name="file"
+                           class="form-control" />
+
+                    <img th:if="${movie.poster != null}"
+                         th:src="${movie.poster}"
+                         width="200"
+                         class="mt-2 rounded" />
+
+                </div>
+
+                <button class="btn btn-success">
+                    Lưu phim
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+</body>
+
+</html>

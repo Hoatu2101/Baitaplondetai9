@@ -6,6 +6,11 @@ package com.tth.repository.impl;
 
 import com.tth.pojo.Movies;
 import com.tth.repository.MoviesRepositories;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.hibernate.Session;
@@ -123,8 +128,6 @@ import org.springframework.transaction.annotation.Transactional;
 //        }
 //    }
 //}
-
-
 @Repository
 @Transactional
 public class MoviesRepositoriesImpl implements MoviesRepositories {
@@ -137,23 +140,53 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
 
         Session s = factory.getCurrentSession();
 
-        HibernateCriteriaBuilder cb = s.getCriteriaBuilder();
+        CriteriaBuilder cb = s.getCriteriaBuilder();
 
-        var cq = cb.createQuery(Movies.class);
+        CriteriaQuery<Movies> cq = cb.createQuery(Movies.class);
 
-        var root = cq.from(Movies.class);
+        Root<Movies> root = cq.from(Movies.class);
 
         cq.select(root);
 
-        Query query = s.createQuery(cq);
+        List<Predicate> predicates = new ArrayList<>();
 
+        if (params != null) {
+
+            // SEARCH KEYWORD
+            String kw = params.get("kw");
+
+            if (kw != null && !kw.isEmpty()) {
+
+                predicates.add((Predicate) cb.like(
+                        root.get("movieName"),
+                        "%" + kw + "%"
+                ));
+            }
+
+            // FILTER CATEGORY
+            String cateId = params.get("cateId");
+
+            if (cateId != null && !cateId.isEmpty()) {
+
+                predicates.add((Predicate) cb.equal(root.get("category").get("id"),
+                        Integer.valueOf(cateId)
+                ));
+            }
+        }
+
+        cq.where(predicates.toArray(Predicate[]::new));
+
+        Query<Movies> query = s.createQuery(cq);
+
+        // PAGINATION
         if (params != null) {
 
             String page = params.get("page");
 
             int pageSize = 10;
 
-            if (page != null) {
+            if (page != null && !page.isEmpty()) {
+
                 int p = Integer.parseInt(page);
 
                 int start = (p - 1) * pageSize;
@@ -180,10 +213,11 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
 
         Session s = factory.getCurrentSession();
 
-        if (movie.getId() == null)
+        if (movie.getId() == null) {
             s.persist(movie);
-        else
+        } else {
             s.merge(movie);
+        }
     }
 
     @Override
@@ -192,6 +226,18 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
         Session s = factory.getCurrentSession();
 
         Movies movie = this.getMovieById(id);
+
+        if (movie == null) {
+            throw new RuntimeException("Phim không tồn tại!");
+        }
+
+        if (movie.getShowtimesList() != null
+                && !movie.getShowtimesList().isEmpty()) {
+
+            throw new RuntimeException(
+                    "Phim đã có suất chiếu, không thể xóa!"
+            );
+        }
 
         s.remove(movie);
     }

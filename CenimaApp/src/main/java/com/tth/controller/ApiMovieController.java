@@ -8,7 +8,6 @@ package com.tth.controller;
  *
  * @author Admin
  */
-
 import com.tth.service.MoviesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,8 +35,10 @@ public class ApiMovieController {
 
         } catch (Exception ex) {
 
+            ex.printStackTrace();
+
             return new ResponseEntity<>(
-                    "Delete failed",
+                    ex.getMessage(),
                     HttpStatus.BAD_REQUEST);
         }
     }

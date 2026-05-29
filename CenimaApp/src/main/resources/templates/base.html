@@ -66,7 +66,7 @@
 
                             <a class="nav-link"
                                th:href="@{/admin/dashboard}">
-                                Dashboard
+                                Trang quản trị
                             </a>
                         </li>
 
@@ -87,16 +87,6 @@
                                th:href="@{/register}">
                                 Đăng ký
                             </a>
-                        </li>
-
-                        <li class="nav-item"
-                            sec:authorize="hasAnyRole('ROLE_ADMIN','ROLE_STAFF')">
-
-                            <a class="nav-link"
-                               th:href="@{/movies/create}">
-                                Thêm phim
-                            </a>
-
                         </li>
 
                     </ul>

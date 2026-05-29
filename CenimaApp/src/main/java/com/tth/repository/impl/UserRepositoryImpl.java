@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package com.tth.repository.impl;
 
 import com.tth.pojo.Users;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 /**
  *
  * @author Admin
@@ -30,10 +30,11 @@ public class UserRepositoryImpl implements UserRepository {
     public void addUser(Users user) {
         Session s = this.factory.getObject().getCurrentSession();
 
-        if (user.getId() == null)
+        if (user.getId() == null) {
             s.persist(user);
-        else
+        } else {
             s.merge(user);
+        }
     }
 
     @Override
@@ -41,7 +42,9 @@ public class UserRepositoryImpl implements UserRepository {
         Session s = this.factory.getObject().getCurrentSession();
 
         Query q = s.createQuery(
-                "FROM Users WHERE username=:username",
+                "FROM Users \n"
+                + "WHERE username=:username\n"
+                + "AND active=true",
                 Users.class
         );
 
@@ -49,8 +52,9 @@ public class UserRepositoryImpl implements UserRepository {
 
         List<Users> users = q.getResultList();
 
-        if (users.isEmpty())
+        if (users.isEmpty()) {
             return null;
+        }
 
         return users.get(0);
     }

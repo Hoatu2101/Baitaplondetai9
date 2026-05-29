@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package com.tth.configs;
 
 import com.cloudinary.Cloudinary;
@@ -30,7 +29,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
             //            "com.tth.controller",
             //            "com.tth.repository",
             //            "com.tth.service"
-            "com.tth"
+                        "com.tth"
+
         }
 )
 @Order(2)

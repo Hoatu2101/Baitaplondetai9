@@ -45,7 +45,7 @@
                                 <option th:each="c : ${categories}"
                                         th:value="${c.id}"
                                         th:text="${c.name}"
-                                        th:selected="${param.cateId == c.id}">
+                                        th:selected="${param.cateId != null && param.cateId[0] == c.id.toString()}">
                                 </option>
 
                             </select>
@@ -106,12 +106,11 @@
                             <!-- POSTER -->
                             <td width="120">
 
-                                <!--<img th:src="@{'/images/' + ${m.poster}}"
-                                        width="100"
-                                        class="rounded shadow-sm"/>-->
                                 <img th:src="${m.poster}"
-                                     width="100"
-                                     class="rounded shadow-sm"/>
+                                     class="rounded shadow-sm"
+                                     style="width:100px;
+                                     height:140px;
+                                     object-fit:cover;"/>
 
                             </td>
 
@@ -121,7 +120,10 @@
                             </td>
 
                             <!-- CATEGORY -->
-                            <td th:text="${m.category.name}"></td>
+                            <td th:text="${m.category != null 
+                                ? m.category.name 
+                                : 'Chưa phân loại'}">
+                            </td>
 
                             <!-- STATUS -->
                             <td th:text="${m.statusMovie != null ? m.statusMovie.nameStatus : 'Đang chiếu'}"></td>
@@ -168,13 +170,18 @@
                 fetch('/CenimaApp/api/movies/' + id, {
                     method: 'DELETE'
                 })
-                        .then(res => {
+                        .then(async res => {
+
+                            const msg = await res.text();
 
                             if (res.ok) {
-                                alert("Xóa thành công!");
+
+                                alert(msg);
                                 location.reload();
+
                             } else {
-                                alert("Xóa thất bại!");
+
+                                alert(msg);
                             }
                         });
             }

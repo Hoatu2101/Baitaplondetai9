@@ -4,8 +4,10 @@
  */
 package com.tth.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -250,7 +252,6 @@ import org.springframework.web.multipart.MultipartFile;
 //    }
 //
 //}
-
 @Entity
 @Table(name = "movies")
 public class Movies implements Serializable {
@@ -280,14 +281,19 @@ public class Movies implements Serializable {
     @Column(name = "created_at")
     private Date createdAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Categories category;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "status_movie_id")
+    private StatusMovie statusMovie;
 
     @Transient
     private MultipartFile file;
 
     @OneToMany(mappedBy = "movieId")
+    @JsonIgnore
     private List<Showtimes> showtimesList;
 
     @PrePersist
@@ -481,5 +487,18 @@ public class Movies implements Serializable {
         this.showtimesList = showtimesList;
     }
 
-    
+    /**
+     * @return the statusMovie
+     */
+    public StatusMovie getStatusMovie() {
+        return statusMovie;
+    }
+
+    /**
+     * @param statusMovie the statusMovie to set
+     */
+    public void setStatusMovie(StatusMovie statusMovie) {
+        this.statusMovie = statusMovie;
+    }
+
 }

@@ -17,6 +17,7 @@ import com.tth.service.MoviesService;
 import com.tth.service.UserService;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,12 +26,97 @@ import org.springframework.web.bind.annotation.GetMapping;
  *
  * @author admin
  */
+//@Controller
+//@ControllerAdvice
+//public class HomeController {
+//
+//    @Autowired
+//    private CategoryServices cateService;
+//
+//    @Autowired
+//    private MoviesService movieService;
+//
+//    @Autowired
+//    private UserService userService;
+//
+//    /*
+//        GLOBAL DATA
+//     */
+//    @ModelAttribute
+//    public void commonAttr(Model model,
+//            Principal principal) {
+//
+//        model.addAttribute(
+//                "categories",
+//                cateService.getCates());
+//
+//        if (principal != null) {
+//
+//            Users user = userService
+//                    .getUserByUsername(principal.getName());
+//
+//            model.addAttribute("currentUser", user);
+//        }
+//    }
+//
+//    /*
+//        HOME
+//     */
+//    @GetMapping("/")
+//    public String index(
+//            Model model,
+//            @RequestParam(value = "kw", required = false) String kw,
+//            @RequestParam(value = "cateId", required = false) Integer cateId,
+//            @RequestParam(value = "page", defaultValue = "1") int page) {
+//
+//        List<Movies> movies =
+//                movieService.getMovies(kw, cateId, page);
+//
+//        model.addAttribute("movies", movies);
+//
+//        model.addAttribute("currentPage", page);
+//
+//        return "index";
+//    }
+//
+//    /*
+//        ROLE CHECK
+//     */
+//    @ModelAttribute("isAdmin")
+//    public boolean isAdmin() {
+//
+//        Authentication auth =
+//                SecurityContextHolder.getContext().getAuthentication();
+//
+//        return auth != null
+//                && auth.getAuthorities()
+//                        .stream()
+//                        .anyMatch(a ->
+//                                a.getAuthority()
+//                                        .equals("ROLE_ADMIN"));
+//    }
+//
+//    @ModelAttribute("isStaff")
+//    public boolean isStaff() {
+//
+//        Authentication auth =
+//                SecurityContextHolder.getContext().getAuthentication();
+//
+//        return auth != null
+//                && auth.getAuthorities()
+//                        .stream()
+//                        .anyMatch(a ->
+//                                a.getAuthority()
+//                                        .equals("ROLE_STAFF"));
+//    }
+//}
+
 @Controller
 @ControllerAdvice
 public class HomeController {
 
     @Autowired
-    private CategoryServices cateService;
+    private CategoryServices categoryService;
 
     @Autowired
     private MoviesService movieService;
@@ -38,74 +124,61 @@ public class HomeController {
     @Autowired
     private UserService userService;
 
-    /*
-        GLOBAL DATA
-     */
     @ModelAttribute
     public void commonAttr(Model model,
-            Principal principal) {
+                           Principal principal) {
 
         model.addAttribute(
                 "categories",
-                cateService.getCates());
+                this.categoryService.getCates()
+        );
 
         if (principal != null) {
 
-            Users user = userService
+            Users u = this.userService
                     .getUserByUsername(principal.getName());
 
-            model.addAttribute("currentUser", user);
+            model.addAttribute("currentUser", u);
         }
     }
 
-    /*
-        HOME
-     */
     @GetMapping("/")
-    public String index(
-            Model model,
-            @RequestParam(value = "kw", required = false) String kw,
-            @RequestParam(value = "cateId", required = false) Integer cateId,
-            @RequestParam(value = "page", defaultValue = "1") int page) {
+    public String index(Model model,
+                        @RequestParam Map<String, String> params) {
 
-        List<Movies> movies =
-                movieService.getMovies(kw, cateId, page);
-
-        model.addAttribute("movies", movies);
-
-        model.addAttribute("currentPage", page);
+        model.addAttribute(
+                "movies",
+                this.movieService.getMovies(params)
+        );
 
         return "index";
     }
 
-    /*
-        ROLE CHECK
-     */
     @ModelAttribute("isAdmin")
     public boolean isAdmin() {
 
-        Authentication auth =
-                SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
 
         return auth != null
                 && auth.getAuthorities()
-                        .stream()
-                        .anyMatch(a ->
-                                a.getAuthority()
-                                        .equals("ROLE_ADMIN"));
+                .stream()
+                .anyMatch(a -> a.getAuthority()
+                        .equals("ROLE_ADMIN"));
     }
 
     @ModelAttribute("isStaff")
     public boolean isStaff() {
 
-        Authentication auth =
-                SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
 
         return auth != null
                 && auth.getAuthorities()
-                        .stream()
-                        .anyMatch(a ->
-                                a.getAuthority()
-                                        .equals("ROLE_STAFF"));
+                .stream()
+                .anyMatch(a -> a.getAuthority()
+                        .equals("ROLE_STAFF"));
     }
 }
