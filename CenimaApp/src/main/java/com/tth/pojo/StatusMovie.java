@@ -33,8 +33,6 @@ public class StatusMovie implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-//    @Basic(optional = false)
-//    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;

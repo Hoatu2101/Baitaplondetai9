@@ -22,6 +22,8 @@ public interface ShowtimeRepository {
     void addOrUpdate(Showtimes showtime);
 
     void deleteShowtime(int id);
+    
+    long countAvailableSeats(int showtimeId);
 
     boolean isRoomBusy(
             int roomId,

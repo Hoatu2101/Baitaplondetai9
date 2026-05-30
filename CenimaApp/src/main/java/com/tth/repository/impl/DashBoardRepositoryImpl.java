@@ -4,22 +4,10 @@
  */
 package com.tth.repository.impl;
 
-import com.tth.pojo.Categories;
-import com.tth.repository.CategoryRepositories;
-
-import jakarta.persistence.Query;
-import java.util.List;
-import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 /**
  *
  * @author Administrator
  */
-
 import com.tth.repository.DashboardRepository;
 import java.util.List;
 import org.hibernate.Session;
@@ -98,6 +86,28 @@ public class DashBoardRepositoryImpl implements DashboardRepository {
         """;
 
         return s.createQuery(hql, Object[].class).getResultList();
+    }
+
+    @Override
+    public List<Object[]> revenueByShowtime() {
+
+        Session s = factory.getCurrentSession();
+
+        String hql = """
+        SELECT
+            st.id,
+            st.startTime,
+            SUM(b.totalPrice)
+        FROM Bookings b
+        JOIN b.showtimeId st
+        GROUP BY st.id, st.startTime
+        ORDER BY st.startTime DESC
+    """;
+
+        return s.createQuery(
+                hql,
+                Object[].class
+        ).getResultList();
     }
 
     @Override

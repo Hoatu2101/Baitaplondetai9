@@ -1,0 +1,17 @@
+<table class="table">
+
+    <tr>
+        <th>Mã vé</th>
+        <th>Phim</th>
+        <th>Suất chiếu</th>
+        <th>Tổng tiền</th>
+    </tr>
+
+    <tr th:each="b : ${bookings}">
+        <td th:text="${b.id}"></td>
+        <td th:text="${b.showtimeId.movieId.movieName}"></td>
+        <td th:text="${b.showtimeId.startTime}"></td>
+        <td th:text="${b.totalAmount}"></td>
+    </tr>
+
+</table>

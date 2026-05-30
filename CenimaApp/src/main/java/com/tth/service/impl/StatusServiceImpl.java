@@ -10,14 +10,10 @@ package com.tth.service.impl;
  * @author Admin
  */
 
-import com.tth.pojo.Showtimes;
 import com.tth.pojo.Status;
-import com.tth.repository.ShowtimeRepository;
 import com.tth.repository.StatusRepository;
-import com.tth.service.ShowtimeService;
 import com.tth.service.StatusService;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

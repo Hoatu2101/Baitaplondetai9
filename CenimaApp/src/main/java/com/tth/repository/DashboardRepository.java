@@ -25,6 +25,8 @@ public interface DashboardRepository {
     double totalRevenue();
 
     List<Object[]> revenueByMovie();
+    
+    List<Object[]> revenueByShowtime();
 
     List<Object[]> bookingByDate();
 }

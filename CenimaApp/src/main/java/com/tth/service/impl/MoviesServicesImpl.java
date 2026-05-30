@@ -21,39 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Administrator
  */
-//@Service
-//@Transactional
-//public class MoviesServicesImpl
-//        implements MoviesService {
-//
-//    @Autowired
-//    private MoviesRepositories movieRepo;
-//
-//    @Override
-//    public List<Movies> getMovies(String kw,
-//                                  Integer cateId,
-//                                  int page) {
-//
-//        return movieRepo.getMovies(kw, cateId, page);
-//    }
-//
-//    @Override
-//    public Movies getMovieById(int id) {
-//        return movieRepo.getMovieById(id);
-//    }
-//
-//    @Override
-//    public void addOrUpdate(Movies movie) {
-//        movieRepo.addOrUpdate(movie);
-//    }
-//
-//    @Override
-//    public void deleteMovie(int id) {
-//        movieRepo.deleteMovie(id);
-//    }
-//}
-
-
 
 @Service
 @Transactional

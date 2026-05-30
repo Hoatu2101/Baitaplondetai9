@@ -2,15 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package com.tth.repository.impl;
 
 /**
  *
  * @author Admin
  */
-
-
 import com.tth.pojo.Showtimes;
 import com.tth.repository.ShowtimeRepository;
 import jakarta.persistence.Query;
@@ -63,8 +60,9 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
             }
         }
 
-        if (!predicates.isEmpty())
+        if (!predicates.isEmpty()) {
             cq.where(predicates.toArray(Predicate[]::new));
+        }
 
         cq.orderBy(cb.desc(root.get("id")));
 
@@ -104,10 +102,11 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
 
         Session s = this.factory.getCurrentSession();
 
-        if (showtime.getId() == null)
+        if (showtime.getId() == null) {
             s.persist(showtime);
-        else
+        } else {
             s.merge(showtime);
+        }
     }
 
     @Override
@@ -118,6 +117,30 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
         Showtimes st = this.getShowtimeById(id);
 
         s.remove(st);
+    }
+
+    @Override
+    public long countAvailableSeats(int showtimeId) {
+
+        Session s = this.factory.getCurrentSession();
+
+        String hql = """
+            SELECT COUNT(se.id)
+            FROM Seats se
+            WHERE se.roomId.id =
+            (
+                SELECT st.roomId.id
+                FROM Showtimes st
+                WHERE st.id=:id
+            )
+            AND se.isAvailable=true
+        """;
+
+        Long count = (Long) s.createQuery(hql)
+                .setParameter("id", showtimeId)
+                .uniqueResult();
+
+        return count == null ? 0 : count;
     }
 
     @Override
