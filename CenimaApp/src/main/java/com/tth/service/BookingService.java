@@ -15,9 +15,9 @@ import java.util.List;
 
 public interface BookingService {
 
-    Bookings bookTicket(
+    Bookings bookTickets(
             Integer showtimeId,
-            Integer seatId,
+            List<Integer> seatId,
             String username);
 
     List<Bookings> getMyBookings(

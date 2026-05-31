@@ -37,28 +37,6 @@ public class BookingRepositoryImpl
         return booking;
     }
 
-    @Override
-    public boolean isSeatBooked(
-            Integer showtimeId,
-            Integer seatId) {
-
-        Session s = this.factory
-                .getCurrentSession();
-
-        String hql = """
-        SELECT COUNT(b.id)
-        FROM Bookings b
-        WHERE b.showtimeId.id=:showtimeId
-        AND b.seatId.id=:seatId
-    """;
-
-        Long count = (Long) s.createQuery(hql)
-                .setParameter("showtimeId", showtimeId)
-                .setParameter("seatId", seatId)
-                .uniqueResult();
-
-        return count != null && count > 0;
-    }
 
     @Override
     public List<Bookings> getBookingsByUser(
@@ -79,6 +57,7 @@ public class BookingRepositoryImpl
                         username)
                 .getResultList();
     }
+
 
     @Override
     public long countBookingByShowtime(

@@ -45,8 +45,6 @@ public class Seats implements Serializable {
     @Size(min = 1, max = 10)
     @Column(name = "seat_number")
     private String seatNumber;
-    @Column(name = "is_available")
-    private Boolean isAvailable;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -81,14 +79,6 @@ public class Seats implements Serializable {
 
     public void setSeatNumber(String seatNumber) {
         this.seatNumber = seatNumber;
-    }
-
-    public Boolean getIsAvailable() {
-        return isAvailable;
-    }
-
-    public void setIsAvailable(Boolean isAvailable) {
-        this.isAvailable = isAvailable;
     }
 
     public Integer getId() {

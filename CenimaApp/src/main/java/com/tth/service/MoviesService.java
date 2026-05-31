@@ -11,17 +11,6 @@ package com.tth.service;
 import com.tth.pojo.Movies;
 import java.util.List;
 import java.util.Map;
-//public interface MoviesService {
-//
-//    List<Movies> getMovies(String kw, Integer cateId, int page);
-//
-//    Movies getMovieById(int id);
-//
-//    void addOrUpdate(Movies movie);
-//
-//    void deleteMovie(int id);
-//}
-
 
 public interface MoviesService {
 

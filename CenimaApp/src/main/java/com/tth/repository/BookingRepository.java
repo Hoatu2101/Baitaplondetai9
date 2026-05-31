@@ -22,6 +22,9 @@ public interface BookingRepository {
 
     List<Bookings> getBookingsByUser(
             String username);
+    
+    List<Integer> getBookedSeatIds(
+        Integer showtimeId);
 
     long countBookingByShowtime(
             Integer showtimeId);

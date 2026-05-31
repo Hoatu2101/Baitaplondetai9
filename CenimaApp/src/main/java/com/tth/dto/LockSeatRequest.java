@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Admin
  */
-public class BookingRequest {
+public class LockSeatRequest {
 
     private Integer showtimeId;
 
@@ -20,8 +20,7 @@ public class BookingRequest {
         return showtimeId;
     }
 
-    public void setShowtimeId(
-            Integer showtimeId) {
+    public void setShowtimeId(Integer showtimeId) {
         this.showtimeId = showtimeId;
     }
 
@@ -29,8 +28,7 @@ public class BookingRequest {
         return seatIds;
     }
 
-    public void setSeatIds(
-            List<Integer> seatIds) {
+    public void setSeatIds(List<Integer> seatIds) {
         this.seatIds = seatIds;
     }
 }

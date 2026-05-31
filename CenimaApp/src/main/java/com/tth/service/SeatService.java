@@ -9,6 +9,7 @@ package com.tth.service;
  * @author Admin
  */
 
+import com.tth.dto.SeatStatusResponse;
 import com.tth.pojo.Seats;
 import java.util.List;
 
@@ -18,9 +19,6 @@ public interface SeatService {
 
     List<Seats> getSeatsByRoom(int roomId);
 
-    List<Seats> getAvailableSeats(int roomId);
-
-    void lockSeat(int seatId);
-
-    void unlockSeat(int seatId);
+    List<SeatStatusResponse> getSeatsByShowtime(
+        Integer showtimeId);
 }

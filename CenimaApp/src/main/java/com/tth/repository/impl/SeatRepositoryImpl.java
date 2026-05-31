@@ -49,29 +49,5 @@ public class SeatRepositoryImpl implements SeatRepository {
         return q.getResultList();
     }
 
-    @Override
-    public List<Seats> getAvailableSeats(int roomId) {
 
-        Session s = factory.getObject().getCurrentSession();
-
-        Query<Seats> q = s.createQuery(
-                """
-                FROM Seats s
-                WHERE s.roomId.id=:roomId
-                AND s.isAvailable=true
-                """,
-                Seats.class);
-
-        q.setParameter("roomId", roomId);
-
-        return q.getResultList();
-    }
-
-    @Override
-    public void updateSeat(Seats seat) {
-
-        Session s = factory.getObject().getCurrentSession();
-
-        s.merge(seat);
-    }
 }

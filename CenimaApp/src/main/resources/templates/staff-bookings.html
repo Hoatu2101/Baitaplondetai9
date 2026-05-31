@@ -1,10 +1,8 @@
-<table>
-
-<tr>
-    <th>Khách hàng</th>
-    <th>Phim</th>
-    <th>Ghế</th>
-    <th>Tổng tiền</th>
+<tbody>
+<tr th:each="b : ${bookings}">
+    <td th:text="${b.userId.fullName}"></td>
+    <td th:text="${b.showtimeId.movieId.movieName}"></td>
+    <td th:text="${b.seatId.seatNumber}"></td>
+    <td th:text="${b.totalPrice}"></td>
 </tr>
-
-</table>
+</tbody>

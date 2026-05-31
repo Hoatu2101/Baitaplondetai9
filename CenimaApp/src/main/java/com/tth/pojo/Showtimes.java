@@ -29,8 +29,6 @@ import java.util.List;
  *
  * @author Administrator
  */
-
-
 @Entity
 @Table(name = "showtimes")
 public class Showtimes implements Serializable {
@@ -61,6 +59,9 @@ public class Showtimes implements Serializable {
 
     @OneToMany(mappedBy = "showtimeId")
     private List<Bookings> bookingsList;
+
+    @OneToMany(mappedBy = "showtimeId")
+    private List<SeatShowtimeStatus> seatStatuses;
 
     @PrePersist
     public void prePersist() {
@@ -178,5 +179,18 @@ public class Showtimes implements Serializable {
         this.bookingsList = bookingsList;
     }
 
-    
+    /**
+     * @return the seatStatuses
+     */
+    public List<SeatShowtimeStatus> getSeatStatuses() {
+        return seatStatuses;
+    }
+
+    /**
+     * @param seatStatuses the seatStatuses to set
+     */
+    public void setSeatStatuses(List<SeatShowtimeStatus> seatStatuses) {
+        this.seatStatuses = seatStatuses;
+    }
+
 }

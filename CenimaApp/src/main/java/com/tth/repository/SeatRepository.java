@@ -20,7 +20,6 @@ public interface SeatRepository {
 
     List<Seats> getSeatsByRoom(int roomId);
 
-    List<Seats> getAvailableSeats(int roomId);
 
-    void updateSeat(Seats seat);
+
 }
