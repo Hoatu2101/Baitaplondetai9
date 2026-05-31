@@ -18,10 +18,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 @Configuration
 @Order(1)
 public class ApiSecurityConfigs {
@@ -36,9 +36,9 @@ public class ApiSecurityConfigs {
 
     @Bean
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
+         http
 
-        http
-            .securityMatcher("/api/**")
+            .securityMatcher(new AntPathRequestMatcher("/api/**"))
 
             .csrf(csrf -> csrf.disable())
 

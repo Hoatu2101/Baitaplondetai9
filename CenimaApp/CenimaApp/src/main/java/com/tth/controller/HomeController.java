@@ -17,6 +17,7 @@ import com.tth.service.MoviesService;
 import com.tth.service.UserService;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,9 +39,6 @@ public class HomeController {
     @Autowired
     private UserService userService;
 
-    /*
-        GLOBAL DATA
-     */
     @ModelAttribute
     public void commonAttr(Model model,
             Principal principal) {
@@ -58,29 +56,20 @@ public class HomeController {
         }
     }
 
-    /*
-        HOME
-     */
     @GetMapping("/")
-    public String index(
-            Model model,
-            @RequestParam(value = "kw", required = false) String kw,
-            @RequestParam(value = "cateId", required = false) Integer cateId,
-            @RequestParam(value = "page", defaultValue = "1") int page) {
+    public String index(Model model,
+                        @RequestParam Map<String, String> params) {
 
-        List<Movies> movies =
-                movieService.getMovies(kw, cateId, page);
-
-        model.addAttribute("movies", movies);
-
-        model.addAttribute("currentPage", page);
+        model.addAttribute(
+                "movies",
+                this.movieService.getMovies(params)
+        );
 
         return "index";
     }
 
-    /*
-        ROLE CHECK
-     */
+
+
     @ModelAttribute("isAdmin")
     public boolean isAdmin() {
 

@@ -1,0 +1,80 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Danh sách lịch chiếu</title>
+
+    <th:block th:replace="base :: css"></th:block>
+</head>
+
+<body>
+
+<div th:replace="base :: header"></div>
+
+<section class="container mt-4">
+
+    <div class="d-flex justify-content-between mb-3">
+
+        <h2>Danh sách lịch chiếu</h2>
+
+        <a th:href="@{/admin/showtimes/create}"
+           class="btn btn-success">
+
+            Thêm lịch chiếu
+        </a>
+
+    </div>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-dark">
+
+            <tr>
+                <th>ID</th>
+                <th>Phim</th>
+                <th>Phòng</th>
+                <th>Bắt đầu</th>
+                <th>Kết thúc</th>
+                <th></th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr th:each="s : ${showtimes}">
+
+                <td th:text="${s.id}"></td>
+
+                <td th:text="${s.movieId.movieName}"></td>
+
+                <td th:text="${s.roomId.name}"></td>
+
+                <td th:text="${#dates.format(s.startTime, 'dd/MM/yyyy HH:mm')}"></td>
+
+                <td th:text="${#dates.format(s.endTime, 'dd/MM/yyyy HH:mm')}"></td>
+
+                <td>
+
+                    <a class="btn btn-warning btn-sm"
+                       th:href="@{'/admin/showtimes/' + ${s.id}}">
+                        Sửa
+                    </a>
+
+                    <a class="btn btn-danger btn-sm"
+                       th:href="@{'/admin/showtimes/delete/' + ${s.id}}">
+                        Xóa
+                    </a>
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</section>
+
+</body>
+</html>

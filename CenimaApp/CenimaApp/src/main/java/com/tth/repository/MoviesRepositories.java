@@ -11,6 +11,17 @@ import java.util.Map;
  *
  * @author Administrator
  */
+//public interface MoviesRepositories {
+//
+//    List<Movies> getMovies(String kw, Integer cateId, int page);
+//
+//    Movies getMovieById(int id);
+//
+//    void addOrUpdate(Movies movie);
+//
+//    void deleteMovie(int id);
+//}
+
 public interface MoviesRepositories {
 
     List<Movies> getMovies(String kw, Integer cateId, int page);
@@ -20,4 +31,6 @@ public interface MoviesRepositories {
     void addOrUpdate(Movies movie);
 
     void deleteMovie(int id);
+
+    long countMovies();
 }

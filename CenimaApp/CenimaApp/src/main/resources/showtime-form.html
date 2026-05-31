@@ -1,0 +1,93 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Quản lý lịch chiếu</title>
+
+    <th:block th:replace="base :: css"></th:block>
+</head>
+
+<body>
+
+<div th:replace="base :: header"></div>
+
+<section class="container mt-4">
+
+    <div class="card shadow p-4">
+
+        <h2 class="mb-4">Quản lý lịch chiếu</h2>
+
+        <div th:if="${errMsg}"
+             class="alert alert-danger"
+             th:text="${errMsg}">
+        </div>
+
+        <form method="post"
+              th:action="@{/admin/showtimes}"
+              th:object="${showtime}">
+
+            <input type="hidden"
+                   th:field="*{id}" />
+
+            <div class="mb-3">
+
+                <label>Phim</label>
+
+                <select class="form-select"
+                        th:field="*{movieId}">
+
+                    <option th:each="m : ${movies}"
+                            th:value="${m.id}"
+                            th:text="${m.movieName}">
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="mb-3">
+
+                <label>Phòng</label>
+
+                <select class="form-select"
+                        th:field="*{roomId}">
+
+                    <option th:each="r : ${rooms}"
+                            th:value="${r.id}"
+                            th:text="${r.name}">
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="mb-3">
+
+                <label>Thời gian bắt đầu</label>
+
+                <input type="datetime-local"
+                       class="form-control"
+                       th:field="*{startTime}"
+                       required />
+            </div>
+
+            <div class="mb-3">
+
+                <label>Thời gian kết thúc</label>
+
+                <input type="datetime-local"
+                       class="form-control"
+                       th:field="*{endTime}"
+                       required />
+            </div>
+
+            <button class="btn btn-success">
+                Lưu lịch chiếu
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+</body>
+</html>

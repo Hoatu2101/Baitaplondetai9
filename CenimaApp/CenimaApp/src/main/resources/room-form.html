@@ -1,0 +1,88 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Quản lý phòng chiếu</title>
+
+    <th:block th:replace="base :: css"></th:block>
+</head>
+
+<body>
+
+<div th:replace="base :: header"></div>
+
+<section class="container mt-4">
+
+    <div class="card shadow p-4">
+
+        <h2 class="mb-4">Quản lý phòng chiếu</h2>
+
+        <form method="post"
+              th:action="@{/admin/rooms}"
+              th:object="${room}">
+
+            <input type="hidden"
+                   th:field="*{id}" />
+
+            <div class="mb-3">
+
+                <label>Tên phòng</label>
+
+                <input type="text"
+                       class="form-control"
+                       th:field="*{name}"
+                       required />
+            </div>
+
+            <div class="mb-3">
+
+                <label>Sức chứa</label>
+
+                <input type="number"
+                       class="form-control"
+                       th:field="*{capacity}"
+                       required />
+            </div>
+
+            <div class="mb-3">
+
+                <label>Rạp</label>
+
+                <select class="form-select"
+                        th:field="*{cinemaId}">
+
+                    <option th:each="c : ${cinemas}"
+                            th:value="${c.id}"
+                            th:text="${c.name}">
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="mb-3">
+
+                <label>Trạng thái</label>
+
+                <select class="form-select"
+                        th:field="*{statusId}">
+
+                    <option th:each="s : ${statuses}"
+                            th:value="${s.id}"
+                            th:text="${s.name}">
+                    </option>
+
+                </select>
+            </div>
+
+            <button class="btn btn-success">
+                Lưu phòng
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+</body>
+</html>

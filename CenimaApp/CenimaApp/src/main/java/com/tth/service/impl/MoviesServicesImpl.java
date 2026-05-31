@@ -26,13 +26,7 @@ public class MoviesServicesImpl
     @Autowired
     private MoviesRepositories movieRepo;
 
-    @Override
-    public List<Movies> getMovies(String kw,
-                                  Integer cateId,
-                                  int page) {
-
-        return movieRepo.getMovies(kw, cateId, page);
-    }
+ 
 
     @Override
     public Movies getMovieById(int id) {
@@ -52,5 +46,10 @@ public class MoviesServicesImpl
     @Override
     public List<Movies> getMovies(Map<String, String> params) {
         return movieRepo.getMovies(params);
+    }
+
+    @Override
+    public long countMovies() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -4,7 +4,6 @@
  */
 
 package com.tth.repository.impl;
-
 import com.tth.pojo.Users;
 import com.tth.repository.UserRepository;
 import jakarta.persistence.Query;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 /**
  *
  * @author Admin
@@ -41,7 +41,9 @@ public class UserRepositoryImpl implements UserRepository {
         Session s = this.factory.getObject().getCurrentSession();
 
         Query q = s.createQuery(
-                "FROM Users WHERE username=:username",
+                "FROM Users \n"
+                + "WHERE username=:username\n"
+                + "AND active=true",
                 Users.class
         );
 
@@ -49,8 +51,9 @@ public class UserRepositoryImpl implements UserRepository {
 
         List<Users> users = q.getResultList();
 
-        if (users.isEmpty())
+        if (users.isEmpty()) {
             return null;
+        }
 
         return users.get(0);
     }
