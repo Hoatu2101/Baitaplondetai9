@@ -32,4 +32,6 @@ public interface SeatShowtimeStatusRepository {
             Integer showtimeId,
             Integer seatId);
     
+    void releaseExpiredLocks();
+    
 }

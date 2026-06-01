@@ -34,7 +34,6 @@ import java.util.List;
 @NamedQueries({
     @NamedQuery(name = "Seats.findAll", query = "SELECT s FROM Seats s"),
     @NamedQuery(name = "Seats.findBySeatNumber", query = "SELECT s FROM Seats s WHERE s.seatNumber = :seatNumber"),
-    @NamedQuery(name = "Seats.findByIsAvailable", query = "SELECT s FROM Seats s WHERE s.isAvailable = :isAvailable"),
     @NamedQuery(name = "Seats.findById", query = "SELECT s FROM Seats s WHERE s.id = :id"),
     @NamedQuery(name = "Seats.findByCreatedAt", query = "SELECT s FROM Seats s WHERE s.createdAt = :createdAt")})
 public class Seats implements Serializable {
@@ -55,8 +54,8 @@ public class Seats implements Serializable {
     private Date createdAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "seatId")
     private List<Tickets> ticketsList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seatId")
-    private List<Bookings> bookingsList;
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seatId")
+//    private List<Bookings> bookingsList;
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Rooms roomId;
@@ -105,13 +104,13 @@ public class Seats implements Serializable {
         this.ticketsList = ticketsList;
     }
 
-    public List<Bookings> getBookingsList() {
-        return bookingsList;
-    }
-
-    public void setBookingsList(List<Bookings> bookingsList) {
-        this.bookingsList = bookingsList;
-    }
+//    public List<Bookings> getBookingsList() {
+//        return bookingsList;
+//    }
+//
+//    public void setBookingsList(List<Bookings> bookingsList) {
+//        this.bookingsList = bookingsList;
+//    }
 
     public Rooms getRoomId() {
         return roomId;

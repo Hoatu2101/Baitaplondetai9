@@ -8,8 +8,9 @@ package com.tth.service.impl;
  *
  * @author Administrator
  */
-
 import com.tth.pojo.SeatShowtimeStatus;
+import com.tth.pojo.SeatStatus;
+import com.tth.pojo.Seats;
 import com.tth.pojo.Showtimes;
 import com.tth.pojo.Users;
 import com.tth.repository.DashboardRepository;
@@ -29,22 +30,34 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class SeatShowtimeStatusServiceImpl
-        implements SeatShowtimeStatusService {
+public class SeatShowtimeStatusServiceImpl implements SeatShowtimeStatusService {
 
     @Autowired
-    private SeatShowtimeStatusRepository
-            statusRepo;
+    private SeatShowtimeStatusRepository statusRepo;
 
     @Autowired
     private SeatRepository seatRepo;
 
     @Autowired
-    private ShowtimeRepository
-            showtimeRepo;
+    private ShowtimeRepository showtimeRepo;
 
     @Autowired
     private UserService userService;
+
+    private void validateSeatBelongShowtime(Showtimes showtime, Seats seat) {
+
+        if (!seat.getRoomId()
+                .getId()
+                .equals(
+                        showtime
+                                .getRoomId()
+                                .getId())) {
+
+            throw new RuntimeException(
+                    "Ghế không thuộc phòng chiếu");
+        }
+
+    }
 
     @Override
     public boolean isBooked(
@@ -81,8 +94,7 @@ public class SeatShowtimeStatusServiceImpl
             getSeatStatusMap(
                     Integer showtimeId) {
 
-        List<SeatShowtimeStatus>
-                statuses
+        List<SeatShowtimeStatus> statuses
                 = statusRepo
                         .getByShowtime(
                                 showtimeId);
@@ -128,8 +140,8 @@ public class SeatShowtimeStatusServiceImpl
 
             if (status == null) {
 
-                status =
-                        new SeatShowtimeStatus();
+                status
+                        = new SeatShowtimeStatus();
 
                 status.setShowtimeId(
                         showtime);
@@ -137,6 +149,7 @@ public class SeatShowtimeStatusServiceImpl
                 status.setSeatId(
                         seatRepo.getSeatById(
                                 seatId));
+
             }
 
             if ("BOOKED".equals(
@@ -148,8 +161,17 @@ public class SeatShowtimeStatusServiceImpl
                         + " đã được đặt");
             }
 
+            if ("LOCKED".equals(
+                    status.getStatus())) {
+
+                throw new RuntimeException(
+                        "Ghế "
+                        + seatId
+                        + " đang được người khác giữ");
+            }
+
             status.setStatus(
-                    "LOCKED");
+                    SeatStatus.LOCKED.name());
 
             status.setUserId(user);
 
@@ -159,5 +181,10 @@ public class SeatShowtimeStatusServiceImpl
             statusRepo.save(
                     status);
         }
+    }
+
+    @Override
+    public void releaseExpiredLocks() {
+        statusRepo.releaseExpiredLocks();
     }
 }

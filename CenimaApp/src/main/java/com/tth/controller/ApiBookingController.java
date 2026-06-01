@@ -33,52 +33,6 @@ public class ApiBookingController {
     @Autowired
     private BookingService bookingService;
 
-//    @PostMapping("/bookings")
-//    public ResponseEntity<?> createBooking(
-//            @RequestBody BookingRequest request,
-//            Principal principal) {
-//
-//        try {
-//
-//            Bookings booking
-//                    = bookingService
-//                            .bookTicket(
-//                                    request
-//                                            .getShowtimeId(),
-//                                    request
-//                                            .getSeatId(),
-//                                    principal
-//                                            .getName()
-//                            );
-//
-//            return ResponseEntity.ok(
-//                    booking.getId());
-//
-//        } catch (Exception ex) {
-//
-//            return ResponseEntity
-//                    .badRequest()
-//                    .body(ex.getMessage());
-//        }
-//    }
-//    @GetMapping("/seats/check")
-//    public ResponseEntity<?> checkSeat(
-//            @RequestParam Integer showtimeId,
-//            @RequestParam Integer seatId) {
-//
-//        boolean booked
-//                = bookingService
-//                        .isSeatBooked(
-//                                showtimeId,
-//                                seatId);
-//
-//        return ResponseEntity.ok(
-//                Map.of(
-//                        "booked",
-//                        booked
-//                )
-//        );
-//    }
     @GetMapping("/my-bookings")
     public ResponseEntity<?> myBookings(
             Principal principal) {
@@ -101,19 +55,18 @@ public class ApiBookingController {
         return "staff-bookings";
     }
 
-    @GetMapping(
-            "/showtimes/{id}/seats")
-    public ResponseEntity<?>
-            getSeatsByShowtime(
-                    @PathVariable Integer id) {
-
-        return ResponseEntity.ok(
-                seatService
-                        .getSeatsByShowtime(
-                                id));
-    }
-
-    @PostMapping("/secure/lock-seats")
+//    @GetMapping(
+//            "/showtimes/{id}/seats")
+//    public ResponseEntity<?>
+//            getSeatsByShowtime(
+//                    @PathVariable Integer id) {
+//
+//        return ResponseEntity.ok(
+//                seatService
+//                        .getSeatsByShowtime(
+//                                id));
+//    }
+    @PostMapping("/lock-seats")
     public ResponseEntity<?> lockSeats(@RequestBody BookingRequest request, Principal principal) {
 
         try {
@@ -137,8 +90,7 @@ public class ApiBookingController {
         }
     }
 
-    @PostMapping(
-            "/secure/bookings")
+    @PostMapping("/bookings")
     public ResponseEntity<?>
             createBooking(
                     @RequestBody BookingRequest request,
@@ -153,5 +105,15 @@ public class ApiBookingController {
 
         return ResponseEntity.ok(
                 booking.getId());
+    }
+
+    @GetMapping("/staff/showtimes/{id}/seats")
+    public ResponseEntity<?>
+            getSeatMap(
+                    @PathVariable ("id") Integer id) {
+
+        return ResponseEntity.ok(
+                seatService
+                        .getSeatsByShowtime(id));
     }
 }

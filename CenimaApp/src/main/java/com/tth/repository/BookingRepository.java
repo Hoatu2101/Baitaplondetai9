@@ -5,6 +5,7 @@
 package com.tth.repository;
 
 import com.tth.pojo.Bookings;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,18 +15,19 @@ import java.util.List;
 
 public interface BookingRepository {
 
-    Bookings createBooking(Bookings booking);
-
-    boolean isSeatBooked(
-            Integer showtimeId,
-            Integer seatId);
+    Bookings createBooking(
+            Bookings booking);
 
     List<Bookings> getBookingsByUser(
             String username);
-    
-    List<Integer> getBookedSeatIds(
-        Integer showtimeId);
 
     long countBookingByShowtime(
             Integer showtimeId);
+    
+    Double revenueByShowtime(
+        Integer showtimeId);
+    
+    List<Bookings>findByShowtime(Integer showtimeId);
+    
+    List<Bookings> getBookingsByDate(Date date);
 }

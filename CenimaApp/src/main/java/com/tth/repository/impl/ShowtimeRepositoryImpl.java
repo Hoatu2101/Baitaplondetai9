@@ -120,27 +120,42 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
     }
 
     @Override
-    public long countAvailableSeats(int showtimeId) {
+    public long countAvailableSeats(
+            int showtimeId) {
 
-        Session s = this.factory.getCurrentSession();
+        Session s
+                = factory.getCurrentSession();
 
         String hql = """
-            SELECT COUNT(se.id)
-            FROM Seats se
-            WHERE se.roomId.id =
-            (
-                SELECT st.roomId.id
-                FROM Showtimes st
-                WHERE st.id=:id
-            )
-            AND se.isAvailable=true
-        """;
+        SELECT COUNT(se.id)
+        FROM Seats se
+        WHERE se.roomId.id =
+        (
+            SELECT st.roomId.id
+            FROM Showtimes st
+            WHERE st.id=:showtimeId
+        )
+        AND se.id NOT IN
+        (
+            SELECT sts.seatId.id
+            FROM SeatShowtimeStatus sts
+            WHERE sts.showtimeId.id=:showtimeId
+            AND sts.status='BOOKED'
+        )
+    """;
 
-        Long count = (Long) s.createQuery(hql)
-                .setParameter("id", showtimeId)
-                .uniqueResult();
+        Long result
+                = s.createQuery(
+                        hql,
+                        Long.class)
+                        .setParameter(
+                                "showtimeId",
+                                showtimeId)
+                        .uniqueResult();
 
-        return count == null ? 0 : count;
+        return result == null
+                ? 0
+                : result;
     }
 
     @Override

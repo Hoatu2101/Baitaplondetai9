@@ -26,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author Administrator
  */
-
 @Controller
 public class MovieController {
 
@@ -43,8 +42,18 @@ public class MovieController {
 
         model.addAttribute(
                 "movies",
-                this.movieService.getMovies(params)
-        );
+                movieService.getMovies(
+                        params));
+
+        model.addAttribute("currentPage",
+                Integer.valueOf(
+                        params.getOrDefault(
+                                "page",
+                                "1")));
+
+        model.addAttribute(
+                "totalMovies",
+                movieService.countMovies());
 
         return "movies";
     }

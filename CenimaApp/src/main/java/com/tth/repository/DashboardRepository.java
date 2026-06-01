@@ -10,23 +10,48 @@ import java.util.List;
  *
  * @author Admin
  */
-
-
+//public interface DashboardRepository {
+//    long countMovies();
+//
+//    long countRooms();
+//
+//    long countShowtimes();
+//
+//    long countBookings();
+//
+//    double totalRevenue();
+//
+//    List<Object[]> revenueByMovie();
+//    
+//    List<Object[]> revenueByShowtime();
+//
+//    List<Object[]> bookingByDate();
+//}
 public interface DashboardRepository {
 
-    long countMovies();
+    List<Object[]> statsRevenueByMovie();
 
-    long countRooms();
+    List<Object[]> statsRevenueByMonth(
+            Integer year);
 
-    long countShowtimes();
+    List<Object[]> statsRevenueByQuarter(
+            Integer year);
 
-    long countBookings();
+    List<Object[]> statsRevenueByYear();
 
-    double totalRevenue();
+    Long countSoldTickets();
 
-    List<Object[]> revenueByMovie();
+    Double totalRevenue();
+
+    Long countMovies();
+
+    Long countRooms();
+
+    Long countShowtimes();
+
+    Long countBookings();
     
-    List<Object[]> revenueByShowtime();
-
-    List<Object[]> bookingByDate();
+    List<Object[]> topMovies();
+    
+    List<Object[]> topCustomers();
 }

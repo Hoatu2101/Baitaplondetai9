@@ -12,6 +12,7 @@ import com.tth.pojo.SeatShowtimeStatus;
 import com.tth.pojo.Seats;
 import com.tth.pojo.Users;
 import com.tth.repository.SeatShowtimeStatusRepository;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.Session;
@@ -112,5 +113,35 @@ public class SeatShowtimeStatusRepositoryImpl
                         s.getStatus());
     }
 
-    
+    @Override
+    public void releaseExpiredLocks() {
+
+        Session session
+                = factory.getCurrentSession();
+
+        Date now = new Date();
+
+        Calendar cal
+                = Calendar.getInstance();
+
+        cal.setTime(now);
+
+        cal.add(Calendar.MINUTE, -5);
+
+        Date expiredTime
+                = cal.getTime();
+
+        session.createMutationQuery("""
+        UPDATE SeatShowtimeStatus s
+        SET s.status='AVAILABLE',
+            s.userId=NULL,
+            s.lockTime=NULL
+        WHERE s.status='LOCKED'
+        AND s.lockTime < :expiredTime
+    """)
+                .setParameter(
+                        "expiredTime",
+                        expiredTime)
+                .executeUpdate();
+    }
 }

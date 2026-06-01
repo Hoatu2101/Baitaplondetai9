@@ -4,7 +4,6 @@
  */
 package com.tth.service.impl;
 
-
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.tth.pojo.Movies;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Administrator
  */
-
 @Service
 @Transactional
 public class MoviesServicesImpl implements MoviesService {
@@ -42,29 +40,65 @@ public class MoviesServicesImpl implements MoviesService {
         return this.movieRepo.getMovieById(id);
     }
 
+//    @Override
+//    public void addOrUpdate(Movies movie) {
+//
+//        if (!movie.getFile().isEmpty()) {
+//
+//            try {
+//
+//                Map res = cloudinary.uploader().upload(
+//                        movie.getFile().getBytes(),
+//                        ObjectUtils.asMap(
+//                                "resource_type",
+//                                "auto"
+//                        )
+//                );
+//
+//                movie.setPoster(res.get("secure_url").toString());
+//
+//            } catch (IOException ex) {
+//                ex.printStackTrace();
+//            }
+//        }
+//
+//        this.movieRepo.addOrUpdate(movie);
+//    }
     @Override
     public void addOrUpdate(Movies movie) {
 
-        if (!movie.getFile().isEmpty()) {
+        try {
 
-            try {
+            if (movie.getFile() != null
+                    && !movie.getFile().isEmpty()) {
 
                 Map res = cloudinary.uploader().upload(
                         movie.getFile().getBytes(),
                         ObjectUtils.asMap(
                                 "resource_type",
                                 "auto"
-                        )
-                );
+                        ));
 
-                movie.setPoster(res.get("secure_url").toString());
+                movie.setPoster(
+                        res.get("secure_url").toString());
+            } else if (movie.getId() != null) {
 
-            } catch (IOException ex) {
-                ex.printStackTrace();
+                Movies oldMovie
+                        = movieRepo.getMovieById(
+                                movie.getId());
+
+                movie.setPoster(
+                        oldMovie.getPoster());
             }
-        }
 
-        this.movieRepo.addOrUpdate(movie);
+            movieRepo.addOrUpdate(movie);
+
+        } catch (Exception ex) {
+
+            throw new RuntimeException(
+                    "Lỗi upload poster",
+                    ex);
+        }
     }
 
     @Override

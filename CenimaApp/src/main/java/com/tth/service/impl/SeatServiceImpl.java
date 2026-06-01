@@ -22,58 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-//@Service
-//@Transactional
-//public class SeatServiceImpl implements SeatService {
-//
-//    @Autowired
-//    private ShowtimeService showtimeService;
-//
-//    @Autowired
-//    private BookingRepository bookingRepo;
-//
-//    @Autowired
-//    private SeatRepository seatRepo;
-//
-//    @Override
-//    public Seats getSeatById(int id) {
-//        return seatRepo.getSeatById(id);
-//    }
-//
-//    @Override
-//    public List<Seats> getSeatsByRoom(int roomId) {
-//        return seatRepo.getSeatsByRoom(roomId);
-//    }
-//
-//    @Override
-//    public List<SeatStatusResponse> getSeatsByShowtime(
-//            Integer showtimeId) {
-//
-//        Showtimes st
-//                = showtimeService
-//                        .getShowtimeById(
-//                                showtimeId);
-//
-//        List<Seats> seats
-//                = seatRepo.getSeatsByRoom(
-//                        st.getRoomId().getId());
-//
-//        List<Integer> bookedSeats
-//                = bookingRepo.getBookedSeatIds(
-//                        showtimeId);
-//
-//        return seats.stream()
-//                .map(s -> new SeatStatusResponse(
-//                s.getId(),
-//                s.getSeatNumber(),
-//                bookedSeats.contains(
-//                        s.getId())
-//        ))
-//                .toList();
-//    }
-//
-//
-//}
 
 @Service
 @Transactional
@@ -103,37 +51,38 @@ public class SeatServiceImpl
     }
 
     @Override
-    public List<SeatStatusResponse>
-            getSeatsByShowtime(
-                    Integer showtimeId) {
+    public List<SeatStatusResponse> getSeatsByShowtime(
+            Integer showtimeId) {
 
-        Showtimes showtime
-                = showtimeService
-                        .getShowtimeById(
-                                showtimeId);
+        seatStatusService.releaseExpiredLocks();
+        
+        Showtimes st
+                = showtimeService.getShowtimeById(
+                        showtimeId);
 
         List<Seats> seats
                 = seatRepo.getSeatsByRoom(
-                        showtime
-                                .getRoomId()
-                                .getId());
+                        st.getRoomId().getId());
 
-        Map<Integer, String> statuses
+        Map<Integer, String> statusMap
                 = seatStatusService
                         .getSeatStatusMap(
                                 showtimeId);
 
         return seats.stream()
-                .map(seat ->
-                        new SeatStatusResponse(
-                                seat.getId(),
-                                seat.getSeatNumber(),
-                                statuses.getOrDefault(
-                                        seat.getId(),
-                                        "AVAILABLE"
-                                )
-                        )
-                )
+                .map(seat -> {
+
+                    String status
+                            = statusMap.getOrDefault(
+                                    seat.getId(),
+                                    "AVAILABLE");
+
+                    return new SeatStatusResponse(
+                            seat.getId(),
+                            seat.getSeatNumber(),
+                            status
+                    );
+                })
                 .toList();
     }
 }

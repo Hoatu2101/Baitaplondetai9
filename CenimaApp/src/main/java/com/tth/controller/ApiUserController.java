@@ -9,14 +9,16 @@ package com.tth.controller;
  * @author Admin
  */
 import com.tth.service.BookingService;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
 public class ApiUserController {
-
 
     @Autowired
     private BookingService bookingService;
@@ -29,4 +31,31 @@ public class ApiUserController {
                 bookingService.getMyBookings(userName));
     }
 
+    @GetMapping("/staff/showtimes/{id}/statistic")
+    public ResponseEntity<?>
+            getStatistic(
+                    @PathVariable("id") Integer id) {
+
+        return ResponseEntity.ok(
+                bookingService
+                        .getShowtimeStatistic(
+                                id));
+    }
+
+    @GetMapping("/staff/bookings")
+    public String bookings(
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
+            Model model) {
+
+        if (date == null) {
+            date = new Date();
+        }
+
+        model.addAttribute(
+                "bookings",
+                bookingService.getBookingsByDate(date));
+
+        return "staff-bookings-list";
+    }
 }

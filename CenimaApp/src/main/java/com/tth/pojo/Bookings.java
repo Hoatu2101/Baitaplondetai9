@@ -52,9 +52,9 @@ public class Bookings implements Serializable {
     private Date createdAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
     private List<Tickets> ticketsList;
-    @JoinColumn(name = "seat_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Seats seatId;
+//    @JoinColumn(name = "seat_id", referencedColumnName = "id")
+//    @ManyToOne(optional = false)
+//    private Seats seatId;
     @JoinColumn(name = "showtime_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Showtimes showtimeId;
@@ -106,13 +106,13 @@ public class Bookings implements Serializable {
         this.ticketsList = ticketsList;
     }
 
-    public Seats getSeatId() {
-        return seatId;
-    }
-
-    public void setSeatId(Seats seatId) {
-        this.seatId = seatId;
-    }
+//    public Seats getSeatId() {
+//        return seatId;
+//    }
+//
+//    public void setSeatId(Seats seatId) {
+//        this.seatId = seatId;
+//    }
 
     public Showtimes getShowtimeId() {
         return showtimeId;

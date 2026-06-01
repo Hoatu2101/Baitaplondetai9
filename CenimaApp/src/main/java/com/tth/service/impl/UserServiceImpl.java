@@ -129,5 +129,24 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Override
+    public List<Users> getAllUsers() {
+        return userRepo.getAllUsers();
+    }
+
+    @Override
+    public Users getUserById(Integer id) {
+        return userRepo.getUserById(id);
+    }
+
+    @Override
+    public void lockUser(Integer id) {
+        userRepo.lockUser(id);
+    }
+
+    @Override
+    public void unlockUser(Integer id) {
+        userRepo.unlockUser(id);
+    }
+
 }
- 

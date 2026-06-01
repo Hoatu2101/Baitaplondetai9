@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>Users</title>
+
+    <th:block th:replace="base :: css"/>
+
+</head>
+<body>
+
+<div th:replace="base :: header"></div>
+
+<div class="container mt-4">
+
+    <h2>Quản lý người dùng</h2>
+
+    <table class="table table-bordered">
+
+        <thead>
+        <tr>
+
+            <th>ID</th>
+
+            <th>Tên</th>
+
+            <th>Username</th>
+
+            <th>Role</th>
+
+            <th>Trạng thái</th>
+
+            <th>Action</th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr th:each="u : ${users}">
+
+            <td th:text="${u.id}"></td>
+
+            <td th:text="${u.name}"></td>
+
+            <td th:text="${u.username}"></td>
+
+            <td th:text="${u.role}"></td>
+
+            <td>
+
+                <span th:if="${u.active}"
+                      class="badge bg-success">
+
+                    Active
+
+                </span>
+
+                <span th:unless="${u.active}"
+                      class="badge bg-danger">
+
+                    Locked
+
+                </span>
+
+            </td>
+
+            <td>
+
+                <a th:if="${u.active}"
+                   th:href="@{/admin/users/lock/{id}(id=${u.id})}"
+                   class="btn btn-danger btn-sm">
+
+                    Khóa
+
+                </a>
+
+                <a th:unless="${u.active}"
+                   th:href="@{/admin/users/unlock/{id}(id=${u.id})}"
+                   class="btn btn-success btn-sm">
+
+                    Mở khóa
+
+                </a>
+
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</body>
+</html>

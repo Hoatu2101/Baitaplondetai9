@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
  *
  * @author Admin
  */
-
 @Controller
 public class UserController {
 
@@ -72,5 +71,33 @@ public class UserController {
         this.userService.approveStaff(id);
 
         return "redirect:/admin/pending-staff";
+    }
+
+    @GetMapping("/admin/users")
+    public String users(Model model) {
+
+        model.addAttribute(
+                "users",
+                userService.getAllUsers());
+
+        return "admin-users";
+    }
+
+    @GetMapping("/admin/users/lock/{id}")
+    public String lockUser(
+            @PathVariable ("id") Integer id) {
+
+        userService.lockUser(id);
+
+        return "redirect:/admin/users";
+    }
+
+    @GetMapping("/admin/users/unlock/{id}")
+    public String unlockUser(
+            @PathVariable ("id") Integer id) {
+
+        userService.unlockUser(id);
+
+        return "redirect:/admin/users";
     }
 }

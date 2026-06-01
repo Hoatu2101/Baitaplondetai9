@@ -1,8 +1,252 @@
-<!doctype html>
+<!--<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Dashboard</title>
+
+    <th:block th:replace="base :: css"></th:block>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div th:replace="base :: header"></div>
+
+    <section class="container mt-4">
+
+        <h2 class="mb-4">
+            Dashboard thống kê
+        </h2>
+
+        <div class="row">
+
+            <div class="col-md-3 mb-3">
+
+                <div class="card shadow border-0 bg-primary text-white">
+
+                    <div class="card-body">
+
+                        <h5>Tổng phim</h5>
+
+                        <h2 th:text="${movieCount}"></h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <div class="card shadow border-0 bg-success text-white">
+
+                    <div class="card-body">
+
+                        <h5>Tổng phòng</h5>
+
+                        <h2 th:text="${roomCount}"></h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <div class="card shadow border-0 bg-warning text-dark">
+
+                    <div class="card-body">
+
+                        <h5>Suất chiếu</h5>
+
+                        <h2 th:text="${showtimeCount}"></h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <div class="card shadow border-0 bg-danger text-white">
+
+                    <div class="card-body">
+
+                        <h5>Bookings</h5>
+
+                        <h2 th:text="${bookingCount}"></h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+                    <div class="card shadow p-3 mt-4">
+                
+                        <h4>
+                            Tổng doanh thu:
+                            <span class="text-danger"
+                                  th:text="${revenue}">
+                            </span>
+                            VNĐ
+                        </h4>
+                
+                    </div>
+
+        <div class="row mt-4">
+
+            <div class="col-md-6">
+
+                <div class="card shadow p-3">
+
+                    <h5>Doanh thu theo phim</h5>
+
+                    <canvas id="movieChart"></canvas>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="card shadow p-3">
+
+                    <h5>Bookings theo tháng</h5>
+
+                    <canvas id="monthChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row mb-4">
+
+            <div class="col-md-6">
+                <div class="card p-3">
+
+                    <h5>Tổng vé bán</h5>
+
+                    <h2 th:text="${ticketCount}"></h2>
+
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card p-3">
+
+                    <h5>Tổng doanh thu</h5>
+
+                    <h2 th:text="${totalRevenue}"></h2>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </section>
+
+    <script th:inline="javascript">
+
+        let movieLabels = [[${movieLabels}
+        ]];
+        let movieRevenue = [[${movieRevenue
+        }
+        ]];
+        let bookingDates = [[${bookingDates
+        }
+        ]];
+        let bookingCounts = [[${bookingCounts
+        }
+        ]];
+        new Chart(document.getElementById('movieChart'), {
+
+        type: 'bar',
+                data: {
+                labels: movieLabels,
+                        datasets: [{
+                        label: 'Revenue',
+                                data: movieRevenue
+                        }]
+                }
+        });
+        new Chart(document.getElementById('bookingChart'), {
+
+        type: 'line',
+                data: {
+                labels: bookingDates,
+                        datasets: [{
+                        label: 'Bookings',
+                                data: bookingCounts
+                        }]
+                }
+        });
+    </script>
+
+    <script th:inline="javascript">
+
+        let movieLabels = [
+        [[${movieStats.![0]}]]
+        ];
+        let movieValues = [
+        [[${movieStats.![1]}
+        ]]
+        ];
+        new Chart(
+                document.getElementById(
+                        'movieChart'),
+        {
+        type: 'bar',
+                data: {
+                labels: movieLabels,
+                        datasets: [{
+                        label: 'Revenue',
+                                data: movieValues
+                        }]
+                }
+        });
+    </script>
+
+    <script th:inline="javascript">
+
+        let monthLabels = [
+        [[${monthStats.![0]}]]
+                ];
+        let monthValues = [
+        [[${monthStats.![1]}]]
+                ];
+        new Chart(
+                document.getElementById(
+                        'monthChart'),
+                {
+                type:'line',
+                        data:{
+                        labels:monthLabels,
+                                datasets:[{
+                                label:'Revenue',
+                                        data:monthValues
+                                }]
+                        }
+                });
+
+    </script>
+
+</body>
+</html>-->
+
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Dashboard</title>
+    <title>Dashboard Admin</title>
 
     <th:block th:replace="base :: css"></th:block>
 
@@ -13,93 +257,52 @@
 
 <div th:replace="base :: header"></div>
 
-<section class="container mt-4">
+<div class="container mt-4">
 
     <h2 class="mb-4">
-        Dashboard thống kê
+        Dashboard Thống Kê
     </h2>
 
+    <!-- SUMMARY -->
     <div class="row">
 
-        <div class="col-md-3 mb-3">
-
-            <div class="card shadow border-0 bg-primary text-white">
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
 
                 <div class="card-body">
 
-                    <h5>Tổng phim</h5>
+                    <h5>Tổng vé đã bán</h5>
 
-                    <h2 th:text="${movieCount}"></h2>
+                    <h2 class="text-primary"
+                        th:text="${ticketCount}">
+                    </h2>
 
                 </div>
 
             </div>
-
         </div>
 
-        <div class="col-md-3 mb-3">
-
-            <div class="card shadow border-0 bg-success text-white">
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-3">
 
                 <div class="card-body">
 
-                    <h5>Tổng phòng</h5>
+                    <h5>Tổng doanh thu</h5>
 
-                    <h2 th:text="${roomCount}"></h2>
+                    <h2 class="text-danger"
+                        th:text="${#numbers.formatDecimal(totalRevenue,0,'COMMA',0,'POINT')}">
+                    </h2>
 
                 </div>
 
             </div>
-
-        </div>
-
-        <div class="col-md-3 mb-3">
-
-            <div class="card shadow border-0 bg-warning text-dark">
-
-                <div class="card-body">
-
-                    <h5>Suất chiếu</h5>
-
-                    <h2 th:text="${showtimeCount}"></h2>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-3 mb-3">
-
-            <div class="card shadow border-0 bg-danger text-white">
-
-                <div class="card-body">
-
-                    <h5>Bookings</h5>
-
-                    <h2 th:text="${bookingCount}"></h2>
-
-                </div>
-
-            </div>
-
         </div>
 
     </div>
 
-    <div class="card shadow p-3 mt-4">
+    <!-- MOVIE + MONTH -->
 
-        <h4>
-            Tổng doanh thu:
-            <span class="text-danger"
-                  th:text="${revenue}">
-            </span>
-            VNĐ
-        </h4>
-
-    </div>
-
-    <div class="row mt-4">
+    <div class="row">
 
         <div class="col-md-6">
 
@@ -117,9 +320,9 @@
 
             <div class="card shadow p-3">
 
-                <h5>Bookings theo ngày</h5>
+                <h5>Doanh thu theo tháng</h5>
 
-                <canvas id="bookingChart"></canvas>
+                <canvas id="monthChart"></canvas>
 
             </div>
 
@@ -127,41 +330,126 @@
 
     </div>
 
-</section>
+    <!-- QUARTER + YEAR -->
+
+    <div class="row mt-4">
+
+        <div class="col-md-6">
+
+            <div class="card shadow p-3">
+
+                <h5>Doanh thu theo quý</h5>
+
+                <canvas id="quarterChart"></canvas>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="card shadow p-3">
+
+                <h5>Doanh thu theo năm</h5>
+
+                <canvas id="yearChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 <script th:inline="javascript">
 
-    let movieLabels = [[${movieLabels}]];
-    let movieRevenue = [[${movieRevenue}]];
+    /* ===== MOVIE ===== */
 
-    let bookingDates = [[${bookingDates}]];
-    let bookingCounts = [[${bookingCounts}]];
+    const movieLabels =
+            [[${movieStats.![0]}]];
 
-    new Chart(document.getElementById('movieChart'), {
+    const movieValues =
+            [[${movieStats.![1]}]];
 
-        type: 'bar',
-
-        data: {
-            labels: movieLabels,
-            datasets: [{
-                label: 'Revenue',
-                data: movieRevenue
-            }]
+    new Chart(
+        document.getElementById('movieChart'),
+        {
+            type: 'bar',
+            data: {
+                labels: movieLabels,
+                datasets: [{
+                    label: 'Revenue',
+                    data: movieValues
+                }]
+            }
         }
-    });
+    );
 
-    new Chart(document.getElementById('bookingChart'), {
+    /* ===== MONTH ===== */
 
-        type: 'line',
+    const monthLabels =
+            [[${monthStats.![0]}]];
 
-        data: {
-            labels: bookingDates,
-            datasets: [{
-                label: 'Bookings',
-                data: bookingCounts
-            }]
+    const monthValues =
+            [[${monthStats.![1]}]];
+
+    new Chart(
+        document.getElementById('monthChart'),
+        {
+            type: 'line',
+            data: {
+                labels: monthLabels,
+                datasets: [{
+                    label: 'Revenue',
+                    data: monthValues
+                }]
+            }
         }
-    });
+    );
+
+    /* ===== QUARTER ===== */
+
+    const quarterLabels =
+            [[${quarterStats.![0]}]];
+
+    const quarterValues =
+            [[${quarterStats.![1]}]];
+
+    new Chart(
+        document.getElementById('quarterChart'),
+        {
+            type: 'pie',
+            data: {
+                labels: quarterLabels,
+                datasets: [{
+                    data: quarterValues
+                }]
+            }
+        }
+    );
+
+    /* ===== YEAR ===== */
+
+    const yearLabels =
+            [[${yearStats.![0]}]];
+
+    const yearValues =
+            [[${yearStats.![1]}]];
+
+    new Chart(
+        document.getElementById('yearChart'),
+        {
+            type: 'bar',
+            data: {
+                labels: yearLabels,
+                datasets: [{
+                    label: 'Revenue',
+                    data: yearValues
+                }]
+            }
+        }
+    );
 
 </script>
 

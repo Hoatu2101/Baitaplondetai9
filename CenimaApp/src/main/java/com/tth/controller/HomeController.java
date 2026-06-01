@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.GetMapping;
  *
  * @author admin
  */
-
 @Controller
 @ControllerAdvice
 public class HomeController {
@@ -42,7 +41,7 @@ public class HomeController {
 
     @ModelAttribute
     public void commonAttr(Model model,
-                           Principal principal) {
+            Principal principal) {
 
         model.addAttribute(
                 "categories",
@@ -59,13 +58,24 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String index(Model model,
-                        @RequestParam Map<String, String> params) {
+    public String index(
+            Model model,
+            @RequestParam Map<String, String> params) {
 
         model.addAttribute(
                 "movies",
-                this.movieService.getMovies(params)
-        );
+                movieService.getMovies(
+                        params));
+
+        model.addAttribute("currentPage",
+                Integer.valueOf(
+                        params.getOrDefault(
+                                "page",
+                                "1")));
+
+        model.addAttribute(
+                "totalMovies",
+                movieService.countMovies());
 
         return "index";
     }
@@ -79,8 +89,8 @@ public class HomeController {
 
         return auth != null
                 && auth.getAuthorities()
-                .stream()
-                .anyMatch(a -> a.getAuthority()
+                        .stream()
+                        .anyMatch(a -> a.getAuthority()
                         .equals("ROLE_ADMIN"));
     }
 
@@ -93,8 +103,8 @@ public class HomeController {
 
         return auth != null
                 && auth.getAuthorities()
-                .stream()
-                .anyMatch(a -> a.getAuthority()
+                        .stream()
+                        .anyMatch(a -> a.getAuthority()
                         .equals("ROLE_STAFF"));
     }
 }

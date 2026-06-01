@@ -10,6 +10,7 @@ package com.tth.repository.impl;
  */
 import com.tth.pojo.Bookings;
 import com.tth.repository.BookingRepository;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -37,7 +38,6 @@ public class BookingRepositoryImpl
         return booking;
     }
 
-
     @Override
     public List<Bookings> getBookingsByUser(
             String username) {
@@ -58,7 +58,6 @@ public class BookingRepositoryImpl
                 .getResultList();
     }
 
-
     @Override
     public long countBookingByShowtime(
             Integer showtimeId) {
@@ -76,5 +75,54 @@ public class BookingRepositoryImpl
                 .setParameter("id",
                         showtimeId)
                 .getSingleResult();
+    }
+
+    @Override
+    public Double revenueByShowtime(
+            Integer showtimeId) {
+
+        return factory
+                .getCurrentSession()
+                .createQuery("""
+                SELECT COALESCE(
+                    SUM(b.totalPrice),
+                    0)
+                FROM Bookings b
+                WHERE b.showtimeId.id=:id
+            """,
+                        Double.class)
+                .setParameter(
+                        "id",
+                        showtimeId)
+                .getSingleResult();
+    }
+
+    @Override
+    public List<Bookings> findByShowtime(Integer showtimeId) {
+
+        return factory
+                .getCurrentSession()
+                .createQuery("""
+                FROM Bookings b
+                WHERE b.showtimeId.id=:id
+                ORDER BY b.createdAt DESC
+            """, Bookings.class)
+                .setParameter(
+                        "id",
+                        showtimeId)
+                .getResultList();
+    }
+
+    @Override
+    public List<Bookings> getBookingsByDate(Date date) {
+
+        return factory.getCurrentSession()
+                .createQuery("""
+                FROM Bookings b
+                WHERE DATE(b.createdAt)=DATE(:d)
+                ORDER BY b.createdAt DESC
+            """, Bookings.class)
+                .setParameter("d", date)
+                .getResultList();
     }
 }

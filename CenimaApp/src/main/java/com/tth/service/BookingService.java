@@ -10,7 +10,10 @@ package com.tth.service;
  */
 
 
+import com.tth.dto.BookingDetailResponse;
+import com.tth.dto.ShowtimeStatisticResponse;
 import com.tth.pojo.Bookings;
+import java.util.Date;
 import java.util.List;
 
 public interface BookingService {
@@ -20,10 +23,12 @@ public interface BookingService {
             List<Integer> seatId,
             String username);
 
-    List<Bookings> getMyBookings(
-            String username);
+    List<Bookings> getMyBookings(String username);
 
-    boolean isSeatBooked(
-            Integer showtimeId,
-            Integer seatId);
+    
+    ShowtimeStatisticResponse getShowtimeStatistic(Integer showtimeId);
+
+    List<BookingDetailResponse> getBookingDetailsByShowtime(Integer showtimeId);
+
+    List<Bookings> getBookingsByDate(Date date);
 }

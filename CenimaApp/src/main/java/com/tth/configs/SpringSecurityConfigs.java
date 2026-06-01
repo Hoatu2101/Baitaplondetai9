@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
             //            "com.tth.controller",
             //            "com.tth.repository",
             //            "com.tth.service"
-                        "com.tth"
+            "com.tth"
 
         }
 )
@@ -68,6 +68,34 @@ public class SpringSecurityConfigs {
 
         http
                 .csrf(csrf -> csrf.disable())
+                //                .authorizeHttpRequests(auth -> auth
+                //                .requestMatchers(
+                //                        "/",
+                //                        "/login",
+                //                        "/register",
+                //                        "/movies",
+                //                        "/movies/**",
+                //                        "/css/**",
+                //                        "/js/**",
+                //                        "/images/**",
+                //                        "/api/**"
+                //                ).permitAll()
+                //                .requestMatchers("/admin/**")
+                //                .hasAnyRole("ADMIN", "STAFF")
+                //                .requestMatchers("/staff/**")
+                //                .hasAnyRole("STAFF", "ADMIN")
+                //                .requestMatchers(
+                //                        "/dashboard/**")
+                //                .hasAnyRole(
+                //                        "ADMIN","STAFF")
+                //                .requestMatchers("/movies/create")
+                //                .hasAnyRole("ADMIN", "STAFF")
+                //                .requestMatchers("/movies/delete/**")
+                //                .hasAnyRole("ADMIN", "STAFF")
+                //                .anyRequest()
+                //                .authenticated()
+                //                )
+
                 .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                         "/",
@@ -78,16 +106,24 @@ public class SpringSecurityConfigs {
                         "/css/**",
                         "/js/**",
                         "/images/**",
-                        "/api/**"
-                ).permitAll()
-                .requestMatchers("/admin/**")
-                .hasAnyRole("ADMIN", "STAFF")
-                .requestMatchers("/staff/**")
-                .hasAnyRole("STAFF", "ADMIN")
-                .requestMatchers("/movies/create")
-                .hasAnyRole("ADMIN", "STAFF")
-                .requestMatchers("/movies/delete/**")
-                .hasAnyRole("ADMIN", "STAFF")
+                        "/api/**")
+                .permitAll()
+                .requestMatchers(
+                        "/admin/users/**",
+                        "/admin/pending-staff/**",
+                        "/admin/approve/**",
+                        "/admin/dashboard")
+                .hasRole("ADMIN")
+                .requestMatchers(
+                        "/admin/movies/**",
+                        "/api/movies/**",
+                        "/movies/create",
+                        "/movies/delete/**",
+                        "/admin/showtimes/**",
+                        "/admin/bookings/**")
+                .hasAnyRole(
+                        "ADMIN",
+                        "STAFF")
                 .anyRequest()
                 .authenticated()
                 )

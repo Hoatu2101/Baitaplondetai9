@@ -4,7 +4,6 @@
  */
 package com.tth.repository.impl;
 
-
 import com.tth.pojo.Tickets;
 import com.tth.repository.TicketRepository;
 import java.util.List;
@@ -34,18 +33,16 @@ public class TicketRepositoryImpl
     }
 
     @Override
-    public List<Tickets> getTicketsByBooking(
-            Integer bookingId) {
+    public List<Tickets>getTicketsByBooking(Integer bookingId) {
 
         return factory
                 .getCurrentSession()
-                .createQuery(
-                        """
-                        FROM Tickets t
-                        WHERE t.bookingId.id=:id
-                        """,
-                        Tickets.class)
-                .setParameter("id",
+                .createQuery("""
+                FROM Tickets t
+                WHERE t.bookingId.id=:id
+            """, Tickets.class)
+                .setParameter(
+                        "id",
                         bookingId)
                 .getResultList();
     }

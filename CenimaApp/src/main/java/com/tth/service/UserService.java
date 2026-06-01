@@ -8,13 +8,12 @@ package com.tth.service;
  *
  * @author Admin
  */
-
 import com.tth.pojo.Users;
 import java.util.List;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface UserService extends UserDetailsService{
+public interface UserService extends UserDetailsService {
 
     void addUser(Users user);
 
@@ -23,6 +22,14 @@ public interface UserService extends UserDetailsService{
     List<Users> getPendingStaff();
 
     void approveStaff(int id);
-    
+
     UserDetails loadUserByUsername(String username);
+
+    List<Users> getAllUsers();
+
+    Users getUserById(Integer id);
+
+    void lockUser(Integer id);
+
+    void unlockUser(Integer id);
 }

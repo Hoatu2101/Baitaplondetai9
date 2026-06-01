@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sơ đồ ghế</title>
+</head>
+<body>
+
+<h2>Sơ đồ ghế</h2>
+
+<table border="1">
+
+    <tr>
+        <th>Ghế</th>
+        <th>Trạng thái</th>
+    </tr>
+
+    <tr th:each="s : ${seats}">
+        <td th:text="${s.seatNumber}"></td>
+        <td th:text="${s.status}"></td>
+    </tr>
+
+</table>
+
+</body>
+</html>

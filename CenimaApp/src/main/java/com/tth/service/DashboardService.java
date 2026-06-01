@@ -8,24 +8,47 @@ package com.tth.service;
  *
  * @author Admin
  */
-
-
-
 import java.util.List;
 
+//public interface DashboardService {
+//
+//    long countMovies();
+//
+//    long countRooms();
+//
+//    long countShowtimes();
+//
+//    long countBookings();
+//
+//    double totalRevenue();
+//
+//    List<Object[]> revenueByMovie();
+//
+//    List<Object[]> bookingByDate();
+//}
 public interface DashboardService {
-
-    long countMovies();
-
-    long countRooms();
-
-    long countShowtimes();
-
-    long countBookings();
-
-    double totalRevenue();
 
     List<Object[]> revenueByMovie();
 
-    List<Object[]> bookingByDate();
+    List<Object[]> revenueByMonth(
+            Integer year);
+
+    List<Object[]> revenueByQuarter(
+            Integer year);
+
+    List<Object[]> revenueByYear();
+
+    Long countSoldTickets();
+
+    Double totalRevenue();
+
+    Long countMovies();
+
+    Long countRooms();
+
+    Long countShowtimes();
+
+    Long countBookings();
+    
+    List<Object[]> topMovies();
 }

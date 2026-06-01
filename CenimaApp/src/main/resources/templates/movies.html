@@ -17,12 +17,13 @@
 
             <h2>Danh sách phim</h2>
 
-            <a th:href="@{/admin/movies}"
-               class="btn btn-success">
+            <div th:if="${isAdmin or isStaff}">
+                <a th:href="@{/admin/movies}"
+                   class="btn btn-success">
 
-                Thêm phim
-            </a>
-
+                    Thêm phim
+                </a>
+            </div>
         </div>
 
         <div class="row">
@@ -49,17 +50,17 @@
                            th:href="@{'/movies/' + ${m.id}}">
                             Chi tiết
                         </a>
+                        <div th:if="${isAdmin or isStaff}">
+                            <a class="btn btn-warning btn-sm"
+                               th:href="@{'/admin/movies/' + ${m.id}}">
+                                Sửa
+                            </a>
 
-                        <a class="btn btn-warning btn-sm"
-                           th:href="@{'/admin/movies/' + ${m.id}}">
-                            Sửa
-                        </a>
-
-                        <a class="btn btn-danger btn-sm"
-                           th:href="@{'/admin/movies/delete/' + ${m.id}}">
-                            Xóa
-                        </a>
-
+                            <a class="btn btn-danger btn-sm"
+                               th:href="@{'/admin/movies/delete/' + ${m.id}}">
+                                Xóa
+                            </a>
+                        </div>
                     </div>
 
                 </div>
@@ -69,6 +70,24 @@
         </div>
 
     </section>
+
+    <nav class="mt-4">
+
+        <ul class="pagination">
+
+            <li class="page-item"
+                th:each="i : ${#numbers.sequence(1,10)}">
+
+                <a class="page-link"
+                   th:href="@{/movies(page=${i})}"
+                   th:text="${i}">
+                </a>
+
+            </li>
+
+        </ul>
+
+    </nav>
 
     <div th:replace="base :: footer"></div>
 </body>

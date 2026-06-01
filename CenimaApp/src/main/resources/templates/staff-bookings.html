@@ -1,8 +1,64 @@
-<tbody>
-<tr th:each="b : ${bookings}">
-    <td th:text="${b.userId.fullName}"></td>
-    <td th:text="${b.showtimeId.movieId.movieName}"></td>
-    <td th:text="${b.seatId.seatNumber}"></td>
-    <td th:text="${b.totalPrice}"></td>
-</tr>
-</tbody>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Danh sách Booking</title>
+    <th:block th:replace="base :: css"></th:block>
+</head>
+<body>
+
+<div th:replace="base :: header"></div>
+
+<div class="container mt-4">
+
+    <h2>Danh sách Booking</h2>
+
+    <form method="get">
+
+        <input type="date"
+               name="date"
+               class="form-control mb-3">
+
+        <button class="btn btn-primary">
+            Lọc
+        </button>
+
+    </form>
+
+    <table class="table table-bordered">
+
+        <thead>
+
+        <tr>
+            <th>ID</th>
+            <th>Khách hàng</th>
+            <th>Tổng tiền</th>
+            <th>Ngày đặt</th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr th:each="b : ${bookings}">
+
+            <td th:text="${b.id}"></td>
+
+            <td th:text="${b.userId.fullName}"></td>
+
+            <td th:text="${b.totalPrice}"></td>
+
+            <td th:text="${#dates.format(
+                b.createdAt,
+                'dd/MM/yyyy HH:mm')}">
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</body>
+</html>

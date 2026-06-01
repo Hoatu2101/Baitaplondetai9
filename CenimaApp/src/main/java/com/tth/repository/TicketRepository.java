@@ -18,4 +18,6 @@ public interface TicketRepository {
 
     List<Tickets> getTicketsByBooking(
             Integer bookingId);
+    
+
 }

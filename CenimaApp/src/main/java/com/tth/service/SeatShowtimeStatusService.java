@@ -8,9 +8,6 @@ package com.tth.service;
  *
  * @author Admin
  */
-
-
-
 import com.tth.pojo.SeatShowtimeStatus;
 import java.util.List;
 import java.util.Map;
@@ -31,10 +28,12 @@ public interface SeatShowtimeStatusService {
             String username);
 
     List<SeatShowtimeStatus>
-        getByShowtime(
-                Integer showtimeId);
+            getByShowtime(
+                    Integer showtimeId);
 
-    Map<Integer,String>
-        getSeatStatusMap(
-                Integer showtimeId);
+    Map<Integer, String>
+            getSeatStatusMap(
+                    Integer showtimeId);
+
+    void releaseExpiredLocks();
 }

@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Admin
  */
-
 @Repository
 @Transactional
 public class UserRepositoryImpl implements UserRepository {
@@ -79,6 +78,52 @@ public class UserRepositoryImpl implements UserRepository {
         Users u = s.get(Users.class, id);
 
         u.setApproved(true);
+
+        s.merge(u);
+    }
+
+    @Override
+    public List<Users> getAllUsers() {
+
+        return this.factory.getObject()
+                .getCurrentSession()
+                .createQuery("""
+                FROM Users
+                ORDER BY createdAt DESC
+            """, Users.class)
+                .getResultList();
+    }
+
+    @Override
+    public Users getUserById(Integer id) {
+
+        return this.factory.getObject()
+                .getCurrentSession()
+                .get(Users.class, id);
+    }
+
+    @Override
+    public void lockUser(Integer id) {
+
+        Session s = this.factory.getObject()
+                .getCurrentSession();
+
+        Users u = s.get(Users.class, id);
+
+        u.setActive(false);
+
+        s.merge(u);
+    }
+
+    @Override
+    public void unlockUser(Integer id) {
+
+        Session s = this.factory.getObject()
+                .getCurrentSession();
+
+        Users u = s.get(Users.class, id);
+
+        u.setActive(true);
 
         s.merge(u);
     }

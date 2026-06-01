@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Administrator
  */
-
 @Repository
 @Transactional
 public class MoviesRepositoriesImpl implements MoviesRepositories {
@@ -71,10 +70,78 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
                         Integer.valueOf(cateId)
                 ));
             }
+
+            String fromPrice
+                    = params.get("fromPrice");
+
+            if (fromPrice != null
+                    && !fromPrice.isBlank()) {
+
+                predicates.add(
+                        cb.ge(root.get("price"),
+                                Double.valueOf(
+                                        fromPrice)
+                        )
+                );
+            }
+
+            String toPrice
+                    = params.get("toPrice");
+
+            if (toPrice != null
+                    && !toPrice.isBlank()) {
+
+                predicates.add(
+                        cb.le(root.get("price"),
+                                Double.valueOf(
+                                        toPrice)
+                        )
+                );
+            }
         }
 
         cq.where(predicates.toArray(Predicate[]::new));
 
+        String sort
+                = params.get("sort");
+
+        if (sort != null) {
+
+            switch (sort) {
+
+                case "priceAsc" ->
+                    cq.orderBy(
+                            cb.asc(
+                                    root.get("price")));
+
+                case "priceDesc" ->
+                    cq.orderBy(
+                            cb.desc(
+                                    root.get("price")));
+
+                case "durationAsc" ->
+                    cq.orderBy(
+                            cb.asc(
+                                    root.get("duration")));
+
+                case "durationDesc" ->
+                    cq.orderBy(
+                            cb.desc(
+                                    root.get("duration")));
+
+                default ->
+                    cq.orderBy(
+                            cb.desc(
+                                    root.get("id")));
+            }
+
+        } else {
+
+            cq.orderBy(
+                    cb.desc(
+                            root.get("id")));
+        }
+        
         Query<Movies> query = s.createQuery(cq);
 
         // PAGINATION
@@ -82,7 +149,7 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
 
             String page = params.get("page");
 
-            int pageSize = 10;
+            int pageSize = 20;
 
             if (page != null && !page.isEmpty()) {
 
