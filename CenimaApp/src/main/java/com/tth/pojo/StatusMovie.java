@@ -4,6 +4,7 @@
  */
 package com.tth.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,6 +43,7 @@ public class StatusMovie implements Serializable {
     @Column(name = "name_status")
     private String nameStatus;
     @OneToMany(mappedBy = "statusMovie")
+    @JsonIgnore
     private List<Movies> moviesList;
 
     public StatusMovie() {

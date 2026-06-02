@@ -1,0 +1,135 @@
+/* =========================================
+   GIAO DIỆN CHI TIẾT PHIM (DARK MODE)
+   ========================================= */
+
+.movie-details-wrapper {
+    background-color: #0f0f0f; /* Nền đen tuyền giống ảnh */
+    min-height: 100vh;
+    color: #ffffff;
+    padding-bottom: 50px;
+}
+
+/* KHU VỰC BANNER BÊN TRÊN */
+.hero-banner {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Lớp phủ Gradient làm đen dần xuống dưới */
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to top, #0f0f0f 0%, rgba(15, 15, 15, 0.8) 40%, rgba(15, 15, 15, 0.2) 100%);
+    display: flex;
+    align-items: flex-end; /* Đẩy chữ xuống đáy banner */
+    padding-bottom: 40px;
+}
+
+.category-tags {
+    margin-bottom: 15px;
+}
+
+.custom-tag {
+    display: inline-block;
+    border: 1px solid #e50914;
+    color: #e50914;
+    background-color: rgba(229, 9, 20, 0.1);
+    padding: 4px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.meta-info {
+    display: flex;
+    gap: 20px;
+    font-size: 0.95rem;
+    color: #cccccc;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+}
+
+/* KHU VỰC NỘI DUNG VÀ ĐẶT VÉ */
+.content-section {
+    margin-top: 30px;
+}
+
+.section-heading {
+    font-weight: 700;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.movie-description {
+    color: #b3b3b3;
+    line-height: 1.8;
+    font-size: 0.95rem;
+}
+
+/* CARD ĐẶT VÉ BÊN PHẢI */
+.booking-card {
+    background-color: #1a1a1a !important; /* Xám đen nhám */
+    border: 1px solid #333333 !important;
+    border-radius: 12px;
+}
+
+.booking-price {
+    color: #e50914; /* Đỏ rực */
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.theater-label {
+    font-size: 0.9rem;
+    color: #dddddd;
+}
+
+/* Style cho khung chọn rạp */
+.dark-select {
+    background-color: #2a2a2a !important;
+    border: 1px solid #444 !important;
+    color: #ffffff !important;
+    border-radius: 8px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.dark-select:focus {
+    box-shadow: none;
+    border-color: #e50914 !important;
+}
+
+/* Nút chọn ghế */
+.btn-book-seat {
+    background-color: #333333 !important;
+    border: none !important;
+    padding: 12px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.btn-book-seat:not(:disabled) {
+    background-color: #e50914 !important;
+    color: white !important;
+}
+
+.btn-book-seat:not(:disabled):hover {
+    background-color: #f40612 !important;
+    transform: translateY(-2px);
+}

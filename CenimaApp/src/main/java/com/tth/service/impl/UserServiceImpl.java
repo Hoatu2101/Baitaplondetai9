@@ -13,20 +13,25 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
  * @author Admin
  */
-@Service
+
 @Transactional
-public class UserServiceImpl implements UserService {
+@Service
+public  class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepo;
@@ -147,6 +152,39 @@ public class UserServiceImpl implements UserService {
     @Override
     public void unlockUser(Integer id) {
         userRepo.unlockUser(id);
+    }
+
+   @Override
+    public Users addUser(Map<String, String> info, MultipartFile avatar) {
+
+        Users u = new Users();
+
+        u.setName(info.get("name"));
+        u.setUsername(info.get("username"));
+        u.setPassword(passwordEncoder.encode(info.get("password")));
+        u.setRole("ROLE_USER");
+
+        u.setNumberPhone(info.get("numberPhone"));
+
+        u.setActive(true);
+        u.setApproved(false);
+
+        if (avatar != null && !avatar.isEmpty()) {
+            try {
+                Map res = cloudinary.uploader().upload(
+                        avatar.getBytes(),
+                        ObjectUtils.asMap("resource_type", "auto")
+                );
+
+                u.setAvatar(res.get("secure_url").toString());
+
+            } catch (IOException ex) {
+                Logger.getLogger(UserServiceImpl.class.getName())
+                        .log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return userRepo.add_User(u);
     }
 
 }

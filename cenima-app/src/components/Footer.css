@@ -1,0 +1,104 @@
+/* =========================================
+   GIAO DIỆN CINEBOOK FOOTER 
+   ========================================= */
+
+.cinema-footer {
+    background-color: #0a0a0a; /* Nền đen sâu hơn Header một chút để tạo độ khối */
+    color: #ffffff;
+    padding-top: 50px;
+    border-top: 1px solid #1f1f1f; /* Đường viền ngăn cách nội dung ở trên */
+    margin-top: auto; /* Tự động đẩy Footer xuống cuối cùng của trang */
+}
+
+/* Bố cục chia cột */
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Cho phép rớt dòng nếu màn hình nhỏ */
+    padding: 0 40px 40px 40px; /* Khớp với lề của Header */
+    gap: 30px;
+}
+
+.footer-col {
+    flex: 1;
+    min-width: 200px; /* Chống méo khi thu nhỏ màn hình */
+}
+
+.brand-col {
+    flex: 2; /* Cột chứa logo sẽ rộng hơn các cột khác */
+    padding-right: 40px;
+}
+
+/* Kiểu dáng Logo Footer */
+.footer-brand {
+    font-size: 28px;
+    font-weight: 800;
+    margin-top: 0;
+    margin-bottom: 15px;
+    letter-spacing: 0.5px;
+}
+
+.text-red {
+    color: #ff0000;
+}
+
+.footer-desc {
+    color: #888888;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+/* Kiểu dáng Tiêu đề các cột */
+.footer-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+/* Đường gạch dưới màu đỏ cho tiêu đề */
+.footer-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background-color: #ff0000;
+}
+
+/* Kiểu dáng các đường Link */
+.footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-link {
+    color: #aaaaaa;
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hiệu ứng khi di chuột vào Link */
+.footer-link:hover {
+    color: #ff0000;
+    transform: translateX(5px); /* Chữ hơi nhích nhẹ sang phải nhìn rất pro */
+}
+
+/* Dòng Copyright cuối cùng */
+.footer-bottom {
+    background-color: #000000; /* Nền đen nhánh */
+    text-align: center;
+    padding: 15px 0;
+    border-top: 1px solid #1a1a1a;
+}
+
+.footer-bottom p {
+    margin: 0;
+    color: #666666;
+    font-size: 14px;
+}
