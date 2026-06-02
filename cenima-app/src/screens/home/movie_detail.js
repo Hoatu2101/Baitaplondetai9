@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Form, Button, Image } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import Apis, { endpoints } from '../../configs/Apis';
-import MySpinner from '../../components/Myspinner/MySpinner';
+import MySpinner from '../../components/MySpinner/MySpinner';
 
 const MovieDetails = () => {
     // 1. GỌI HOOKS Ở ĐÂY (Cấp cao nhất của Component)
@@ -62,9 +62,9 @@ const MovieDetails = () => {
                             <span className="meta-item text-warning">
                                 <b>⭐ {movie.rating}/10</b>
                             </span>
-                            <span className="meta-item">⏱ {movie.duration} phút</span>
-                            <span className="meta-item">📅 {movie.releaseDate}</span>
-                            <span className="meta-item">🌐 {movie.language}</span>
+                            <span className="meta-item"> Thời lượng: {movie.duration} phút</span>
+                
+                            <span className="meta-item"> Định dạng: {movie.movieFormat}</span>
                         </div>
                     </Container>
                 </div>

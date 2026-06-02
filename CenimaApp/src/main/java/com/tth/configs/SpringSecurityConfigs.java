@@ -7,6 +7,7 @@ package com.tth.configs;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.tth.service.UserService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,9 +18,13 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -62,93 +67,50 @@ public class SpringSecurityConfigs {
 
         return authProvider;
     }
-
+// 1. Cấu hình chuyên biệt cho API (Order 1)
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http
-                .csrf(csrf -> csrf.disable())
-                //                .authorizeHttpRequests(auth -> auth
-                //                .requestMatchers(
-                //                        "/",
-                //                        "/login",
-                //                        "/register",
-                //                        "/movies",
-                //                        "/movies/**",
-                //                        "/css/**",
-                //                        "/js/**",
-                //                        "/images/**",
-                //                        "/api/**"
-                //                ).permitAll()
-                //                .requestMatchers("/admin/**")
-                //                .hasAnyRole("ADMIN", "STAFF")
-                //                .requestMatchers("/staff/**")
-                //                .hasAnyRole("STAFF", "ADMIN")
-                //                .requestMatchers(
-                //                        "/dashboard/**")
-                //                .hasAnyRole(
-                //                        "ADMIN","STAFF")
-                //                .requestMatchers("/movies/create")
-                //                .hasAnyRole("ADMIN", "STAFF")
-                //                .requestMatchers("/movies/delete/**")
-                //                .hasAnyRole("ADMIN", "STAFF")
-                //                .anyRequest()
-                //                .authenticated()
-                //                )
-
-                .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                        "/",
-                        "/login",
-                        "/register",
-                        "/movies",
-                        "/movies/**",
-                        "/css/**",
-                        "/js/**",
-                        "/images/**",
-                        "/api/**")
-                .permitAll()
-                .requestMatchers(
-                        "/admin/users/**",
-                        "/admin/pending-staff/**",
-                        "/admin/approve/**",
-                        "/admin/dashboard")
-                .hasRole("ADMIN")
-                .requestMatchers(
-                        "/admin/movies/**",
-                        "/api/movies/**",
-                        "/movies/create",
-                        "/movies/delete/**",
-                        "/admin/showtimes/**",
-                        "/admin/bookings/**")
-                .hasAnyRole(
-                        "ADMIN",
-                        "STAFF")
-                .anyRequest()
-                .authenticated()
-                )
-                .formLogin(form -> form
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .defaultSuccessUrl("/", true)
-                .failureUrl("/login?error=true")
-                .permitAll()
-                )
-                .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout=true")
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .permitAll()
-                );
-
-        http.authenticationProvider(authenticationProvider());
-
+    @Order(1)
+    public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
+        http.securityMatcher("/api/**") // CHỈ bắt các URL /api/**
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/login", "/api/register").permitAll()
+                .anyRequest().authenticated() // Bảo vệ tất cả API khác (yêu cầu token)
+            );
         return http.build();
     }
 
+    // 2. Cấu hình cho Website truyền thống (Order 2)
+    @Bean
+    @Order(2)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable()) 
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .authorizeHttpRequests(auth -> auth
+            
+                .requestMatchers("/login", "/admin/login", "/", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
+                .loginPage("/admin/login")
+                .loginProcessingUrl("/login") 
+                .failureUrl("/admin/login?error=true")
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/admin/login")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .permitAll()
+            );
+
+        return http.build();
+    }
     @Bean
     public Cloudinary cloudinary() {
         Cloudinary cloudinary
@@ -159,5 +121,18 @@ public class SpringSecurityConfigs {
                         "secure", true));
         return cloudinary;
     }
+@Bean
+public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
 
+    configuration.setAllowedOrigins(List.of("http://localhost:3000")); // frontend URL
+    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    configuration.setAllowedHeaders(List.of("*"));
+    configuration.setAllowCredentials(true);
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+
+    return source;
+}
 }

@@ -8,18 +8,34 @@ package com.tth.controller;
  *
  * @author Admin
  */
+import com.tth.pojo.Users;
 import com.tth.service.BookingService;
+import com.tth.service.UserService;
+import java.security.Principal;
 import java.util.Date;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class ApiUserController {
-
+    @Autowired
+    private UserService userService;
+    
+    @PostMapping("/users")
+    public ResponseEntity<Users> create(@RequestParam Map<String, String> info, 
+            @RequestParam(value = "avatar") MultipartFile avatar) {
+        Users u = this.userService.addUser(info, avatar);
+          return new ResponseEntity<>(u, HttpStatus.CREATED);
+    }
     @Autowired
     private BookingService bookingService;
 
@@ -58,4 +74,13 @@ public class ApiUserController {
 
         return "staff-bookings-list";
     }
+@RequestMapping("/secure/profile")
+@ResponseBody
+@CrossOrigin
+public ResponseEntity<Users> getProfile(Principal principal) {
+    return new ResponseEntity<>(
+        this.userService.getUserByUsername(principal.getName()),
+        HttpStatus.OK
+    );
+}
 }

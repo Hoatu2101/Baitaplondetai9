@@ -174,3 +174,40 @@
         gap: 20px;
     }
 }
+/* Làm cho các dòng chữ thông báo lỗi nổi bật lên */
+.error-text {
+    color: #ff4d4d;          /* Màu đỏ cảnh báo */
+    font-size: 12px;
+    font-weight: bold;       /* Chữ đậm lên */
+    margin-top: 5px;
+    display: block;
+    text-align: left;
+    
+    /* Đổ bóng nhẹ cho chữ để tạo độ nổi khối 3D tách biệt khỏi nền */
+    text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.15);
+    
+    /* Hiệu ứng chuyển động mượt mà khi xuất hiện */
+    animation: fadeInError 0.3s ease-in-out; 
+}
+
+/* Hiệu ứng viền của ô Input cũng nổi màu đỏ bao quanh khi có lỗi */
+.register-input.input-error {
+    border: 1.5px solid #ff4d4d !important;
+    background-color: #fff8f8; /* Nền hồng nhạt để phân biệt */
+    
+    /* Đổ bóng viền tỏa ra xung quanh tạo hiệu ứng phát sáng (Glow) */
+    box-shadow: 0 0 8px rgba(255, 77, 77, 0.2);
+    transition: all 0.2s ease;
+}
+
+/* Hiệu ứng trượt nhẹ từ trên xuống khi thông báo lỗi hiện ra */
+@keyframes fadeInError {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

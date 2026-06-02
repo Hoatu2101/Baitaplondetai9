@@ -12,7 +12,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import './Home.css';
 
-import MySpinner from '../../components/Myspinner/MySpinner';
+import MySpinner from '../../components/MySpinner/MySpinner';
 
 import Apis, { endpoints } from '../../configs/Apis';
 import { useSearchParams } from 'react-router-dom';

@@ -1,79 +1,112 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import './Register.css'; 
+import { useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import MySpinner from "./MySpinner";
+import Apis, { endpoints } from "../../configs/Apis";
+import "./Register.css";
 
 const Register = () => {
-    // 1. Tạo state lưu trữ dữ liệu người dùng nhập
-    const [formData, setFormData] = useState({
-        name: '',
-        numberPhone: '',
-        username: '',
-        password: '',
-        confirmPassword: ''
+    // Định nghĩa chuẩn theo tên các cột trong database của bạn
+    const userInfo = [
+        { field: "name", label: "Họ và tên", type: "text", placeholder: "VD: Nguyễn Văn A" },
+        { field: "number_phone", label: "Số điện thoại", type: "tel", placeholder: "090xxxxxxx" },
+        { field: "username", label: "Tên đăng nhập (Username)", type: "text", placeholder: "Từ 5-20 ký tự..." },
+        { field: "password", label: "Mật khẩu", type: "password", placeholder: "Tối thiểu 6 ký tự gồm chữ và số..." },
+        { field: "confirm", label: "Xác nhận mật khẩu", type: "password", placeholder: "Nhập lại mật khẩu..." }
+    ];
+
+    const [user, setUser] = useState({
+        name: "",
+        number_phone: "", // Sửa từ phone thành number_phone để khớp DB
+        username: "",
+        password: "",
+        confirm: ""
     });
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+    const avatar = useRef();
+    const nav = useNavigate();
 
-    // State riêng để lưu file ảnh avatar
-    const [avatarFile, setAvatarFile] = useState(null);
-
-    // 2. Hàm bắt sự kiện khi gõ phím vào các ô text
-    const handleInputChange = (e) => {
-        const { id, value } = e.target;
-        setFormData({
-            ...formData,
-            [id]: value
-        });
-    };
-
-    // 3. Hàm bắt sự kiện khi chọn file ảnh
-    const handleFileChange = (e) => {
-        if (e.target.files && e.target.files[0]) {
-            setAvatarFile(e.target.files[0]);
+    const changeInput = (field, value) => {
+        setUser({ ...user, [field]: value });
+        if (errors[field]) {
+            setErrors({ ...errors, [field]: "" });
         }
     };
 
-    // 4. Hàm xử lý khi bấm nút "Đăng Ký Ngay"
-    const handleRegister = (e) => {
-        e.preventDefault(); // Ngăn trình duyệt load lại trang
+    const validateForm = () => {
+        let newErrors = {};
+        const nameRegex = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂÂÊÔƠỨỪỬỮỰẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăâêôơứừửữựấẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪỬỮỰÝỲỶỸÝỳỷỹ\s]+$/;
+        const phoneRegex = /^[0-9]{10}$/;
+        const usernameRegex = /^[a-zA-Z0-9]{5,20}$/;
+     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/;
 
-        // Kiểm tra mật khẩu khớp nhau
-        if (formData.password !== formData.confirmPassword) {
-            alert("Mật khẩu xác nhận không khớp!");
-            return;
+        if (!user.name.trim()) {
+            newErrors.name = "Họ và tên không được để trống";
+        } else if (!nameRegex.test(user.name)) {
+            newErrors.name = "Họ và tên không được chứa số hoặc ký tự đặc biệt";
         }
 
-        // ĐÓNG GÓI DỮ LIỆU ĐỂ GỬI CHO SPRING BOOT (Do có MultipartFile)
-        const data = new FormData();
-        
-        // Key ở đây (name, username, password...) PHẢI KHỚP với tên biến trong class Users.java
-        data.append("name", formData.name);
-        data.append("numberPhone", formData.numberPhone);
-        data.append("username", formData.username);
-        data.append("password", formData.password);
-
-        // Nạp file ảnh vào (Khớp với @Transient private MultipartFile file;)
-        if (avatarFile) {
-            data.append("file", avatarFile);
-        } else {
-            alert("Vui lòng chọn ảnh đại diện!");
-            return;
+        if (!user.number_phone.trim()) {
+            newErrors.number_phone = "Số điện thoại không được để trống";
+        } else if (!phoneRegex.test(user.number_phone)) {
+            newErrors.number_phone = "Số điện thoại phải gồm đúng 10 chữ số";
         }
 
-        // --- GHI CHÚ CHO BẠN ---
-        // Chỗ này bạn dùng fetch hoặc axios để gọi API Spring Boot
-        console.log("Dữ liệu chuẩn bị gửi đi:", formData);
-        console.log("File ảnh đính kèm:", avatarFile.name);
-        
-        /* Cấu trúc gọi API mẫu:
-        fetch('http://localhost:8080/api/users/register', {
-            method: 'POST',
-            body: data // Chú ý: KHÔNG set Content-Type là application/json khi dùng FormData
-        })
-        .then(res => res.json())
-        .then(result => console.log(result))
-        .catch(err => console.error(err));
-        */
-       
-       alert("Đã gom dữ liệu thành công! Mở F12 Console để xem thử nhé.");
+        if (!user.username.trim()) {
+            newErrors.username = "Tên đăng nhập không được để trống";
+        } else if (!usernameRegex.test(user.username)) {
+            newErrors.username = "Tên đăng nhập từ 5-20 ký tự, viết liền không dấu, không chứa ký tự đặc biệt";
+        }
+
+        if (!user.password) {
+            newErrors.password = "Mật khẩu không được để trống";
+        } else if (!passwordRegex.test(user.password)) {
+            newErrors.password = "Mật khẩu tối thiểu 6 ký tự, bao gồm cả chữ cái và số";
+        }
+
+        if (user.password !== user.confirm) {
+            newErrors.confirm = "Mật khẩu xác nhận không khớp";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const register = async (e) => {
+        e.preventDefault();
+
+        if (validateForm()) {
+            let form = new FormData();
+
+            // Đóng gói dữ liệu chuẩn tên key gửi lên Spring Boot backend
+            for (var key of Object.keys(user)) {
+                if (key !== "confirm") {
+                    form.append(key, user[key].trim());
+                }
+            }
+
+            // Đóng gói key 'avatar' trùng với tên cột lưu ảnh trong database của bạn
+            if (avatar.current && avatar.current.files.length > 0) {
+                form.append("avatar", avatar.current.files[0]);
+            }
+
+            try {
+                setLoading(true);
+                const res = await Apis.post(endpoints["register"], form, {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                });
+                if (res.status === 201 || res.status === 200) {
+                    nav("/login");
+                }
+            } catch (ex) {
+                console.error(ex);
+                alert("Đăng ký thất bại! Vui lòng kiểm tra lại kết nối.");
+            } finally {
+                setLoading(false);
+            }
+        }
     };
 
     return (
@@ -82,54 +115,49 @@ const Register = () => {
                 <h2 className="register-title">Đăng Ký Tài Khoản</h2>
                 <p className="register-subtitle">Trở thành thành viên của CineBook ngay hôm nay</p>
 
-                {/* Gắn hàm handleRegister vào sự kiện onSubmit */}
-                <form className="register-form" onSubmit={handleRegister}>
-                    
-                    <div className="form-row">
-                        <div className="input-group">
-                            <label htmlFor="name">Họ và tên</label>
-                            <input type="text" id="name" value={formData.name} onChange={handleInputChange} placeholder="VD: Nguyễn Văn A" className="register-input" required />
+                <form className="register-form" onSubmit={register}>
+                    {userInfo.map((u) => (
+                        <div className="input-group" key={u.field}>
+                            <label htmlFor={u.field}>{u.label}</label>
+                            <input
+                                type={u.type}
+                                id={u.field}
+                                value={user[u.field] || ""}
+                                onChange={(e) => changeInput(u.field, e.target.value)}
+                                placeholder={u.placeholder}
+                                className={`register-input ${errors[u.field] ? "input-error" : ""}`}
+                                disabled={loading}
+                            />
+                            {errors[u.field] && <span className="error-text">{errors[u.field]}</span>}
                         </div>
-                        <div className="input-group">
-                            <label htmlFor="numberPhone">Số điện thoại</label>
-                            <input type="tel" id="numberPhone" value={formData.numberPhone} onChange={handleInputChange} placeholder="090xxxxxxx" className="register-input" required />
-                        </div>
-                    </div>
+                    ))}
 
                     <div className="input-group">
-                        <label htmlFor="username">Tên đăng nhập (Username)</label>
-                        <input type="text" id="username" value={formData.username} onChange={handleInputChange} placeholder="Nhập tên đăng nhập viết liền không dấu..." className="register-input" required />
-                    </div>
-
-                    <div className="form-row">
-                        <div className="input-group">
-                            <label htmlFor="password">Mật khẩu</label>
-                            <input type="password" id="password" value={formData.password} onChange={handleInputChange} placeholder="Tạo mật khẩu..." className="register-input" required />
-                        </div>
-                        <div className="input-group">
-                            <label htmlFor="confirmPassword">Xác nhận mật khẩu</label>
-                            <input type="password" id="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} placeholder="Nhập lại mật khẩu..." className="register-input" required />
-                        </div>
-                    </div>
-
-                    <div className="input-group">
-                        <label>Ảnh đại diện (Avatar)</label>
+                        <label>Ảnh đại diện (Avatar) - <small style={{ color: "#888" }}>Không bắt buộc</small></label>
                         <div className="file-upload-wrapper">
-                            {/* Gắn hàm handleFileChange vào ô input file */}
-                            <input type="file" id="file" accept="image/*" onChange={handleFileChange} className="file-input-hidden" />
+                            <input 
+                                type="file" 
+                                id="file" 
+                                accept="image/*" 
+                                ref={avatar}
+                                className="file-input-hidden" 
+                                disabled={loading} 
+                            />
                             <label htmlFor="file" className="file-upload-btn">
                                 <span>📁 Chọn ảnh từ máy tính</span>
                             </label>
-                            {/* Hiển thị tên file nếu đã chọn, nếu chưa thì hiện chữ mặc định */}
-                            <span className="file-name-display">
-                                {avatarFile ? avatarFile.name : "Chưa có tệp nào được chọn"}
-                            </span>
                         </div>
                     </div>
 
-                    <button type="submit" className="btn-submit-register">
-                        Đăng Ký Ngay
-                    </button>
+                    <div className="form-submit-wrapper" style={{ marginTop: '20px', textAlign: 'center' }}>
+                        {loading === true ? (
+                            <MySpinner />
+                        ) : (
+                            <button type="submit" className="btn-submit-register">
+                                Đăng Ký Ngay
+                            </button>
+                        )}
+                    </div>
                 </form>
 
                 <div className="register-footer">
