@@ -8,8 +8,6 @@ package com.tth.repository.impl;
  *
  * @author Administrator
  */
-
-
 import com.tth.pojo.Seats;
 import com.tth.repository.SeatRepository;
 import java.util.List;
@@ -49,5 +47,24 @@ public class SeatRepositoryImpl implements SeatRepository {
         return q.getResultList();
     }
 
+    @Override
+    public void addSeat(Seats seat) {
+        Session s = this.factory.getObject().getCurrentSession();
+        s.persist(seat);
+    }
+
+    @Override
+    public void deleteSeatsByRoom(int roomId) {
+
+        Session s = this.factory.getObject().getCurrentSession();
+
+        Query q = s.createQuery(
+                "DELETE FROM Seats s WHERE s.roomId.id=:roomId"
+        );
+
+        q.setParameter("roomId", roomId);
+
+        q.executeUpdate();
+    }
 
 }

@@ -23,6 +23,9 @@ public interface RoomService {
     void addOrUpdate(Rooms room);
 
     void deleteRoom(int id);
+    
+    void reopenRoom(int id);
 
     long countRooms();
+    
 }

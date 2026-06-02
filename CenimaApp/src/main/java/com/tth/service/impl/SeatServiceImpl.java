@@ -9,6 +9,7 @@ package com.tth.service.impl;
  * @author Admin
  */
 import com.tth.dto.SeatStatusResponse;
+import com.tth.pojo.Rooms;
 import com.tth.pojo.Seats;
 import com.tth.pojo.Showtimes;
 import com.tth.repository.BookingRepository;
@@ -16,12 +17,12 @@ import com.tth.repository.SeatRepository;
 import com.tth.service.SeatService;
 import com.tth.service.SeatShowtimeStatusService;
 import com.tth.service.ShowtimeService;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 @Transactional
@@ -55,7 +56,7 @@ public class SeatServiceImpl
             Integer showtimeId) {
 
         seatStatusService.releaseExpiredLocks();
-        
+
         Showtimes st
                 = showtimeService.getShowtimeById(
                         showtimeId);
@@ -84,5 +85,58 @@ public class SeatServiceImpl
                     );
                 })
                 .toList();
+    }
+
+    @Override
+    public void generateSeats(Rooms room) {
+
+        int capacity = room.getCapacity();
+
+        int cols = 10;
+
+        for (int i = 0; i < capacity; i++) {
+
+            char row
+                    = (char) ('A' + i / cols);
+
+            int col
+                    = (i % cols) + 1;
+
+            Seats seat
+                    = new Seats();
+
+            seat.setRoomId(room);
+
+            seat.setSeatNumber(
+                    row + String.valueOf(col));
+
+            seat.setCreatedAt(
+                    new Date());
+
+            seatRepo.addSeat(seat);
+        }
+    }
+
+    @Override
+    public void regenerateSeats(Rooms room) {
+
+        List<Seats> seats
+                = seatRepo.getSeatsByRoom(
+                        room.getId());
+
+        for (Seats s : seats) {
+
+            if (s.getTicketsList() != null
+                    && !s.getTicketsList().isEmpty()) {
+
+                throw new RuntimeException(
+                        "Không thể thay đổi sức chứa phòng đã phát sinh vé.");
+            }
+        }
+
+        seatRepo.deleteSeatsByRoom(
+                room.getId());
+
+        generateSeats(room);
     }
 }

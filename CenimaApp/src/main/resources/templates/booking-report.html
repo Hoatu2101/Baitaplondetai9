@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <title>Báo cáo Booking</title>
+    <head>
+        <title>Báo cáo Booking</title>
 
     <th:block th:replace="base :: css"></th:block>
 
@@ -165,8 +165,8 @@
                                 </td>
 
                                 <td th:text="${#dates.format(
-                                        b.createdAt,
-                                        'dd/MM/yyyy HH:mm')}">
+                                    b.createdAt,
+                                    'dd/MM/yyyy HH:mm')}">
                                 </td>
 
                                 <td>
@@ -186,11 +186,11 @@
 
                                 <td>
 
-                                    <a href="#"
+                                    <a th:href="@{'/admin/showtimes/' +
+                                       ${b.showtimeId.id}
+                                       + '/bookings'}"
                                        class="btn btn-info btn-sm">
-
                                         Xem
-
                                     </a>
 
                                 </td>

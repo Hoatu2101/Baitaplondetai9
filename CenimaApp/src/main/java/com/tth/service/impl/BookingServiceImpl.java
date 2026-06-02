@@ -99,7 +99,7 @@ public class BookingServiceImpl
                 : seatIds) {
 
             SeatShowtimeStatus status
-                    = seatStatusRepo.find(
+                    = seatStatusRepo.findForUpdate(
                             showtimeId,
                             seatId);
 
@@ -172,8 +172,8 @@ public class BookingServiceImpl
                     Integer showtimeId) {
 
         Long sold
-                = bookingRepo
-                        .countBookingByShowtime(
+                = ticketRepo
+                        .countTicketsByShowtime(
                                 showtimeId);
 
         Double revenue

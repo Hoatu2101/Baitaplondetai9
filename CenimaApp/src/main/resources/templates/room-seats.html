@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <title>Ghế phòng</title>
+
+    <th:block th:replace="base :: css"></th:block>
+
+</head>
+
+<body>
+
+<div th:replace="base :: header"></div>
+
+<div class="container mt-4">
+
+    <h2>
+        Danh sách ghế
+    </h2>
+
+    <table class="table table-bordered">
+
+        <thead>
+
+        <tr>
+            <th>ID</th>
+            <th>Số ghế</th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr th:each="s : ${seats}">
+
+            <td th:text="${s.id}"></td>
+
+            <td th:text="${s.seatNumber}">
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</body>
+
+</html>

@@ -87,18 +87,45 @@ public class SpringSecurityConfigs {
     @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) 
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .authorizeHttpRequests(auth -> auth
-            
-                .requestMatchers("/login", "/admin/login", "/", "/css/**", "/js/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/admin/login")
-                .loginProcessingUrl("/login") 
-                .failureUrl("/admin/login?error=true")
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                        "/",
+                        "/login",
+                        "/register",
+                        "/movies",
+                        "/movies/**",
+                        "/css/**",
+                        "/js/**",
+                        "/images/**",
+                        "/api/**")
+                .permitAll()
+                .requestMatchers(
+                        "/admin/users/**",
+                        "/admin/pending-staff/**",
+                        "/admin/approve/**",
+                        "/admin/dashboard")
+                .hasRole("ADMIN")
+                .requestMatchers(
+                        "/admin/movies/**",
+                        "/api/movies/**",
+                        "/movies/create",
+                        "/movies/delete/**",
+                        "/admin/showtimes/**",
+                        "/admin/bookings/**")
+                .hasAnyRole(
+                        "ADMIN",
+                        "STAFF")
+                .anyRequest()
+                .authenticated()
+                )
+                .formLogin(form -> form
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/", true)
+                .failureUrl("/login?error=true")
                 .permitAll()
             )
             .logout(logout -> logout

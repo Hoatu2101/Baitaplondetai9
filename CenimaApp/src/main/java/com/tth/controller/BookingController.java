@@ -28,7 +28,7 @@ public class BookingController {
 
     @GetMapping
     public String bookingByDate(
-            @RequestParam(required = false)
+            @RequestParam(name ="date", required = false)
             @DateTimeFormat(pattern="yyyy-MM-dd")
             Date date,
             Model model){

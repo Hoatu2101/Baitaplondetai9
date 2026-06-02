@@ -8,7 +8,6 @@ package com.tth.repository.impl;
  *
  * @author Administrator
  */
-
 import com.tth.pojo.Status;
 import com.tth.repository.StatusRepository;
 import java.util.List;
@@ -31,7 +30,7 @@ public class StatusRepositoryImpl implements StatusRepository {
         Session s = this.factory.getCurrentSession();
 
         return s.createQuery(
-                "FROM Statuses ORDER BY id ASC",
+                "FROM Status ORDER BY id ASC",
                 Status.class
         ).getResultList();
     }
@@ -42,5 +41,32 @@ public class StatusRepositoryImpl implements StatusRepository {
         Session s = this.factory.getCurrentSession();
 
         return s.get(Status.class, id);
+    }
+
+    @Override
+    public void addOrUpdate(Status status) {
+
+        Session s
+                = factory.getCurrentSession();
+
+        if (status.getId() == null) {
+            s.persist(status);
+        } else {
+            s.merge(status);
+        }
+    }
+
+    @Override
+    public void deleteStatus(Integer id) {
+
+        Session s
+                = factory.getCurrentSession();
+
+        Status st
+                = s.get(Status.class, id);
+
+        if (st != null) {
+            s.remove(st);
+        }
     }
 }

@@ -8,12 +8,16 @@ package com.tth.service;
  *
  * @author Admin
  */
-
-
 import com.tth.pojo.Status;
 import java.util.List;
 
 public interface StatusService {
+
     List<Status> getStatuses();
+
     Status getStatusById(int id);
+
+    void addOrUpdate(Status status);
+
+    void deleteStatus(Integer id);
 }

@@ -20,110 +20,7 @@ public class DashBoardRepositoryImpl implements DashboardRepository {
 
     @Autowired
     private SessionFactory factory;
-
-//    @Override
-//    public long countMovies() {
-//
-//        Session s = this.factory.getCurrentSession();
-//
-//        String hql = "SELECT COUNT(m.id) FROM Movies m";
-//
-//        return (Long) s.createQuery(hql).uniqueResult();
-//    }
-//
-//    @Override
-//    public long countRooms() {
-//
-//        Session s = this.factory.getCurrentSession();
-//
-//        String hql = "SELECT COUNT(r.id) FROM Rooms r";
-//
-//        return (Long) s.createQuery(hql).uniqueResult();
-//    }
-//
-//    @Override
-//    public long countShowtimes() {
-//
-//        Session s = this.factory.getCurrentSession();
-//
-//        String hql = "SELECT COUNT(st.id) FROM Showtimes st";
-//
-//        return (Long) s.createQuery(hql).uniqueResult();
-//    }
-//
-//    @Override
-//    public long countBookings() {
-//
-//        Session s = this.factory.getCurrentSession();
-//
-//        String hql = "SELECT COUNT(b.id) FROM Bookings b";
-//
-//        return (Long) s.createQuery(hql).uniqueResult();
-//    }
-//
-//    @Override
-//    public double totalRevenue() {
-//
-//        Session s = this.factory.getCurrentSession();
-//
-//        String hql = "SELECT SUM(b.totalPrice) FROM Bookings b";
-//
-//        Double total = (Double) s.createQuery(hql).uniqueResult();
-//
-//        return total == null ? 0 : total;
-//    }
-//
-//    @Override
-//    public List<Object[]> revenueByMovie() {
-//
-//        Session s = this.factory.getCurrentSession();
-//
-//        String hql = """
-//            SELECT st.movieId.movieName, SUM(b.totalPrice)
-//            FROM Bookings b
-//            JOIN b.showtimeId st
-//            GROUP BY st.movieId.movieName
-//        """;
-//
-//        return s.createQuery(hql, Object[].class).getResultList();
-//    }
-//
-//    @Override
-//    public List<Object[]> revenueByShowtime() {
-//
-//        Session s = factory.getCurrentSession();
-//
-//        String hql = """
-//        SELECT
-//            st.id,
-//            st.startTime,
-//            SUM(b.totalPrice)
-//        FROM Bookings b
-//        JOIN b.showtimeId st
-//        GROUP BY st.id, st.startTime
-//        ORDER BY st.startTime DESC
-//    """;
-//
-//        return s.createQuery(
-//                hql,
-//                Object[].class
-//        ).getResultList();
-//    }
-//
-//    @Override
-//    public List<Object[]> bookingByDate() {
-//
-//        Session s = this.factory.getCurrentSession();
-//
-//        String hql = """
-//            SELECT DATE(b.createdAt), COUNT(b.id)
-//            FROM Bookings b
-//            GROUP BY DATE(b.createdAt)
-//            ORDER BY DATE(b.createdAt)
-//        """;
-//
-//        return s.createQuery(hql, Object[].class).getResultList();
-//    }
+    
     @Override
     public List<Object[]> statsRevenueByMovie() {
 
@@ -305,12 +202,12 @@ public class DashBoardRepositoryImpl implements DashboardRepository {
     public List<Object[]> topCustomers() {
 
         String hql = """
-        SELECT u.fullName,
+        SELECT u.name,
                COUNT(t.id)
         FROM Tickets t
         JOIN t.bookingId b
         JOIN b.userId u
-        GROUP BY u.id,u.fullName
+        GROUP BY u.id,u.name
         ORDER BY COUNT(t.id) DESC
     """;
 

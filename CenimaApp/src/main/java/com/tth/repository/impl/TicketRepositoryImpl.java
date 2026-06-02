@@ -33,7 +33,7 @@ public class TicketRepositoryImpl
     }
 
     @Override
-    public List<Tickets>getTicketsByBooking(Integer bookingId) {
+    public List<Tickets> getTicketsByBooking(Integer bookingId) {
 
         return factory
                 .getCurrentSession()
@@ -45,5 +45,21 @@ public class TicketRepositoryImpl
                         "id",
                         bookingId)
                 .getResultList();
+    }
+
+    @Override
+    public long countTicketsByShowtime(
+            Integer showtimeId) {
+
+        return factory
+                .getCurrentSession()
+                .createQuery("""
+                SELECT COUNT(t)
+                FROM Tickets t
+                JOIN t.bookingId b
+                WHERE b.showtimeId.id=:id
+            """, Long.class)
+                .setParameter("id", showtimeId)
+                .getSingleResult();
     }
 }
