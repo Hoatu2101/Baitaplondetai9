@@ -4,12 +4,10 @@
  */
 package com.tth.service.impl;
 
-
 /**
  *
  * @author Admin
  */
-
 import com.tth.pojo.Status;
 import com.tth.repository.StatusRepository;
 import com.tth.service.StatusService;
@@ -22,11 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class StatusServiceImpl implements StatusService {
 
-    
     @Autowired
     private StatusRepository statusRepo;
-    
-        
+
     @Override
     public List<Status> getStatuses() {
         return this.statusRepo.getStatuses();
@@ -37,5 +33,14 @@ public class StatusServiceImpl implements StatusService {
         return this.statusRepo.getStatusById(id);
     }
 
+    @Override
+    public void addOrUpdate(Status status) {
+        statusRepo.addOrUpdate(status);
+    }
+
+    @Override
+    public void deleteStatus(Integer id) {
+        statusRepo.deleteStatus(id);
+    }
 
 }

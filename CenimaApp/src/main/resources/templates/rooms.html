@@ -1,80 +1,117 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <title>Danh sách phòng chiếu</title>
+    <head>
+        <title>Danh sách phòng chiếu</title>
+
 
     <th:block th:replace="base :: css"></th:block>
 </head>
 
 <body>
 
-<div th:replace="base :: header"></div>
+    <div th:if="${success}"
+         class="alert alert-success">
 
-<section class="container mt-4">
-
-    <div class="d-flex justify-content-between mb-3">
-
-        <h2>Danh sách phòng chiếu</h2>
-
-        <a th:href="@{/admin/rooms/create}"
-           class="btn btn-success">
-
-            Thêm phòng
-        </a>
+        <span th:text="${success}"></span>
 
     </div>
 
-    <table class="table table-bordered table-hover">
+    <div th:if="${error}"
+         class="alert alert-danger">
 
-        <thead class="table-dark">
+        <span th:text="${error}"></span>
 
-            <tr>
-                <th>ID</th>
-                <th>Tên phòng</th>
-                <th>Sức chứa</th>
-                <th>Rạp</th>
-                <th>Trạng thái</th>
-                <th></th>
-            </tr>
+    </div>
 
-        </thead>
+    <div th:replace="base :: header"></div>
 
-        <tbody>
+    <section class="container mt-4">
 
-            <tr th:each="r : ${rooms}">
+        <div class="d-flex justify-content-between mb-3">
 
-                <td th:text="${r.id}"></td>
+            <h2>Danh sách phòng chiếu</h2>
 
-                <td th:text="${r.name}"></td>
+            <a th:href="@{/admin/rooms/create}"
+               class="btn btn-success">
 
-                <td th:text="${r.capacity}"></td>
+                Thêm phòng
+            </a>
 
-                <td th:text="${r.cinemaId.name}"></td>
+        </div>
 
-                <td th:text="${r.statusId.name}"></td>
+        <table class="table table-bordered table-hover">
 
-                <td>
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Tên phòng</th>
+                    <th>Sức chứa</th>
+                    <th>Rạp</th>
+                    <th>Trạng thái</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+            </thead>
 
-                    <a class="btn btn-warning btn-sm"
-                       th:href="@{'/admin/rooms/' + ${r.id}}">
-                        Sửa
-                    </a>
+            <tbody>
 
-                    <a class="btn btn-danger btn-sm"
-                       th:href="@{'/admin/rooms/delete/' + ${r.id}}">
-                        Xóa
-                    </a>
+                <tr th:each="r : ${rooms}">
 
-                </td>
+                    <td th:text="${r.id}"></td>
 
-            </tr>
+                    <td th:text="${r.name}"></td>
 
-        </tbody>
+                    <td th:text="${r.capacity}"></td>
 
-    </table>
+                    <td th:text="${r.cinemaId.name}"></td>
 
-</section>
+                    <td>
+
+                        <span th:if="${r.statusId.id == 1}"
+                              class="badge bg-success">
+                            Hoạt động
+                        </span>
+
+                        <span th:if="${r.statusId.id == 2}"
+                              class="badge bg-warning text-dark">
+                            Bảo trì
+                        </span>
+
+                        <span th:if="${r.statusId.id == 3}"
+                              class="badge bg-danger">
+                            Đã đóng
+                        </span>
+
+                    </td>
+
+                    <td class="text-center">
+
+                        <a class="btn btn-warning btn-sm"
+                           th:href="@{'/admin/rooms/' + ${r.id}}">
+                            Sửa
+                        </a>
+
+                        <a th:if="${r.statusId.id != 3}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Bạn có chắc muốn đóng phòng này?')"
+                           th:href="@{'/admin/rooms/delete/' + ${r.id}}">
+                            Đóng phòng
+                        </a>
+
+                        <a th:if="${r.statusId.id == 3}"
+                           class="btn btn-success btn-sm"
+                           th:href="@{'/admin/rooms/reopen/' + ${r.id}}">
+                            Mở lại
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+        </table>
+
+    </section>
 
 </body>
 </html>

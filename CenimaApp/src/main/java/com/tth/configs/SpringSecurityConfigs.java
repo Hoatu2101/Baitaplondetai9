@@ -68,34 +68,6 @@ public class SpringSecurityConfigs {
 
         http
                 .csrf(csrf -> csrf.disable())
-                //                .authorizeHttpRequests(auth -> auth
-                //                .requestMatchers(
-                //                        "/",
-                //                        "/login",
-                //                        "/register",
-                //                        "/movies",
-                //                        "/movies/**",
-                //                        "/css/**",
-                //                        "/js/**",
-                //                        "/images/**",
-                //                        "/api/**"
-                //                ).permitAll()
-                //                .requestMatchers("/admin/**")
-                //                .hasAnyRole("ADMIN", "STAFF")
-                //                .requestMatchers("/staff/**")
-                //                .hasAnyRole("STAFF", "ADMIN")
-                //                .requestMatchers(
-                //                        "/dashboard/**")
-                //                .hasAnyRole(
-                //                        "ADMIN","STAFF")
-                //                .requestMatchers("/movies/create")
-                //                .hasAnyRole("ADMIN", "STAFF")
-                //                .requestMatchers("/movies/delete/**")
-                //                .hasAnyRole("ADMIN", "STAFF")
-                //                .anyRequest()
-                //                .authenticated()
-                //                )
-
                 .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                         "/",

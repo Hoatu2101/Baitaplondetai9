@@ -11,12 +11,15 @@ import java.util.List;
  *
  * @author Admin
  */
-
 public interface SeatShowtimeStatusRepository {
 
     SeatShowtimeStatus find(
             Integer showtimeId,
             Integer seatId);
+
+    SeatShowtimeStatus findForUpdate( // Chong dat trung ve
+                    Integer showtimeId,
+                    Integer seatId);
 
     void save(
             SeatShowtimeStatus status);
@@ -31,7 +34,7 @@ public interface SeatShowtimeStatusRepository {
     boolean isLocked(
             Integer showtimeId,
             Integer seatId);
-    
+
     void releaseExpiredLocks();
-    
+
 }

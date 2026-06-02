@@ -9,9 +9,8 @@ package com.tth.repository.impl;
  * @author Administrator
  */
 import com.tth.pojo.SeatShowtimeStatus;
-import com.tth.pojo.Seats;
-import com.tth.pojo.Users;
 import com.tth.repository.SeatShowtimeStatusRepository;
+import jakarta.persistence.LockModeType;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -143,5 +142,32 @@ public class SeatShowtimeStatusRepositoryImpl
                         "expiredTime",
                         expiredTime)
                 .executeUpdate();
+    }
+
+    @Override
+    public SeatShowtimeStatus
+            findForUpdate(
+                    Integer showtimeId,
+                    Integer seatId) {
+
+        Session session
+                = this.factory.getCurrentSession();
+
+        return session.createQuery(
+                """
+            FROM SeatShowtimeStatus s
+            WHERE s.showtimeId.id=:showtimeId
+            AND s.seatId.id=:seatId
+            """,
+                SeatShowtimeStatus.class)
+                .setParameter(
+                        "showtimeId",
+                        showtimeId)
+                .setParameter(
+                        "seatId",
+                        seatId)
+                .setLockMode(
+                        LockModeType.PESSIMISTIC_WRITE)
+                .uniqueResult();
     }
 }

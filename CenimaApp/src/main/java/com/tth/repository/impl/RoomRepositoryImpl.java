@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package com.tth.repository.impl;
 
 import com.tth.pojo.Rooms;
+import com.tth.pojo.Status;
 import com.tth.repository.RoomRepository;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.Predicate;
@@ -18,11 +18,11 @@ import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 /**
  *
  * @author Admin
  */
-
 @Repository
 @Transactional
 public class RoomRepositoryImpl implements RoomRepository {
@@ -45,6 +45,7 @@ public class RoomRepositoryImpl implements RoomRepository {
 
         List predicates = new ArrayList<>();
 
+
         if (params != null) {
 
             String kw = params.get("kw");
@@ -59,8 +60,9 @@ public class RoomRepositoryImpl implements RoomRepository {
                 );
             }
 
-            if (!predicates.isEmpty())
+            if (!predicates.isEmpty()) {
                 cq.where((Predicate[]) predicates.toArray(Predicate[]::new));
+            }
         }
 
         cq.orderBy(cb.desc(root.get("id")));
@@ -101,29 +103,44 @@ public class RoomRepositoryImpl implements RoomRepository {
 
         Session s = this.factory.getCurrentSession();
 
-        if (room.getId() == null)
+        if (room.getId() == null) {
             s.persist(room);
-        else
+            s.flush();
+        } else {
             s.merge(room);
+            s.flush();
+        }
     }
 
     @Override
     public void deleteRoom(int id) {
 
-        Session s = this.factory.getCurrentSession();
+        Session s = factory.getCurrentSession();
 
-        Rooms room = this.getRoomById(id);
+        Rooms room = s.get(Rooms.class, id);
 
-        s.remove(room);
+        if (room == null) {
+            throw new RuntimeException("Phòng không tồn tại");
+        }
+
+        Status closed = s.get(Status.class, 3);
+
+        room.setStatusId(closed);
+
+        s.merge(room);
+        s.flush();
     }
 
     @Override
     public long countRooms() {
 
-        Session s = this.factory.getCurrentSession();
+        Session s = factory.getCurrentSession();
 
         return s.createQuery(
-                "SELECT COUNT(*) FROM Rooms",
+                """
+        SELECT COUNT(r)
+        FROM Rooms r
+        """,
                 Long.class
         ).getSingleResult();
     }

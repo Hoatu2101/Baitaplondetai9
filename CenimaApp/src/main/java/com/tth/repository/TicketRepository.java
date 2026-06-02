@@ -20,4 +20,5 @@ public interface TicketRepository {
             Integer bookingId);
     
 
+    long countTicketsByShowtime(Integer showtimeId);
 }

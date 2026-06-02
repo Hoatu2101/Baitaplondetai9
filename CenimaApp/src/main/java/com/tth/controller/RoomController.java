@@ -4,7 +4,6 @@
  */
 package com.tth.controller;
 
-
 import com.tth.pojo.Rooms;
 import com.tth.service.RoomService;
 import com.tth.service.StatusService;
@@ -14,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.tth.service.CinemaService;
+import com.tth.service.SeatService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin/rooms")
@@ -28,9 +29,12 @@ public class RoomController {
     @Autowired
     private StatusService statusService;
 
+    @Autowired
+    private SeatService seatService;
+
     @GetMapping
     public String rooms(Model model,
-                        @RequestParam Map<String, String> params) {
+            @RequestParam Map<String, String> params) {
 
         model.addAttribute(
                 "rooms",
@@ -60,16 +64,37 @@ public class RoomController {
 
     @PostMapping
     public String addRoom(
-            @ModelAttribute(value = "room") Rooms room) {
+            @RequestParam(name = "id", required = false) Integer id,
+            @RequestParam(name = "name") String name,
+            @RequestParam(name = "capacity") int capacity,
+            @RequestParam(name = "cinemaId") Integer cinemaId,
+            @RequestParam(name = "statusId") Integer statusId) {
 
-        this.roomService.addOrUpdate(room);
+        Rooms room;
+
+        if (id != null) {
+            room = roomService.getRoomById(id);
+        } else {
+            room = new Rooms();
+        }
+
+        room.setName(name);
+        room.setCapacity(capacity);
+
+        room.setCinemaId(
+                cinemaService.getCinemaById(cinemaId));
+
+        room.setStatusId(
+                statusService.getStatusById(statusId));
+
+        roomService.addOrUpdate(room);
 
         return "redirect:/admin/rooms";
     }
 
     @GetMapping("/{id}")
     public String updateView(Model model,
-                             @PathVariable(value = "id") int id) {
+            @PathVariable(value = "id") int id) {
 
         model.addAttribute(
                 "room",
@@ -91,10 +116,54 @@ public class RoomController {
 
     @GetMapping("/delete/{id}")
     public String deleteRoom(
-            @PathVariable(value = "id") int id) {
+            @PathVariable("id") int id,
+            RedirectAttributes redirect) {
 
-        this.roomService.deleteRoom(id);
+        try {
+
+            roomService.deleteRoom(id);
+
+            redirect.addFlashAttribute(
+                    "success",
+                    "Đóng phòng thành công !");
+
+        } catch (Exception ex) {
+
+            redirect.addFlashAttribute(
+                    "error",
+                    ex.getMessage());
+        }
 
         return "redirect:/admin/rooms";
+    }
+
+    @GetMapping("/reopen/{id}")
+    public String reopenRoom(
+            @PathVariable("id") int id,
+            RedirectAttributes redirect) {
+
+        roomService.reopenRoom(id);
+
+        redirect.addFlashAttribute(
+                "success",
+                "Mở lại phòng thành công");
+
+        return "redirect:/admin/rooms";
+    }
+
+    @GetMapping("/{id}/seats")
+    public String roomSeats(
+            @PathVariable("id") int id,
+            Model model) {
+
+        model.addAttribute(
+                "room",
+                roomService.getRoomById(id));
+
+        model.addAttribute(
+                "seats",
+                seatService.getSeatsByRoom(id));
+
+        return "room-seats";
     }
 }

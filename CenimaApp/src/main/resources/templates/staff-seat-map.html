@@ -1,25 +1,75 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Sơ đồ ghế</title>
+
+    <title>Seat Map</title>
+
+    <th:block th:replace="base :: css"></th:block>
+
+    <style>
+
+        .seat{
+            width:70px;
+            margin:5px;
+            text-align:center;
+            border-radius:8px;
+            padding:10px;
+            color:white;
+            font-weight:bold;
+        }
+
+        .available{
+            background:#198754;
+        }
+
+        .locked{
+            background:#ffc107;
+            color:black;
+        }
+
+        .booked{
+            background:#dc3545;
+        }
+
+    </style>
+
 </head>
+
 <body>
 
-<h2>Sơ đồ ghế</h2>
+<div th:replace="base :: header"></div>
 
-<table border="1">
+<div class="container mt-4">
 
-    <tr>
-        <th>Ghế</th>
-        <th>Trạng thái</th>
-    </tr>
+    <h2>Sơ đồ ghế</h2>
 
-    <tr th:each="s : ${seats}">
-        <td th:text="${s.seatNumber}"></td>
-        <td th:text="${s.status}"></td>
-    </tr>
+    <div class="row">
 
-</table>
+        <div class="col-auto"
+             th:each="seat : ${seats}">
+
+            <div class="seat"
+                 th:classappend="${seat.status == 'AVAILABLE'} ?
+                 ' available' :
+                 (${seat.status == 'LOCKED'}
+                 ? ' locked'
+                 : ' booked')">
+
+                <div th:text="${seat.seatNumber}">
+                </div>
+
+                <small th:text="${seat.status}">
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
+
 </html>
