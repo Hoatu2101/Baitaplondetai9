@@ -46,16 +46,6 @@ public class ShowtimeController {
     @Autowired
     private ShowtimeRepository showtimeRepo;
 
-//    @GetMapping
-//    public String showtimes(Model model, @RequestParam Map<String, String> params) {
-//
-//        model.addAttribute(
-//                "showtimes",
-//                this.showtimeService.getShowtimes(params)
-//        );
-//
-//        return "showtimes";
-//    }
     @GetMapping
     public String showtimes(Model model, @RequestParam Map<String, String> params) {
 
@@ -169,7 +159,7 @@ public class ShowtimeController {
 
     @GetMapping("/{id}/bookings")
     public String bookingList(
-            @PathVariable Integer id,
+            @PathVariable ("id") Integer id,
             Model model) {
 
         model.addAttribute(
@@ -181,7 +171,7 @@ public class ShowtimeController {
     }
 
     @GetMapping("/{id}/seats")
-    public String seatMap(@PathVariable Integer id, Model model) {
+    public String seatMap(@PathVariable ("id") Integer id, Model model) {
 
         model.addAttribute(
                 "showtime",

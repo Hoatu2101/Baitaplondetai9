@@ -1,25 +1,21 @@
-package com.tth.repository;
-
-import com.tth.pojo.Tickets;
-import java.util.List;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+package com.tth.service;
 
 /**
  *
  * @author Admin
  */
-public interface TicketRepository {
+import com.tth.pojo.Tickets;
+import java.util.List;
 
-    void createTicket(Tickets ticket);
+public interface TicketService {
+
+    Tickets getTicketById(Integer id);
 
     List<Tickets> getTicketsByBooking(Integer bookingId);
-    
 
     long countTicketsByShowtime(Integer showtimeId);
-    
-    Tickets getTicketById(Integer ticketId);
 }

@@ -11,6 +11,8 @@ package com.tth.service.impl;
 import com.tth.dto.StaffDashboardDTO;
 import com.tth.repository.DashboardRepository;
 import com.tth.service.DashboardService;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -18,14 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 @Transactional
 public class DashboardServiceImpl implements DashboardService {
 
     @Autowired
     private SessionFactory factory;
-    
+
     @Autowired
     private DashboardRepository dashboardRepo;
 
@@ -92,14 +93,14 @@ public class DashboardServiceImpl implements DashboardService {
     public List<Object[]> topMovies() {
         return dashboardRepo.topMovies();
     }
-    
+
     @Override
     public StaffDashboardDTO getStaffDashboard() {
 
         Session s = this.factory.getCurrentSession();
 
-        Long soldToday =
-                s.createQuery("""
+        Long soldToday
+                = s.createQuery("""
                 SELECT COUNT(t)
                 FROM Tickets t
                 WHERE DATE(t.createdAt)
@@ -107,8 +108,8 @@ public class DashboardServiceImpl implements DashboardService {
             """, Long.class)
                         .getSingleResult();
 
-        Double revenueToday =
-                s.createQuery("""
+        Double revenueToday
+                = s.createQuery("""
                 SELECT COALESCE(
                     SUM(b.totalPrice),
                     0)
@@ -118,8 +119,8 @@ public class DashboardServiceImpl implements DashboardService {
             """, Double.class)
                         .getSingleResult();
 
-        Long showtimesToday =
-                s.createQuery("""
+        Long showtimesToday
+                = s.createQuery("""
                 SELECT COUNT(s)
                 FROM Showtimes s
                 WHERE DATE(s.startTime)
@@ -127,8 +128,8 @@ public class DashboardServiceImpl implements DashboardService {
             """, Long.class)
                         .getSingleResult();
 
-        Long running =
-                s.createQuery("""
+        Long running
+                = s.createQuery("""
                 SELECT COUNT(s)
                 FROM Showtimes s
                 WHERE CURRENT_TIMESTAMP
@@ -137,8 +138,8 @@ public class DashboardServiceImpl implements DashboardService {
             """, Long.class)
                         .getSingleResult();
 
-        Long freeSeats =
-                s.createQuery("""
+        Long freeSeats
+                = s.createQuery("""
                 SELECT COUNT(se)
                 FROM Seats se
                 WHERE se.id NOT IN (
@@ -157,5 +158,25 @@ public class DashboardServiceImpl implements DashboardService {
                 freeSeats
         );
     }
-    
+
+    @Override
+    public List<Object[]> revenueByDate(
+            Date fromDate,
+            Date toDate) {
+
+        if (fromDate == null || toDate == null) {
+            return new ArrayList<>();
+        }
+
+        return dashboardRepo
+                .statsRevenueByDate(
+                        fromDate,
+                        toDate);
+    }
+
+    @Override
+    public List<Object[]> topCustomers() {
+        return dashboardRepo.topCustomers();
+    }
+
 }

@@ -1,15 +1,88 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <title>Kiểm tra vé</title>
+
+    <th:block th:replace="base :: css"></th:block>
+
+</head>
+
+<body>
+
+<div th:replace="base :: header"></div>
+
+<div class="container mt-4">
+
+    <h2>Kiểm tra vé</h2>
+
+    <form method="get">
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <input
+                    class="form-control"
+                    name="ticketId"
+                    placeholder="Nhập mã vé">
+
+            </div>
+
+            <div class="col-md-2">
+
+                <button
+                    class="btn btn-primary">
+                    Kiểm tra
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+    <div
+      th:if="${ticket != null}"
+      class="card mt-4">
+
+        <div class="card-body">
+
+            <h4>Thông tin vé</h4>
+
+            <p>
+
+                Phim:
+
+                <b th:text="${ticket.bookingId.showtimeId.movieId.movieName}">
+                </b>
+
+            </p>
+
+            <p>
+
+                Ghế:
+
+                <b th:text="${ticket.seatId.seatNumber}">
+                </b>
+
+            </p>
+
+            <p>
+
+                Giá:
+
+                <b th:text="${ticket.price}">
+                </b>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
 </html>

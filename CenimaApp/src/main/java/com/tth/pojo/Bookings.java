@@ -106,13 +106,6 @@ public class Bookings implements Serializable {
         this.ticketsList = ticketsList;
     }
 
-//    public Seats getSeatId() {
-//        return seatId;
-//    }
-//
-//    public void setSeatId(Seats seatId) {
-//        this.seatId = seatId;
-//    }
 
     public Showtimes getShowtimeId() {
         return showtimeId;

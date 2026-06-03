@@ -62,4 +62,10 @@ public class TicketRepositoryImpl
                 .setParameter("id", showtimeId)
                 .getSingleResult();
     }
+
+    @Override
+    public Tickets getTicketById(Integer ticketId) {
+
+        return factory.getCurrentSession().get(Tickets.class, ticketId);
+    }
 }

@@ -9,18 +9,21 @@ package com.tth.repository.impl;
  * @author Administrator
  */
 import com.tth.repository.DashboardRepository;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@Transactional
 public class DashBoardRepositoryImpl implements DashboardRepository {
 
     @Autowired
     private SessionFactory factory;
-    
+
     @Override
     public List<Object[]> statsRevenueByMovie() {
 
@@ -219,4 +222,34 @@ public class DashBoardRepositoryImpl implements DashboardRepository {
                 .setMaxResults(10)
                 .getResultList();
     }
+
+    @Override
+    public List<Object[]> statsRevenueByDate(Date fromDate, Date toDate) {
+
+        String hql = """
+        SELECT DATE(b.createdAt),
+               SUM(t.price)
+        FROM Tickets t
+        JOIN t.bookingId b
+        WHERE b.createdAt
+            BETWEEN :fromDate
+            AND :toDate
+        GROUP BY DATE(b.createdAt)
+        ORDER BY DATE(b.createdAt)
+    """;
+
+        return factory
+                .getCurrentSession()
+                .createQuery(
+                        hql,
+                        Object[].class)
+                .setParameter(
+                        "fromDate",
+                        fromDate)
+                .setParameter(
+                        "toDate",
+                        toDate)
+                .getResultList();
+    }
+
 }

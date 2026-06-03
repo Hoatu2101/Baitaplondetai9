@@ -10,6 +10,7 @@ import com.tth.repository.RoomRepository;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.hibernate.Session;
@@ -33,6 +34,10 @@ public class RoomRepositoryImpl implements RoomRepository {
     @Override
     public List<Rooms> getRooms(Map<String, String> params) {
 
+        if (params == null) {
+            params = new HashMap<>();
+        }
+
         Session s = this.factory.getCurrentSession();
 
         HibernateCriteriaBuilder cb = s.getCriteriaBuilder();
@@ -44,7 +49,6 @@ public class RoomRepositoryImpl implements RoomRepository {
         cq.select(root);
 
         List predicates = new ArrayList<>();
-
 
         if (params != null) {
 

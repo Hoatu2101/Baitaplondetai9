@@ -56,7 +56,46 @@
                             </a>
                         </li>
 
-                        <li class="nav-item"
+                        <li
+                            sec:authorize="hasRole('STAFF')">
+
+                            <a
+                                class="nav-link"
+                                th:href="@{/staff/dashboard}">
+
+                                Dashboard
+
+                            </a>
+
+                        </li>
+
+                        <li
+                            sec:authorize="hasRole('STAFF')">
+
+                            <a
+                                class="nav-link"
+                                th:href="@{/staff/bookings}">
+
+                                Booking
+
+                            </a>
+
+                        </li>
+
+                        <li
+                            sec:authorize="hasRole('STAFF')">
+
+                            <a
+                                class="nav-link"
+                                th:href="@{/staff/check-ticket}">
+
+                                Check Vé
+
+                            </a>
+
+                        </li>
+
+                        <li 
                             sec:authorize="hasRole('ADMIN')">
 
                             <a class="nav-link"

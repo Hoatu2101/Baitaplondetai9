@@ -88,6 +88,8 @@ public class SpringSecurityConfigs {
                 .hasRole("ADMIN")
                 .requestMatchers(
                         "/admin/movies/**",
+                        "/admin/rooms/**",
+                        "/admin/statuses/**",
                         "/api/movies/**",
                         "/movies/create",
                         "/movies/delete/**",
