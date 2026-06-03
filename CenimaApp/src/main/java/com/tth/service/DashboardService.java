@@ -8,24 +8,9 @@ package com.tth.service;
  *
  * @author Admin
  */
+import com.tth.dto.StaffDashboardDTO;
 import java.util.List;
 
-//public interface DashboardService {
-//
-//    long countMovies();
-//
-//    long countRooms();
-//
-//    long countShowtimes();
-//
-//    long countBookings();
-//
-//    double totalRevenue();
-//
-//    List<Object[]> revenueByMovie();
-//
-//    List<Object[]> bookingByDate();
-//}
 public interface DashboardService {
 
     List<Object[]> revenueByMovie();
@@ -51,4 +36,6 @@ public interface DashboardService {
     Long countBookings();
     
     List<Object[]> topMovies();
+    
+    StaffDashboardDTO getStaffDashboard();
 }

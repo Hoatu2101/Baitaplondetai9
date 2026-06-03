@@ -11,6 +11,7 @@ package com.tth.repository.impl;
 import com.tth.pojo.Showtimes;
 import com.tth.repository.ShowtimeRepository;
 import jakarta.persistence.Query;
+import jakarta.persistence.criteria.CriteriaQuery;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -198,4 +200,145 @@ public class ShowtimeRepositoryImpl implements ShowtimeRepository {
 
         return count > 0;
     }
+
+    @Override
+    public long countSoldTickets(Integer showtimeId) {
+
+        return factory
+                .getCurrentSession()
+                .createQuery("""
+                SELECT COUNT(t)
+                FROM Tickets t
+                JOIN t.bookingId b
+                WHERE b.showtimeId.id = :id
+            """, Long.class)
+                .setParameter("id", showtimeId)
+                .getSingleResult();
+    }
+
+    @Override
+    public double revenueByShowtime(Integer showtimeId) {
+
+        Double result = factory
+                .getCurrentSession()
+                .createQuery("""
+                SELECT COALESCE(
+                    SUM(b.totalPrice),
+                    0
+                )
+                FROM Bookings b
+                WHERE b.showtimeId.id=:id
+            """, Double.class)
+                .setParameter("id", showtimeId)
+                .getSingleResult();
+
+        return result == null ? 0 : result;
+    }
+
+    @Override
+    public List<Showtimes> getShowtimesByMovie(Integer movieId) {
+
+        return factory
+                .getCurrentSession()
+                .createQuery("""
+                FROM Showtimes s
+                WHERE s.movieId.id=:id
+                ORDER BY s.startTime
+            """, Showtimes.class)
+                .setParameter("id", movieId)
+                .getResultList();
+    }
+
+    @Override
+    public List<Showtimes> getShowtimesByRoom(Integer roomId) {
+
+        return factory
+                .getCurrentSession()
+                .createQuery("""
+                FROM Showtimes s
+                WHERE s.roomId.id=:id
+                ORDER BY s.startTime DESC
+            """, Showtimes.class)
+                .setParameter("id", roomId)
+                .getResultList();
+    }
+
+    @Override
+    public List<Showtimes> getUpcomingShowtimes() {
+
+        return factory
+                .getCurrentSession()
+                .createQuery("""
+                FROM Showtimes s
+                WHERE s.startTime > CURRENT_TIMESTAMP
+                ORDER BY s.startTime
+            """, Showtimes.class)
+                .getResultList();
+    }
+
+    @Override
+    public List<Showtimes> getTodayShowtimes() {
+
+        return factory
+                .getCurrentSession()
+                .createQuery("""
+                FROM Showtimes s
+                WHERE DATE(s.startTime)=CURRENT_DATE
+            """, Showtimes.class)
+                .getResultList();
+    }
+
+    @Override
+    public List<Showtimes> searchShowtimes(
+            String movie,
+            Date date) {
+
+        Session s
+                = factory.getCurrentSession();
+
+        HibernateCriteriaBuilder cb
+                = s.getCriteriaBuilder();
+
+        CriteriaQuery<Showtimes> cq
+                = cb.createQuery(Showtimes.class);
+
+        Root<Showtimes> root
+                = cq.from(Showtimes.class);
+
+        List<Predicate> predicates
+                = new ArrayList<>();
+
+        if (movie != null && !movie.isEmpty()) {
+
+            predicates.add(
+                    cb.like(
+                            root.get("movieId")
+                                    .get("movieName"),
+                            "%" + movie + "%"
+                    )
+            );
+        }
+
+        if (date != null) {
+
+            predicates.add(
+                    cb.equal(
+                            cb.function(
+                                    "DATE",
+                                    Date.class,
+                                    root.get("startTime")
+                            ),
+                            date
+                    )
+            );
+        }
+
+        cq.where(
+                predicates.toArray(
+                        Predicate[]::new));
+
+        return s.createQuery(cq)
+                .getResultList();
+    }
+    
 }
