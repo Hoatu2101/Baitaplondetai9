@@ -29,16 +29,16 @@ public class ApiSeatController {
                 seatService.getSeatsByShowtime(showtimeId));
     }
 
-    @GetMapping("/staff/showtimes/{id}/seat-map")
-    public String seatMap(
-            @PathVariable ("id") Integer id,
-            Model model) {
-
-        model.addAttribute(
-                "seats",
-                seatService
-                        .getSeatsByShowtime(id));
-
-        return "staff-seat-map";
-    }
+//    @GetMapping("/staff/showtimes/{id}/seat-map")
+//    public String seatMap(
+//            @PathVariable ("id") Integer id,
+//            Model model) {
+//
+//        model.addAttribute(
+//                "seats",
+//                seatService
+//                        .getSeatsByShowtime(id));
+//
+//        return "staff-seat-map";
+//    }
 }

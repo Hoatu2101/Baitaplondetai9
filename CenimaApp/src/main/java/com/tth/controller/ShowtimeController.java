@@ -4,22 +4,25 @@
  */
 package com.tth.controller;
 
-
 /**
  *
  * @author Admin
  */
-
-
 import com.tth.pojo.Showtimes;
+import com.tth.repository.ShowtimeRepository;
+import com.tth.service.BookingService;
 import com.tth.service.MoviesService;
 import com.tth.service.RoomService;
+import com.tth.service.SeatService;
 import com.tth.service.ShowtimeService;
+import java.util.Date;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin/showtimes")
@@ -34,15 +37,31 @@ public class ShowtimeController {
     @Autowired
     private RoomService roomService;
 
+    @Autowired
+    private BookingService bookingService;
+
+    @Autowired
+    private SeatService seatService;
+    
+    @Autowired
+    private ShowtimeRepository showtimeRepo;
+
+//    @GetMapping
+//    public String showtimes(Model model, @RequestParam Map<String, String> params) {
+//
+//        model.addAttribute(
+//                "showtimes",
+//                this.showtimeService.getShowtimes(params)
+//        );
+//
+//        return "showtimes";
+//    }
     @GetMapping
-    public String showtimes(
-            Model model,
-            @RequestParam Map<String, String> params) {
+    public String showtimes(Model model, @RequestParam Map<String, String> params) {
 
         model.addAttribute(
                 "showtimes",
-                this.showtimeService.getShowtimes(params)
-        );
+                showtimeService.getAdminShowtimes());
 
         return "showtimes";
     }
@@ -66,9 +85,7 @@ public class ShowtimeController {
     }
 
     @PostMapping
-    public String addShowtime(
-            @ModelAttribute(value = "showtime") Showtimes showtime,
-            Model model) {
+    public String addShowtime(@ModelAttribute(value = "showtime") Showtimes showtime, Model model) {
 
         try {
 
@@ -95,9 +112,7 @@ public class ShowtimeController {
     }
 
     @GetMapping("/{id}")
-    public String updateView(
-            Model model,
-            @PathVariable(value = "id") int id) {
+    public String updateView(Model model, @PathVariable(value = "id") int id) {
 
         model.addAttribute(
                 "showtime",
@@ -118,11 +133,82 @@ public class ShowtimeController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteShowtime(
-            @PathVariable(value = "id") int id) {
+    public String deleteShowtime(@PathVariable("id") int id, RedirectAttributes redirect) {
 
-        this.showtimeService.deleteShowtime(id);
+        try {
+
+            showtimeService.deleteShowtime(id);
+
+            redirect.addFlashAttribute(
+                    "success",
+                    "Xóa thành công");
+
+        } catch (Exception ex) {
+
+            redirect.addFlashAttribute(
+                    "error",
+                    ex.getMessage());
+        }
 
         return "redirect:/admin/showtimes";
     }
+
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") Integer id, Model model) {
+
+        model.addAttribute(
+                "showtime",
+                showtimeService.getShowtimeById(id));
+
+        model.addAttribute(
+                "statistic",
+                showtimeService.getStatistic(id));
+
+        return "showtime-detail";
+    }
+
+    @GetMapping("/{id}/bookings")
+    public String bookingList(
+            @PathVariable Integer id,
+            Model model) {
+
+        model.addAttribute(
+                "details",
+                bookingService
+                        .getBookingDetailsByShowtime(id));
+
+        return "showtime-bookings";
+    }
+
+    @GetMapping("/{id}/seats")
+    public String seatMap(@PathVariable Integer id, Model model) {
+
+        model.addAttribute(
+                "showtime",
+                showtimeService.getShowtimeById(id));
+
+        model.addAttribute(
+                "seats",
+                seatService.getSeatsByShowtime(id));
+
+        return "showtime-seat-map";
+    }
+
+    @GetMapping("/search")
+    public String search(
+            @RequestParam(required = false) String movie,
+            @RequestParam(required = false)
+            @DateTimeFormat(
+                    pattern = "yyyy-MM-dd") Date date,
+            Model model) {
+
+        model.addAttribute(
+                "showtimes",
+                showtimeRepo.searchShowtimes(
+                        movie,
+                        date));
+
+        return "showtimes";
+    }
+
 }

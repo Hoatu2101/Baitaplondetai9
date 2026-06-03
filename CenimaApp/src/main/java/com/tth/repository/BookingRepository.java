@@ -15,19 +15,17 @@ import java.util.List;
 
 public interface BookingRepository {
 
-    Bookings createBooking(
-            Bookings booking);
+    Bookings createBooking(Bookings booking);
 
-    List<Bookings> getBookingsByUser(
-            String username);
+    List<Bookings> getBookingsByUser(String username);
 
-    long countBookingByShowtime(
-            Integer showtimeId);
+    long countBookingByShowtime(Integer showtimeId);
     
-    Double revenueByShowtime(
-        Integer showtimeId);
+    Double revenueByShowtime(Integer showtimeId);
     
     List<Bookings>findByShowtime(Integer showtimeId);
     
     List<Bookings> getBookingsByDate(Date date);
+    
+    boolean hasBookingByShowtime(Integer showtimeId);
 }

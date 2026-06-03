@@ -83,16 +83,16 @@ public class DashboardController {
         return "dashboard";
     }
 
-    @GetMapping("/showtimes/{id}/bookings")
-    public String bookingByShowtime(
-            @PathVariable("id") Integer id,
-            Model model) {
-
-        model.addAttribute(
-                "bookings",
-                bookingService
-                        .getBookingDetailsByShowtime(id));
-
-        return "staff-bookings";
-    }
+//    @GetMapping("/showtimes/{id}/bookings")
+//    public String bookingByShowtime(
+//            @PathVariable("id") Integer id,
+//            Model model) {
+//
+//        model.addAttribute(
+//                "bookings",
+//                bookingService
+//                        .getBookingDetailsByShowtime(id));
+//
+//        return "staff-bookings";
+//    }
 }

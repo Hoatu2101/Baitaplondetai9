@@ -34,4 +34,6 @@ public class SeatController {
 
         return "staff-seat-map";
     }
+    
+    
 }

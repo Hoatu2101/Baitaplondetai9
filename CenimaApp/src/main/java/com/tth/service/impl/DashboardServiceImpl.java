@@ -8,60 +8,24 @@ package com.tth.service.impl;
  *
  * @author Administrator
  */
+import com.tth.dto.StaffDashboardDTO;
 import com.tth.repository.DashboardRepository;
 import com.tth.service.DashboardService;
 import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-//@Service
-//@Transactional
-//public class DashboardServiceImpl implements DashboardService {
-//
-//    @Autowired
-//    private DashboardRepository dashboardRepo;
-//
-//    @Override
-//    public long countMovies() {
-//        return this.dashboardRepo.countMovies();
-//    }
-//
-//    @Override
-//    public long countRooms() {
-//        return this.dashboardRepo.countRooms();
-//    }
-//
-//    @Override
-//    public long countShowtimes() {
-//        return this.dashboardRepo.countShowtimes();
-//    }
-//
-//    @Override
-//    public long countBookings() {
-//        return this.dashboardRepo.countBookings();
-//    }
-//
-//    @Override
-//    public double totalRevenue() {
-//        return this.dashboardRepo.totalRevenue();
-//    }
-//
-//    @Override
-//    public List<Object[]> revenueByMovie() {
-//        return this.dashboardRepo.revenueByMovie();
-//    }
-//
-//    @Override
-//    public List<Object[]> bookingByDate() {
-//        return this.dashboardRepo.bookingByDate();
-//    }
-//}
+
 @Service
 @Transactional
-public class DashboardServiceImpl
-        implements DashboardService {
+public class DashboardServiceImpl implements DashboardService {
 
+    @Autowired
+    private SessionFactory factory;
+    
     @Autowired
     private DashboardRepository dashboardRepo;
 
@@ -128,4 +92,70 @@ public class DashboardServiceImpl
     public List<Object[]> topMovies() {
         return dashboardRepo.topMovies();
     }
+    
+    @Override
+    public StaffDashboardDTO getStaffDashboard() {
+
+        Session s = this.factory.getCurrentSession();
+
+        Long soldToday =
+                s.createQuery("""
+                SELECT COUNT(t)
+                FROM Tickets t
+                WHERE DATE(t.createdAt)
+                    = CURRENT_DATE
+            """, Long.class)
+                        .getSingleResult();
+
+        Double revenueToday =
+                s.createQuery("""
+                SELECT COALESCE(
+                    SUM(b.totalPrice),
+                    0)
+                FROM Bookings b
+                WHERE DATE(b.createdAt)
+                    = CURRENT_DATE
+            """, Double.class)
+                        .getSingleResult();
+
+        Long showtimesToday =
+                s.createQuery("""
+                SELECT COUNT(s)
+                FROM Showtimes s
+                WHERE DATE(s.startTime)
+                    = CURRENT_DATE
+            """, Long.class)
+                        .getSingleResult();
+
+        Long running =
+                s.createQuery("""
+                SELECT COUNT(s)
+                FROM Showtimes s
+                WHERE CURRENT_TIMESTAMP
+                    BETWEEN s.startTime
+                    AND s.endTime
+            """, Long.class)
+                        .getSingleResult();
+
+        Long freeSeats =
+                s.createQuery("""
+                SELECT COUNT(se)
+                FROM Seats se
+                WHERE se.id NOT IN (
+                    SELECT sts.seatId.id
+                    FROM SeatShowtimeStatus sts
+                    WHERE sts.status='BOOKED'
+                )
+            """, Long.class)
+                        .getSingleResult();
+
+        return new StaffDashboardDTO(
+                soldToday,
+                revenueToday,
+                showtimesToday,
+                running,
+                freeSeats
+        );
+    }
+    
 }

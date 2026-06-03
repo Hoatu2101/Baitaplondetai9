@@ -112,7 +112,8 @@ public class SpringSecurityConfigs {
                         "/movies/create",
                         "/movies/delete/**",
                         "/admin/showtimes/**",
-                        "/admin/bookings/**")
+                        "/admin/bookings/**",
+                        "/staff/**")
                 .hasAnyRole(
                         "ADMIN",
                         "STAFF")
