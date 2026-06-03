@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Transactional
 @Service
+
 public  class UserServiceImpl implements UserService {
 
     @Autowired

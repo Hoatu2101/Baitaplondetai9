@@ -1,99 +1,132 @@
-import { useContext, useRef, useState } from "react";
-import { Alert, Button, Form } from "react-bootstrap";
-import MySpinner from '../../components/MySpinner/MySpinner';
-import Apis, { authApis, endpoints } from "../../configs/Apis";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import cookies from 'react-cookies'
-import { MyUserContext } from "../../configs/context";
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import './Login.css';
+
+import Apis, { endpoints, authApis } from '../../configs/Apis';
+import cookies from 'react-cookies';
+import { MyUserContext } from '../../configs/context';
 
 const Login = () => {
-    const userInfo = [{
-        field: "username",
-        label: "Tên đăng nhập", 
-        type: "text"
-    }, {
-        field: "password",
-        label: "Mật khẩu", 
-        type: "password"
-    }];
+    const [user, setUser] = useState({
+        username: "",
+        password: ""
+    });
 
-    const [user, setUser] = useState({})
     const [err, setErr] = useState("");
     const [loading, setLoading] = useState(false);
+
     const [, dispatch] = useContext(MyUserContext);
     const [q] = useSearchParams();
-   
     const nav = useNavigate();
 
+    const handleChange = (e) => {
+        setUser({
+            ...user,
+            [e.target.id]: e.target.value
+        });
+    };
+
     const validate = () => {
-    
+        if (!user.username || !user.password) {
+            setErr("Vui lòng nhập đầy đủ thông tin!");
+            return false;
+        }
+        setErr("");
         return true;
-    }
+    };
 
     const login = async (e) => {
         e.preventDefault();
 
-        if (validate()) {
-            try {
-                setLoading(true);
+        if (!validate()) return;
 
-                let res = await Apis.post(endpoints['login'], {...user});
-                cookies.save('token', res.data.token);
+        try {
+            setLoading(true);
 
-            //    setTimeout(async () => {
-                let p = await authApis().get(endpoints['profile']);
-                console.info(p.data);
-                cookies.save('user', p.data);
+           
+            let res = await Apis.post(endpoints['login'], user);
+            cookies.save('token', res.data.token);
 
-                dispatch({
-                    "type": "LOGIN",
-                    "payload": p.data
-                })
-                let next = q.get('next')
-                if (next)
-                    nav(next);
-                else
-                    nav('/');
+            
+            let p = await authApis().get(endpoints['profile']);
+            cookies.save('user', p.data);
 
-            //    }, 500)
-            } catch (ex) {
-                console.error(ex);
-            } finally {
-                setLoading(false);
-            }
+        
+            dispatch({
+                type: "LOGIN",
+                payload: p.data
+            });
+            let next = q.get('next');
+            nav(next ? next : '/');
+
+        } catch (ex) {
+            console.error(ex);
+            setErr("Đăng nhập thất bại!");
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
     return (
-        <div className="login-page-container">
-            <h1 className="text-center mt-1">CINEBOOK LOGIN</h1>
+        <div className="login-container">
+            <div className="login-box">
+                <h2 className="login-title">Đăng Nhập</h2>
+                <p className="login-subtitle">Chào mừng bạn trở lại với CineBook</p>
 
-            {err && <Alert variant="danger">{err}</Alert>}
+                {err && <p style={{ color: 'red' }}>{err}</p>}
 
-            <Form onSubmit={login}>
-                {userInfo.map(u => (
-                    <Form.Group key={u.field} className="mb-3" controlId={u.field}>
-                        <Form.Label>{u.label}</Form.Label>
-                        <Form.Control 
-                            type={u.type} 
-                            placeholder={`Nhập ${u.label.toLowerCase()}...`} 
-                            value={user[u.field] || ""} 
-                            onChange={e => setUser({...user, [u.field]: e.target.value})} 
-                            required 
+                <form className="login-form" onSubmit={login}>
+                    
+                    {/* Username */}
+                    <div className="input-group">
+                        <label htmlFor="username">Tên đăng nhập</label>
+                        <input
+                            type="text"
+                            id="username"
+                            value={user.username}
+                            onChange={handleChange}
+                            placeholder="Nhập tên đăng nhập..."
+                            className="login-input"
                         />
-                    </Form.Group>
-                ))}
+                    </div>
 
-                <Form.Group className="mb-3">
-                    {loading ? (
-                        <div className="text-center"><MySpinner /></div>
-                    ) : (
-                        <Button variant="success" type="submit">Đăng nhập ngay</Button>
-                    )}
-                </Form.Group>
-            </Form>
+                    {/* Password */}
+                    <div className="input-group">
+                        <label htmlFor="password">Mật khẩu</label>
+                        <input
+                            type="password"
+                            id="password"
+                            value={user.password}
+                            onChange={handleChange}
+                            placeholder="Nhập mật khẩu..."
+                            className="login-input"
+                        />
+                    </div>
+
+                    {/* Forgot password */}
+                    <div className="forgot-password">
+                        <a href="#!">Quên mật khẩu?</a>
+                    </div>
+
+                    {/* Submit */}
+                    <button
+                        type="submit"
+                        className="btn-submit-login"
+                        disabled={loading}
+                    >
+                        {loading ? "Đang đăng nhập..." : "Đăng Nhập"}
+                    </button>
+                </form>
+
+                <div className="login-footer">
+                    <span>Bạn chưa có tài khoản? </span>
+                    <Link to="/register" className="register-link">
+                        Đăng ký ngay
+                    </Link>
+                </div>
+            </div>
         </div>
     );
-}
+};
 
 export default Login;

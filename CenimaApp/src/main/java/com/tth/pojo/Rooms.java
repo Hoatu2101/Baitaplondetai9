@@ -4,6 +4,7 @@
  */
 package com.tth.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -56,10 +57,10 @@ public class Rooms implements Serializable {
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
     private Status statusId;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "roomId")
     private List<Showtimes> showtimesList;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "roomId")
     private List<Seats> seatsList;
 

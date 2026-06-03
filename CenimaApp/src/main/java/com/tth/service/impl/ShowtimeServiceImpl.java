@@ -73,4 +73,8 @@ public class ShowtimeServiceImpl implements ShowtimeService {
                 showtimeId
         );
     }
+    @Override
+public long countAvailableSeats(int showtimeId) {
+    return showtimeRepo.countAvailableSeats(showtimeId);
+}
 }

@@ -9,7 +9,7 @@
     padding-bottom: 50px;
 }
 
-/* KHU VỰC BANNER BÊN TRÊN */
+
 .hero-banner {
     position: relative;
     width: 100%;
@@ -132,4 +132,42 @@
 .btn-book-seat:not(:disabled):hover {
     background-color: #f40612 !important;
     transform: translateY(-2px);
+}
+/* Khung chứa ngoài cùng */
+.showtime-container {
+    background-color: #121212 !important; /* Đen tuyền huyền bí */
+    color: #e0e0e0 !important;
+    padding: 24px;
+    border-radius: 12px;
+}
+
+/* Từng cụm rạp */
+.cinema-group {
+    background-color: #1e1e1e !important; /* Xám tối dịu mắt */
+    border: 1px solid #2d2d2d !important; /* Viền mỏng tối */
+}
+
+/* Tên rạp (Lotte, CGV...) */
+.cinema-name span {
+    color: #ff4d6d !important; /* Màu hồng/đỏ neon dịu */
+}
+
+/* Các nút giờ chiếu chưa chọn */
+.cinema-group .btn-outline-warning {
+    background-color: #2a2a2a !important;
+    color: #ffb703 !important;
+    border: 1px solid #444444 !important;
+}
+
+.cinema-group .btn-outline-warning:hover {
+    background-color: #ffb703 !important;
+    color: #000000 !important;
+}
+
+/* Nút giờ chiếu ĐÃ CHỌN */
+.cinema-group .btn-warning {
+    background-color: #ffb703 !important;
+    color: #000000 !important;
+    font-weight: bold;
+    box-shadow: 0 0 12px rgba(255, 183, 3, 0.4) !important;
 }

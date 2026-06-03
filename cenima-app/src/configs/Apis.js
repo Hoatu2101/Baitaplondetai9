@@ -1,26 +1,37 @@
 import axios from "axios";
-import cookies from 'react-cookies'
+import cookies from "react-cookies";
+
+const BASE_URL = "http://localhost:8080/CenimaApp/api";
 
 export const endpoints = {
-   'movies': '/movies',
-   'detail_movie': (id) => `/movies/${id}`,
-   'categories': '/categories',
-   'register': '/users',
-   'login': '/login',
-   'current_user':'/secure/profile',
-}
+    'movies': "/movies",
+    'detail_movie': (id) => `/movies/${id}`,
+    'categories': "/categories",
+    'register': "/users",
+    'login': "/login",
+    'profile': "/secure/profile",
+
+    'movie_showtimes': (movieId) => `/movies/${movieId}/showtimes`,
+
+    'cenimas': "/cenimas",
+
+    'seats': (showtimeId) => `/showtimes/${showtimeId}/seats`,
+    'booking': '/bookings'
+};
 
 export const authApis = () => {
-    console.info(cookies.load('token'))
-    return axios.create({
-        baseURL: "http://localhost:8080/CenimaApp/api",
-        headers: {
-            'Authorization': `Bearer ${cookies.load('token')}`
-        }
+    const token = cookies.load("token");
 
-    })
-}
+    return axios.create({
+        baseURL: BASE_URL,
+        headers: token
+            ? {
+                  Authorization: `Bearer ${token}`,
+              }
+            : {},
+    });
+};
 
 export default axios.create({
-    baseURL: "http://localhost:8080/CenimaApp/api"
-})
+    baseURL: BASE_URL,
+});

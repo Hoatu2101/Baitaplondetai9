@@ -20,9 +20,11 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 /**
  *
@@ -30,14 +32,20 @@ import java.util.List;
  */
 @Entity
 @Table(name = "status")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Status.findAll", query = "SELECT s FROM Status s"),
-    @NamedQuery(name = "Status.findByName", query = "SELECT s FROM Status s WHERE s.name = :name"),
     @NamedQuery(name = "Status.findById", query = "SELECT s FROM Status s WHERE s.id = :id"),
+    @NamedQuery(name = "Status.findByName", query = "SELECT s FROM Status s WHERE s.name = :name"),
     @NamedQuery(name = "Status.findByCreatedAt", query = "SELECT s FROM Status s WHERE s.createdAt = :createdAt")})
 public class Status implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -47,16 +55,11 @@ public class Status implements Serializable {
     @Size(max = 65535)
     @Column(name = "description")
     private String description;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "statusId")
-    private List<Rooms> roomsList;
+    private Collection<Rooms> roomsCollection;
 
     public Status() {
     }
@@ -68,6 +71,14 @@ public class Status implements Serializable {
     public Status(Integer id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -86,14 +97,6 @@ public class Status implements Serializable {
         this.description = description;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -102,12 +105,13 @@ public class Status implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public List<Rooms> getRoomsList() {
-        return roomsList;
+    @XmlTransient
+    public Collection<Rooms> getRoomsCollection() {
+        return roomsCollection;
     }
 
-    public void setRoomsList(List<Rooms> roomsList) {
-        this.roomsList = roomsList;
+    public void setRoomsCollection(Collection<Rooms> roomsCollection) {
+        this.roomsCollection = roomsCollection;
     }
 
     @Override

@@ -42,8 +42,8 @@ public class StatusMovie implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "name_status")
     private String nameStatus;
-    @OneToMany(mappedBy = "statusMovie")
     @JsonIgnore
+    @OneToMany(mappedBy = "statusMovie")
     private List<Movies> moviesList;
 
     public StatusMovie() {

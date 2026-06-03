@@ -72,4 +72,5 @@ public ResponseEntity<List<Map<String,Object>>> list(
 
     return new ResponseEntity<>(result, HttpStatus.OK);
 }
+
 }

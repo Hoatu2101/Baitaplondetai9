@@ -10,6 +10,7 @@ package com.tth.repository;
  */
 import com.tth.pojo.Seats;
 import java.util.List;
+import java.util.Map;
 
 public interface SeatRepository {
 
@@ -20,5 +21,6 @@ public interface SeatRepository {
     void addSeat(Seats seat);
 
     void deleteSeatsByRoom(int roomId);
+
 
 }

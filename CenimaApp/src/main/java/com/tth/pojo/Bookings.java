@@ -20,9 +20,11 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 /**
  *
@@ -30,31 +32,29 @@ import java.util.List;
  */
 @Entity
 @Table(name = "bookings")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Bookings.findAll", query = "SELECT b FROM Bookings b"),
-    @NamedQuery(name = "Bookings.findByTotalPrice", query = "SELECT b FROM Bookings b WHERE b.totalPrice = :totalPrice"),
     @NamedQuery(name = "Bookings.findById", query = "SELECT b FROM Bookings b WHERE b.id = :id"),
+    @NamedQuery(name = "Bookings.findByTotalPrice", query = "SELECT b FROM Bookings b WHERE b.totalPrice = :totalPrice"),
     @NamedQuery(name = "Bookings.findByCreatedAt", query = "SELECT b FROM Bookings b WHERE b.createdAt = :createdAt")})
 public class Bookings implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "total_price")
-    private float totalPrice;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "total_price")
+    private float totalPrice;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
-    private List<Tickets> ticketsList;
-//    @JoinColumn(name = "seat_id", referencedColumnName = "id")
-//    @ManyToOne(optional = false)
-//    private Seats seatId;
+    private Collection<Tickets> ticketsCollection;
     @JoinColumn(name = "showtime_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Showtimes showtimeId;
@@ -74,20 +74,20 @@ public class Bookings implements Serializable {
         this.totalPrice = totalPrice;
     }
 
-    public float getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(float totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public float getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(float totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public Date getCreatedAt() {
@@ -98,21 +98,14 @@ public class Bookings implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public List<Tickets> getTicketsList() {
-        return ticketsList;
+    @XmlTransient
+    public Collection<Tickets> getTicketsCollection() {
+        return ticketsCollection;
     }
 
-    public void setTicketsList(List<Tickets> ticketsList) {
-        this.ticketsList = ticketsList;
+    public void setTicketsCollection(Collection<Tickets> ticketsCollection) {
+        this.ticketsCollection = ticketsCollection;
     }
-
-//    public Seats getSeatId() {
-//        return seatId;
-//    }
-//
-//    public void setSeatId(Seats seatId) {
-//        this.seatId = seatId;
-//    }
 
     public Showtimes getShowtimeId() {
         return showtimeId;

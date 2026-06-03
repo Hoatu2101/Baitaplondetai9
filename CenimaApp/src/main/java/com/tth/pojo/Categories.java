@@ -24,6 +24,7 @@ import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 /**
  *
@@ -31,6 +32,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "categories")
+@CrossOrigin
 @NamedQueries({
     @NamedQuery(name = "Categories.findAll", query = "SELECT c FROM Categories c"),
     @NamedQuery(name = "Categories.findByName", query = "SELECT c FROM Categories c WHERE c.name = :name"),
@@ -56,8 +58,8 @@ public class Categories implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private List<Movies> moviesList;
 
     public Categories() {

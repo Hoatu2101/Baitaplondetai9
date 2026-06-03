@@ -30,4 +30,5 @@ public interface ShowtimeService {
             java.util.Date end,
             Integer showtimeId
     );
+     long countAvailableSeats(int showtimeId);
 }

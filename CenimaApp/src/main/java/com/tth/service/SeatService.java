@@ -12,6 +12,7 @@ import com.tth.dto.SeatStatusResponse;
 import com.tth.pojo.Rooms;
 import com.tth.pojo.Seats;
 import java.util.List;
+import java.util.Map;
 
 public interface SeatService {
 

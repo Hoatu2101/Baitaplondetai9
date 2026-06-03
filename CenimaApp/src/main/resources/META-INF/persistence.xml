@@ -13,5 +13,6 @@
     <class>com.tth.pojo.Categories</class>
     <class>com.tth.pojo.Cinemas</class>
     <class>com.tth.pojo.StatusMovie</class>
+    <class>com.tth.pojo.SeatShowtimeStatus</class>
   </persistence-unit>
 </persistence>
