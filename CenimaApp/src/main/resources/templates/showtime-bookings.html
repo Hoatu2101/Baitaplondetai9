@@ -1,0 +1,63 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Danh sách đặt vé</title>
+</head>
+
+<body>
+
+<div class="container mt-4">
+
+    <h2>Danh sách khách đặt vé</h2>
+
+    <table class="table table-bordered">
+
+        <thead>
+
+        <tr>
+            <th>Mã booking</th>
+            <th>Khách hàng</th>
+            <th>Ghế</th>
+            <th>Tổng tiền</th>
+            <th>Ngày đặt</th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr th:each="d : ${details}">
+
+            <td>[[${d.bookingId}]]</td>
+
+            <td>[[${d.customerName}]]</td>
+
+            <td>
+                [[${#strings.listJoin(
+                d.seats,
+                ', '
+                )}]]
+            </td>
+
+            <td>
+                [[${d.totalPrice}]]
+            </td>
+
+            <td>
+                [[${#dates.format(
+                d.createdAt,
+                'dd/MM/yyyy HH:mm'
+                )}]]
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</body>
+</html>

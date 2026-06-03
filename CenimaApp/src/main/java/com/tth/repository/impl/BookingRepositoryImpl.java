@@ -125,4 +125,20 @@ public class BookingRepositoryImpl
                 .setParameter("d", date)
                 .getResultList();
     }
+
+    @Override
+    public boolean hasBookingByShowtime(Integer showtimeId) {
+
+        Long count = factory
+                .getCurrentSession()
+                .createQuery("""
+                SELECT COUNT(b)
+                FROM Bookings b
+                WHERE b.showtimeId.id=:id
+            """, Long.class)
+                .setParameter("id", showtimeId)
+                .getSingleResult();
+
+        return count > 0;
+    }
 }

@@ -1,0 +1,180 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <title>Dashboard nhân viên</title>
+
+    <th:block th:replace="base :: css"></th:block>
+
+</head>
+
+<body>
+
+<div th:replace="base :: header"></div>
+
+<section class="container mt-4">
+
+    <h2 class="mb-4">
+
+        Dashboard Nhân Viên
+
+    </h2>
+
+    <div class="row">
+
+        <div class="col-md-3">
+
+            <div class="card shadow">
+
+                <div class="card-body text-center">
+
+                    <h5>Vé bán hôm nay</h5>
+
+                    <h2
+                        th:text="${dashboard.totalTicketsToday}">
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow">
+
+                <div class="card-body text-center">
+
+                    <h5>Doanh thu hôm nay</h5>
+
+                    <h2>
+
+                        [[${#numbers.formatDecimal(
+                        dashboard.revenueToday,
+                        0,
+                        'COMMA',
+                        0,
+                        'POINT'
+                        )}]]
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow">
+
+                <div class="card-body text-center">
+
+                    <h5>Suất chiếu hôm nay</h5>
+
+                    <h2
+                      th:text="${dashboard.totalShowtimesToday}">
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card shadow">
+
+                <div class="card-body text-center">
+
+                    <h5>Đang chiếu</h5>
+
+                    <h2
+                      th:text="${dashboard.runningShowtimes}">
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <hr>
+
+    <h3 class="mt-4">
+
+        Suất chiếu hôm nay
+
+    </h3>
+
+    <table class="table table-bordered">
+
+        <thead>
+
+        <tr>
+
+            <th>ID</th>
+
+            <th>Phim</th>
+
+            <th>Phòng</th>
+
+            <th>Bắt đầu</th>
+
+            <th>Kết thúc</th>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr
+            th:each="s : ${showtimes}">
+
+            <td
+              th:text="${s.id}">
+            </td>
+
+            <td
+              th:text="${s.movieId.movieName}">
+            </td>
+
+            <td
+              th:text="${s.roomId.name}">
+            </td>
+
+            <td>
+
+                [[${#dates.format(
+                s.startTime,
+                'dd/MM/yyyy HH:mm'
+                )}]]
+
+            </td>
+
+            <td>
+
+                [[${#dates.format(
+                s.endTime,
+                'dd/MM/yyyy HH:mm'
+                )}]]
+
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+</section>
+
+</body>
+</html>

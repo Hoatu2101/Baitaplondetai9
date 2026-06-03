@@ -1,80 +1,195 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <title>Danh sách lịch chiếu</title>
+    <head>
+        <title>Danh sách lịch chiếu</title>
 
     <th:block th:replace="base :: css"></th:block>
 </head>
 
 <body>
 
-<div th:replace="base :: header"></div>
+    <div th:replace="base :: header"></div>
 
-<section class="container mt-4">
+    <section class="container mt-4">
 
-    <div class="d-flex justify-content-between mb-3">
+        <div class="d-flex justify-content-between mb-3">
 
-        <h2>Danh sách lịch chiếu</h2>
+            <h2>Danh sách lịch chiếu</h2>
 
-        <a th:href="@{/admin/showtimes/create}"
-           class="btn btn-success">
+            <a th:href="@{/admin/showtimes/create}"
+               class="btn btn-success">
 
-            Thêm lịch chiếu
-        </a>
+                Thêm lịch chiếu
+            </a>
 
-    </div>
+        </div>
 
-    <table class="table table-bordered table-hover">
+        <form method="get"
+              th:action="@{/admin/showtimes/search}"
+              class="row mb-3">
 
-        <thead class="table-dark">
+            <div class="col-md-4">
 
-            <tr>
-                <th>ID</th>
-                <th>Phim</th>
-                <th>Phòng</th>
-                <th>Bắt đầu</th>
-                <th>Kết thúc</th>
-                <th></th>
-            </tr>
+                <input
+                    name="movie"
+                    class="form-control"
+                    placeholder="Tên phim">
 
-        </thead>
+            </div>
 
-        <tbody>
+            <div class="col-md-3">
 
-            <tr th:each="s : ${showtimes}">
+                <input
+                    type="date"
+                    name="date"
+                    class="form-control">
 
-                <td th:text="${s.id}"></td>
+            </div>
 
-                <td th:text="${s.movieId.movieName}"></td>
+            <div class="col-md-2">
 
-                <td th:text="${s.roomId.name}"></td>
+                <button class="btn btn-primary">
 
-                <td th:text="${#dates.format(s.startTime, 'dd/MM/yyyy HH:mm')}"></td>
+                    Tìm
 
-                <td th:text="${#dates.format(s.endTime, 'dd/MM/yyyy HH:mm')}"></td>
+                </button>
 
-                <td>
+            </div>
 
-                    <a class="btn btn-warning btn-sm"
-                       th:href="@{'/admin/showtimes/' + ${s.id}}">
-                        Sửa
-                    </a>
+        </form>
 
-                    <a class="btn btn-danger btn-sm"
-                       th:href="@{'/admin/showtimes/delete/' + ${s.id}}">
-                        Xóa
-                    </a>
+        <table class="table table-bordered table-hover">
 
-                </td>
+            <thead class="table-dark">
 
-            </tr>
+                <tr>
 
-        </tbody>
+                    <th>ID</th>
 
-    </table>
+                    <th>Phim</th>
 
-</section>
+                    <th>Phòng</th>
+
+                    <th>Tổng ghế</th>
+
+                    <th>Đã bán</th>
+
+                    <th>Còn trống</th>
+
+                    <th>Tỷ lệ lấp đầy</th>
+
+                    <th>Doanh thu</th>
+
+                    <th>Trạng thái</th>
+
+                    <th width="350"></th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr th:each="s : ${showtimes}">
+
+                    <td th:text="${s.id}"></td>
+
+                    <td th:text="${s.movieName}"></td>
+
+                    <td th:text="${s.roomName}"></td>
+
+                    <td th:text="${s.totalSeats}"></td>
+
+                    <td th:text="${s.soldSeats}"></td>
+
+                    <td th:text="${s.availableSeats}"></td>
+
+                    <td>
+
+                        <span class="badge bg-info">
+
+                            [[${#numbers.formatDecimal(
+                            s.occupancyRate,
+                            0,
+                            'POINT',
+                            1,
+                            'POINT')}]] %
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        [[${#numbers.formatDecimal(
+                        s.revenue,
+                        0,
+                        'COMMA',
+                        0,
+                        'POINT')}]]
+
+                    </td>
+
+                    <td>
+
+                        <span
+                            th:if="${s.status=='UPCOMING'}"
+                            class="badge bg-primary">
+
+                            Sắp chiếu
+
+                        </span>
+
+                        <span
+                            th:if="${s.status=='RUNNING'}"
+                            class="badge bg-success">
+
+                            Đang chiếu
+
+                        </span>
+
+                        <span
+                            th:if="${s.status=='COMPLETED'}"
+                            class="badge bg-secondary">
+
+                            Đã kết thúc
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <a class="btn btn-info btn-sm"
+                           th:href="@{'/admin/showtimes/detail/'+${s.id}}">
+                            Chi tiết
+                        </a>
+
+                        <a class="btn btn-secondary btn-sm"
+                           th:href="@{'/admin/showtimes/'+${s.id}+'/bookings'}">
+                            Khách đặt
+                        </a>
+
+                        <a class="btn btn-dark btn-sm"
+                           th:href="@{'/admin/showtimes/'+${s.id}+'/seats'}">
+                            Sơ đồ ghế
+                        </a>
+
+                        <a class="btn btn-warning btn-sm"
+                           th:href="@{'/admin/showtimes/'+${s.id}}">
+                            Sửa
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </section>
 
 </body>
 </html>

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author Administrator
  */
+
 @Controller
 @RequestMapping("/admin/bookings")
 public class BookingController {

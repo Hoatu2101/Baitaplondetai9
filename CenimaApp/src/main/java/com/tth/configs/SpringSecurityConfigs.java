@@ -94,7 +94,6 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
             .anyRequest().authenticated()
         )
         .formLogin(form -> form.loginPage("/login").permitAll());
-
     return http.build();
 }
 

@@ -8,8 +8,8 @@ package com.tth.service;
  *
  * @author Admin
  */
-
-
+import com.tth.dto.ShowtimeAdminDTO;
+import com.tth.dto.ShowtimeStatisticResponse;
 import com.tth.pojo.Showtimes;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +24,20 @@ public interface ShowtimeService {
 
     void deleteShowtime(int id);
 
-    boolean isRoomBusy(
-            int roomId,
-            java.util.Date start,
-            java.util.Date end,
-            Integer showtimeId
-    );
-     long countAvailableSeats(int showtimeId);
+
+    boolean isRoomBusy(int roomId, java.util.Date start, java.util.Date end, Integer showtimeId);
+
+    long countSoldTickets(Integer showtimeId);
+
+    double revenueByShowtime(Integer showtimeId);
+
+    ShowtimeStatisticResponse getStatistic(Integer showtimeId);
+
+    List<Showtimes> getUpcomingShowtimes();
+
+    List<Showtimes> getTodayShowtimes();
+    
+    List<ShowtimeAdminDTO> getAdminShowtimes();
+    long countAvailableSeats(int showtimeId);
 }
+
