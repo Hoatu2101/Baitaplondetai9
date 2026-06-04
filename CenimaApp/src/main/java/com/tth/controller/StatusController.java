@@ -51,7 +51,7 @@ public class StatusController {
 
     @GetMapping("/delete/{id}")
     public String delete(
-            @PathVariable Integer id){
+            @PathVariable ("id") Integer id){
 
         statusService
                 .deleteStatus(id);

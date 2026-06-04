@@ -59,6 +59,15 @@ public class ShowtimeServiceImpl implements ShowtimeService {
                 throw new RuntimeException(
                         "Không thể sửa suất chiếu đã phát sinh vé!");
             }
+
+            Date now = new Date();
+
+            if (showtime.getId() != null
+                    && showtime.getStartTime().before(now)) {
+
+                throw new RuntimeException(
+                        "Không thể sửa suất chiếu đã bắt đầu!");
+            }
         }
 
         boolean busy
@@ -85,6 +94,15 @@ public class ShowtimeServiceImpl implements ShowtimeService {
         if (booked) {
             throw new RuntimeException(
                     "Không thể xóa suất chiếu đã phát sinh vé!");
+        }
+
+        Showtimes st
+                = showtimeRepo.getShowtimeById(id);
+
+        if (st.getStartTime().before(new Date())) {
+
+            throw new RuntimeException(
+                    "Không thể xóa suất chiếu đã bắt đầu!");
         }
 
         showtimeRepo.deleteShowtime(id);

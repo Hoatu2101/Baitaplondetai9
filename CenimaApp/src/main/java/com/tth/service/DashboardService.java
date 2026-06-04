@@ -9,17 +9,18 @@ package com.tth.service;
  * @author Admin
  */
 import com.tth.dto.StaffDashboardDTO;
+import java.util.Date;
 import java.util.List;
 
 public interface DashboardService {
 
     List<Object[]> revenueByMovie();
 
-    List<Object[]> revenueByMonth(
-            Integer year);
+    List<Object[]> revenueByDate(Date fromDate, Date toDate);
 
-    List<Object[]> revenueByQuarter(
-            Integer year);
+    List<Object[]> revenueByMonth(Integer year);
+
+    List<Object[]> revenueByQuarter(Integer year);
 
     List<Object[]> revenueByYear();
 
@@ -34,8 +35,10 @@ public interface DashboardService {
     Long countShowtimes();
 
     Long countBookings();
-    
+
     List<Object[]> topMovies();
-    
+
+    List<Object[]> topCustomers();
+
     StaffDashboardDTO getStaffDashboard();
 }

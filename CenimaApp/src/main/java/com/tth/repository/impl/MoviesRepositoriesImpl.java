@@ -11,6 +11,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.hibernate.Session;
@@ -35,6 +36,10 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
 
     @Override
     public List<Movies> getMovies(Map<String, String> params) {
+
+        if (params == null) {
+            params = new HashMap<>();
+        }
 
         Session s = factory.getCurrentSession();
 
@@ -141,7 +146,7 @@ public class MoviesRepositoriesImpl implements MoviesRepositories {
                     cb.desc(
                             root.get("id")));
         }
-        
+
         Query<Movies> query = s.createQuery(cq);
 
         // PAGINATION

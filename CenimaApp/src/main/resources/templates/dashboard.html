@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <title>Dashboard Admin</title>
+    <head>
+        <title>Dashboard Admin</title>
 
     <th:block th:replace="base :: css"></th:block>
 
@@ -11,203 +11,266 @@
 
 <body>
 
-<div th:replace="base :: header"></div>
+    <div th:replace="base :: header"></div>
 
-<div class="container mt-4">
+    <div class="container mt-4">
 
-    <h2 class="mb-4">
-        Dashboard Thống Kê
-    </h2>
+        <h2 class="mb-4">
+            Dashboard Thống Kê
+        </h2>
 
-    <!-- SUMMARY -->
-    <div class="row">
+        <!-- SUMMARY -->
+        <div class="row">
 
-        <div class="col-md-6">
-            <div class="card shadow-sm mb-3">
+            <div class="col-md-6">
+                <div class="card shadow-sm mb-3">
 
-                <div class="card-body">
+                    <div class="card-body">
 
-                    <h5>Tổng vé đã bán</h5>
+                        <h5>Tổng vé đã bán</h5>
 
-                    <h2 class="text-primary"
-                        th:text="${ticketCount}">
-                    </h2>
+                        <h2 class="text-primary"
+                            th:text="${ticketCount}">
+                        </h2>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow-sm mb-3">
+
+                    <div class="card-body">
+
+                        <h5>Tổng doanh thu</h5>
+
+                        <h2 class="text-danger"
+                            th:text="${#numbers.formatDecimal(totalRevenue,0,'COMMA',0,'POINT')}">
+                        </h2>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MOVIE + MONTH -->
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <div class="card shadow p-3">
+
+                    <h5>Doanh thu theo phim</h5>
+
+                    <canvas id="movieChart"></canvas>
 
                 </div>
 
             </div>
-        </div>
 
-        <div class="col-md-6">
-            <div class="card shadow-sm mb-3">
+            <div class="col-md-6">
 
-                <div class="card-body">
+                <div class="card shadow p-3">
 
-                    <h5>Tổng doanh thu</h5>
+                    <h5>Doanh thu theo tháng</h5>
 
-                    <h2 class="text-danger"
-                        th:text="${#numbers.formatDecimal(totalRevenue,0,'COMMA',0,'POINT')}">
-                    </h2>
+                    <canvas id="monthChart"></canvas>
 
                 </div>
 
             </div>
+
+        </div>
+
+        <!-- QUARTER + YEAR -->
+
+        <div class="row mt-4">
+
+            <div class="col-md-6">
+
+                <div class="card shadow p-3">
+
+                    <h5>Doanh thu theo quý</h5>
+
+                    <canvas id="quarterChart"></canvas>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="card shadow p-3">
+
+                    <h5>Doanh thu theo năm</h5>
+
+                    <canvas id="yearChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row mt-4">
+
+            <div class="col-md-6">
+
+                <div class="card shadow">
+
+                    <div class="card-header">
+                        Top khách hàng
+                    </div>
+
+                    <table class="table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Khách hàng</th>
+                                <th>Số vé</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr
+                                th:each="c : ${topCustomers}">
+
+                                <td th:text="${c[0]}"></td>
+
+                                <td th:text="${c[1]}"></td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
         </div>
 
     </div>
 
-    <!-- MOVIE + MONTH -->
+    <script th:inline="javascript">
 
-    <div class="row">
+        /* ===== MOVIE ===== */
 
-        <div class="col-md-6">
+//        const movieLabels =
+//        [[${movieStats.![0]}
+//        ]];
+//
+//        const movieValues =
+//        [[${movieStats.![1]}
+//        ]];
 
-            <div class="card shadow p-3">
 
-                <h5>Doanh thu theo phim</h5>
+        const movieLabels =
+        [[${movieLabels}]];
 
-                <canvas id="movieChart"></canvas>
+        const movieValues =
+        [[${movieValues}]];
 
-            </div>
+        new Chart(
+                document.getElementById('movieChart'),
+                {
+                    type: 'bar',
+                    data: {
+                        labels: movieLabels,
+                        datasets: [{
+                                label: 'Revenue',
+                                data: movieValues
+                            }]
+                    }
+                }
+        );
 
-        </div>
+        /* ===== MONTH ===== */
 
-        <div class="col-md-6">
-
-            <div class="card shadow p-3">
-
-                <h5>Doanh thu theo tháng</h5>
-
-                <canvas id="monthChart"></canvas>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- QUARTER + YEAR -->
-
-    <div class="row mt-4">
-
-        <div class="col-md-6">
-
-            <div class="card shadow p-3">
-
-                <h5>Doanh thu theo quý</h5>
-
-                <canvas id="quarterChart"></canvas>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-6">
-
-            <div class="card shadow p-3">
-
-                <h5>Doanh thu theo năm</h5>
-
-                <canvas id="yearChart"></canvas>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<script th:inline="javascript">
-
-    /* ===== MOVIE ===== */
-
-    const movieLabels =
-            [[${movieStats.![0]}]];
-
-    const movieValues =
-            [[${movieStats.![1]}]];
-
-    new Chart(
-        document.getElementById('movieChart'),
-        {
-            type: 'bar',
-            data: {
-                labels: movieLabels,
-                datasets: [{
-                    label: 'Revenue',
-                    data: movieValues
-                }]
-            }
+        const monthLabels =
+        [[${monthStats.![0]
         }
-    );
+        ]];
 
-    /* ===== MONTH ===== */
-
-    const monthLabels =
-            [[${monthStats.![0]}]];
-
-    const monthValues =
-            [[${monthStats.![1]}]];
-
-    new Chart(
-        document.getElementById('monthChart'),
-        {
-            type: 'line',
-            data: {
-                labels: monthLabels,
-                datasets: [{
-                    label: 'Revenue',
-                    data: monthValues
-                }]
-            }
+        const monthValues =
+        [[${monthStats.![1]
         }
-    );
+        ]];
 
-    /* ===== QUARTER ===== */
+        new Chart(
+                document.getElementById('monthChart'),
+                {
+                    type: 'line',
+                    data: {
+                        labels: monthLabels,
+                        datasets: [{
+                                label: 'Revenue',
+                                data: monthValues
+                            }]
+                    }
+                }
+        );
 
-    const quarterLabels =
-            [[${quarterStats.![0]}]];
+        /* ===== QUARTER ===== */
 
-    const quarterValues =
-            [[${quarterStats.![1]}]];
-
-    new Chart(
-        document.getElementById('quarterChart'),
-        {
-            type: 'pie',
-            data: {
-                labels: quarterLabels,
-                datasets: [{
-                    data: quarterValues
-                }]
-            }
+        const quarterLabels =
+        [[${quarterStats.![0]
         }
-    );
+        ]];
 
-    /* ===== YEAR ===== */
-
-    const yearLabels =
-            [[${yearStats.![0]}]];
-
-    const yearValues =
-            [[${yearStats.![1]}]];
-
-    new Chart(
-        document.getElementById('yearChart'),
-        {
-            type: 'bar',
-            data: {
-                labels: yearLabels,
-                datasets: [{
-                    label: 'Revenue',
-                    data: yearValues
-                }]
-            }
+        const quarterValues =
+        [[${quarterStats.![1]
         }
-    );
+        ]];
 
-</script>
+        new Chart(
+                document.getElementById('quarterChart'),
+                {
+                    type: 'pie',
+                    data: {
+                        labels: quarterLabels,
+                        datasets: [{
+                                data: quarterValues
+                            }]
+                    }
+                }
+        );
+
+        /* ===== YEAR ===== */
+
+        const yearLabels =
+        [[${yearStats.![0]
+        }
+        ]];
+
+        const yearValues =
+        [[${yearStats.![1]
+        }
+        ]];
+
+        new Chart(
+                document.getElementById('yearChart'),
+                {
+                    type: 'bar',
+                    data: {
+                        labels: yearLabels,
+                        datasets: [{
+                                label: 'Revenue',
+                                data: yearValues
+                            }]
+                    }
+                }
+        );
+
+    </script>
 
 </body>
 </html>

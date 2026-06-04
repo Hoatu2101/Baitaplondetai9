@@ -4,32 +4,19 @@
  */
 package com.tth.repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  *
  * @author Admin
  */
-//public interface DashboardRepository {
-//    long countMovies();
-//
-//    long countRooms();
-//
-//    long countShowtimes();
-//
-//    long countBookings();
-//
-//    double totalRevenue();
-//
-//    List<Object[]> revenueByMovie();
-//    
-//    List<Object[]> revenueByShowtime();
-//
-//    List<Object[]> bookingByDate();
-//}
+ 
 public interface DashboardRepository {
 
     List<Object[]> statsRevenueByMovie();
+    
+    List<Object[]> statsRevenueByDate(Date fromDate, Date toDate);
 
     List<Object[]> statsRevenueByMonth(
             Integer year);

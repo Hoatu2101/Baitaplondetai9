@@ -10,14 +10,16 @@ package com.tth.controller;
  */
 import com.tth.service.BookingService;
 import com.tth.service.DashboardService;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 
 @Controller
 @RequestMapping("/admin")
@@ -34,11 +36,25 @@ public class DashboardController {
             Model model,
             @RequestParam(
                     value = "year",
-                    defaultValue = "2026") Integer year) {
+                    defaultValue = "2026") Integer year,
+            @RequestParam(
+                    value = "fromDate",
+                    required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
+            @RequestParam(
+                    value = "toDate",
+                    required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) {
 
         model.addAttribute(
                 "movieStats",
                 dashboardService.revenueByMovie());
+
+        model.addAttribute(
+                "dateStats",
+                dashboardService.revenueByDate(
+                        fromDate,
+                        toDate));
 
         model.addAttribute(
                 "monthStats",
@@ -75,24 +91,35 @@ public class DashboardController {
         model.addAttribute(
                 "bookingCount",
                 dashboardService.countBookings());
-        
+
         model.addAttribute(
                 "topMovies",
                 dashboardService.topMovies());
 
+        model.addAttribute(
+                "topCustomers",
+                dashboardService.topCustomers());
+
+        List<String> movieLabels = new ArrayList<>();
+        List<Double> movieValues = new ArrayList<>();
+
+        for (Object[] o : dashboardService.revenueByMovie()) {
+
+            movieLabels.add(String.valueOf(o[0]));
+
+            movieValues.add(
+                    ((Number) o[1]).doubleValue());
+        }
+
+        model.addAttribute(
+                "movieLabels",
+                movieLabels);
+
+        model.addAttribute(
+                "movieValues",
+                movieValues);
+
         return "dashboard";
     }
 
-//    @GetMapping("/showtimes/{id}/bookings")
-//    public String bookingByShowtime(
-//            @PathVariable("id") Integer id,
-//            Model model) {
-//
-//        model.addAttribute(
-//                "bookings",
-//                bookingService
-//                        .getBookingDetailsByShowtime(id));
-//
-//        return "staff-bookings";
-//    }
 }
