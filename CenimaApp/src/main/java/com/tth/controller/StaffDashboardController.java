@@ -312,39 +312,6 @@ public class StaffDashboardController {
         return "staff-showtime-form";
     }
 
-//    @PostMapping("/showtimes/update")
-//    public String updateShowtime(
-//            @ModelAttribute("showtime") Showtimes showtime,
-//            Model model,
-//            RedirectAttributes redirect) {
-//
-//        try {
-//
-//            showtimeService.addOrUpdate(showtime);
-//
-//            redirect.addFlashAttribute(
-//                    "success",
-//                    "Cập nhật thành công");
-//
-//            return "redirect:/staff/dashboard";
-//
-//        } catch (Exception ex) {
-//
-//            model.addAttribute(
-//                    "errMsg",
-//                    ex.getMessage());
-//
-//            model.addAttribute(
-//                    "movies",
-//                    movieService.getMovies(null));
-//
-//            model.addAttribute(
-//                    "rooms",
-//                    roomService.getRooms(null));
-//
-//            return "staff-showtime-form";
-//        }
-//    }
     @PostMapping("/showtimes/update")
     public String updateShowtime(
             @ModelAttribute("showtime") ShowtimeForm form,
@@ -382,6 +349,85 @@ public class StaffDashboardController {
             redirect.addFlashAttribute(
                     "success",
                     "Cập nhật thành công");
+
+            return "redirect:/staff/dashboard";
+
+        } catch (Exception ex) {
+
+            model.addAttribute(
+                    "errMsg",
+                    ex.getMessage());
+
+            model.addAttribute(
+                    "movies",
+                    movieService.getMovies(
+                            new HashMap<>()));
+
+            model.addAttribute(
+                    "rooms",
+                    roomService.getRooms(
+                            new HashMap<>()));
+
+            return "staff-showtime-form";
+        }
+    }
+
+    @GetMapping("/showtimes/create")
+    public String createShowtime(Model model) {
+
+        Showtimes showtime = new Showtimes();
+
+        model.addAttribute(
+                "showtime",
+                showtime);
+
+        model.addAttribute(
+                "movies",
+                movieService.getMovies(
+                        new HashMap<>()));
+
+        model.addAttribute(
+                "rooms",
+                roomService.getRooms(
+                        new HashMap<>()));
+
+        return "staff-showtime-form";
+    }
+
+    @PostMapping("/showtimes/create")
+    public String saveShowtime(
+            @ModelAttribute("showtime") ShowtimeForm form,
+            Model model,
+            RedirectAttributes redirect) {
+
+        try {
+
+            Movies movie
+                    = movieService.getMovieById(
+                            form.getMovieId());
+
+            Rooms room
+                    = roomService.getRoomById(
+                            form.getRoomId());
+
+            Showtimes st
+                    = new Showtimes();
+
+            st.setMovieId(movie);
+
+            st.setRoomId(room);
+
+            st.setStartTime(
+                    form.getStartTime());
+
+            st.setEndTime(
+                    form.getEndTime());
+
+            showtimeService.addOrUpdate(st);
+
+            redirect.addFlashAttribute(
+                    "success",
+                    "Thêm suất chiếu thành công");
 
             return "redirect:/staff/dashboard";
 
