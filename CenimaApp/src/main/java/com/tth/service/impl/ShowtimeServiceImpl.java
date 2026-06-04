@@ -68,6 +68,20 @@ public class ShowtimeServiceImpl implements ShowtimeService {
                 throw new RuntimeException(
                         "Không thể sửa suất chiếu đã bắt đầu!");
             }
+
+            if (showtime.getStartTime()
+                    .after(showtime.getEndTime())) {
+
+                throw new RuntimeException(
+                        "Thời gian kết thúc phải lớn hơn thời gian bắt đầu!");
+            }
+
+            if (showtime.getStartTime()
+                    .before(new Date())) {
+
+                throw new RuntimeException(
+                        "Không thể tạo suất chiếu trong quá khứ!");
+            }
         }
 
         boolean busy
