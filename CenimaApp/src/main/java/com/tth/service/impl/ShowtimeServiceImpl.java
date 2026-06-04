@@ -123,6 +123,12 @@ public class ShowtimeServiceImpl implements ShowtimeService {
         );
     }
 
+ @Override
+public long countAvailableSeats(int showtimeId) {
+    return showtimeRepo.countAvailableSeats(showtimeId);
+}
+
+
     @Override
     public long countSoldTickets(Integer showtimeId) {
         return showtimeRepo.countSoldTickets(showtimeId);
@@ -213,3 +219,4 @@ public class ShowtimeServiceImpl implements ShowtimeService {
         return result;
     }
 }
+

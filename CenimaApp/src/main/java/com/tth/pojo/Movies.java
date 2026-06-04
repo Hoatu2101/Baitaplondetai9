@@ -23,6 +23,7 @@ import jakarta.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -32,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name = "movies")
+@CrossOrigin
 public class Movies implements Serializable {
 
     @Id
@@ -69,9 +71,9 @@ public class Movies implements Serializable {
 
     @Transient
     private MultipartFile file;
-
-    @OneToMany(mappedBy = "movieId")
     @JsonIgnore
+    @OneToMany(mappedBy = "movieId")
+
     private List<Showtimes> showtimesList;
 
     @PrePersist

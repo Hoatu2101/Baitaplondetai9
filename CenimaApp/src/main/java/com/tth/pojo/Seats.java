@@ -4,6 +4,7 @@
  */
 package com.tth.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -24,6 +25,7 @@ import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 /**
  *
@@ -31,6 +33,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "seats")
+@CrossOrigin
 @NamedQueries({
     @NamedQuery(name = "Seats.findAll", query = "SELECT s FROM Seats s"),
     @NamedQuery(name = "Seats.findBySeatNumber", query = "SELECT s FROM Seats s WHERE s.seatNumber = :seatNumber"),
@@ -52,6 +55,7 @@ public class Seats implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "seatId")
     private List<Tickets> ticketsList;
     @JoinColumn(name = "room_id", referencedColumnName = "id")
@@ -61,6 +65,9 @@ public class Seats implements Serializable {
     public Seats() {
     }
 
+    public String getName() {
+        return this.seatNumber;
+    }
     public Seats(Integer id) {
         this.id = id;
     }

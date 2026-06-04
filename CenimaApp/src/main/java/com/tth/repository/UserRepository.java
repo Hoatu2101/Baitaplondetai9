@@ -6,13 +6,16 @@ package com.tth.repository;
 
 import com.tth.pojo.Users;
 import java.util.List;
+import java.util.Map;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
  * @author Admin
  */
 public interface UserRepository {
-
+    Users add_User(Users u);
     void addUser(Users user);
 
     Users getUserByUsername(String username);

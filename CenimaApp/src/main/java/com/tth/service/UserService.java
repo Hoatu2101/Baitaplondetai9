@@ -10,11 +10,14 @@ package com.tth.service;
  */
 import com.tth.pojo.Users;
 import java.util.List;
+import java.util.Map;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService extends UserDetailsService {
-
+    Users addUser(Map<String, String> info, MultipartFile avatar);
     void addUser(Users user);
 
     Users getUserByUsername(String username);

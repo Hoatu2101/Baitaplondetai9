@@ -16,17 +16,15 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/showtimes")
+@CrossOrigin
 public class ApiSeatController {
 
     @Autowired
     private SeatService seatService;
 
-    @GetMapping("/{showtimeId}/seats")
-    public ResponseEntity<?> getSeats(
-            @PathVariable Integer showtimeId) {
-
-        return ResponseEntity.ok(
-                seatService.getSeatsByShowtime(showtimeId));
+        @GetMapping("/{showtimeId}/seats")
+    public ResponseEntity<?> getSeats(@PathVariable("showtimeId") Integer showtimeId) {
+        return ResponseEntity.ok(seatService.getSeatsByShowtime(showtimeId));
     }
 
 //    @GetMapping("/staff/showtimes/{id}/seat-map")

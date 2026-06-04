@@ -8,11 +8,14 @@ import com.tth.pojo.Users;
 import com.tth.repository.UserRepository;
 import jakarta.persistence.Query;
 import java.util.List;
+import java.util.Map;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -126,5 +129,13 @@ public class UserRepositoryImpl implements UserRepository {
         u.setActive(true);
 
         s.merge(u);
+    }
+
+    @Override
+    public Users add_User(Users u) {
+         Session s = this.factory.getObject().getCurrentSession();
+        s.persist(u);
+        
+        return u;
     }
 }

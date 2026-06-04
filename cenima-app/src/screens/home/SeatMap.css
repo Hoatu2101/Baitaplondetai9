@@ -1,0 +1,110 @@
+/* Bao bọc toàn bộ khu vực chọn ghế */
+.seatmap-container {
+    background-color: #1a1a2e; /* Trùng với tông màu nền phim */
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid #2b2b42;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* --- CHÚ THÍCH CÁC LOẠI GHẾ --- */
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+}
+
+.seat-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px 4px 2px 2px;
+}
+
+.seat-icon.available { background-color: #4b4b8f; border: 1px solid #6a6a9d; }
+.seat-icon.selected { background-color: #f5e625; }
+.seat-icon.booked { background-color: #444; }
+
+/* --- MÀN HÌNH RẠP (Uốn cong) --- */
+.screen-container {
+    perspective: 400px; /* Tạo góc nhìn 3D */
+    margin: 0 auto 50px auto;
+    width: 80%;
+    max-width: 600px;
+}
+
+.cinema-screen {
+    height: 80px;
+    background: #fff;
+    transform: rotateX(-45deg); /* Bẻ nghiêng màn hình về sau */
+    box-shadow: 0 20px 50px rgba(255, 255, 255, 0.5); /* Tạo vầng sáng phát ra từ màn hình */
+    border-radius: 5px;
+}
+
+/* --- GRID SƠ ĐỒ GHẾ --- */
+.row-label {
+    width: 30px;
+    text-align: center;
+}
+
+.seat-box {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 8px 8px 4px 4px; /* Bo tròn phần tựa đầu nhiều hơn phần đệm ngồi */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    user-select: none;
+}
+
+/* Tạo chi tiết rãnh ghế cho giống thật */
+.seat-box::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    width: 80%;
+    height: 4px;
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 2px;
+}
+
+/* Trạng thái Ghế trống */
+.seat-box.available {
+    background-color: #4b4b8f;
+    color: white;
+    border: 1px solid #6a6a9d;
+}
+
+.seat-box.available:hover {
+    background-color: #6a6a9d;
+    transform: scale(1.15) translateY(-5px); /* Nổi lên khi hover */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Trạng thái Ghế đang được chọn */
+.seat-box.selected {
+    background-color: #f5e625;
+    color: #1a1a2e;
+    border: 1px solid #d4c51b;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(245, 230, 37, 0.6);
+}
+
+/* Trạng thái Ghế đã bán */
+.seat-box.booked {
+    background-color: #333;
+    color: #666;
+    cursor: not-allowed;
+    border: 1px solid #222;
+}
+
+/* Khung Thanh toán cố định bên dưới */
+.checkout-bar {
+    background-color: #232336;
+    border: 2px solid #f5e625;
+}

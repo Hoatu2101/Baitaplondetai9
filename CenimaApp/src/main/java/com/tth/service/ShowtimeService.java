@@ -24,6 +24,7 @@ public interface ShowtimeService {
 
     void deleteShowtime(int id);
 
+
     boolean isRoomBusy(int roomId, java.util.Date start, java.util.Date end, Integer showtimeId);
 
     long countSoldTickets(Integer showtimeId);
@@ -37,4 +38,6 @@ public interface ShowtimeService {
     List<Showtimes> getTodayShowtimes();
     
     List<ShowtimeAdminDTO> getAdminShowtimes();
+    long countAvailableSeats(int showtimeId);
 }
+
